@@ -1,0 +1,14 @@
+include ':dkplayer-videocache'
+include ':dkplayer'
+include ':dkplayer-ui'
+include ':dkplayer-java'
+include 'dkplayer-players:ijk'
+include 'dkplayer-players:exo'
+include ':app',
+        ':okhttp',
+        ':base',
+        ':camera',
+        ':videocompressor',
+        ':media',
+        ':cropper'
+rootProject.name = 'kuaimu'

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/padding">
+
+    <View
+        android:id="@+id/tagStatusBar"
+        android:layout_width="match_parent"
+        android:layout_height="60px"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/nav_back"
+        android:layout_width="46dp"
+        android:layout_height="36dp"
+        android:paddingRight="30dp"
+        android:paddingBottom="20dp"
+        android:src="@drawable/guanbi_b"
+        android:layout_marginTop="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="个人标签"
+        android:textColor="#ff333333"
+        android:textSize="14sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/userTagRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="所属行业"
+        android:textColor="#ff333333"
+        android:textSize="14sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/tagRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding" />
+
+</LinearLayout>

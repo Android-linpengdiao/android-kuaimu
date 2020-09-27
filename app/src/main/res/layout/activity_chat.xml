@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/colorPrimary">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:padding="15dp"
+                android:src="@drawable/back" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text=""
+                android:textColor="#ffffffff"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@color/white"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="center_vertical"
+            android:minHeight="50dp"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/padding">
+
+            <EditText
+                android:id="@+id/et_message"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_margin="0dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:gravity="left|center_vertical"
+                android:hint="输入消息"
+                android:imeOptions="flagNoExtractUi|actionSend"
+                android:inputType="text"
+                android:maxLength="300"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:singleLine="true"
+                android:textColor="@color/textColor"
+                android:textColorHint="#BBBBBB"
+                android:textCursorDrawable="@null"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/tv_message_send"
+                android:layout_width="40dp"
+                android:layout_height="38dp"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:padding="10dp"
+                android:src="@drawable/send" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

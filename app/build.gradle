@@ -1,0 +1,85 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        applicationId "com.kuaimu.android.app"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        multiDexEnabled true
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a"
+        }
+    }
+    signingConfigs {
+        signConfig {
+            storeFile file('../kuaimu.jks')
+            storePassword "kuaimu"
+            keyAlias "kuaimu"
+            keyPassword "kuaimu"
+        }
+    }
+
+    buildTypes {
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.signConfig // 配置release包的签名
+        }
+
+        debug {
+            signingConfig signingConfigs.signConfig // 配置debug包的签名
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    repositories {
+        flatDir { dirs 'libs' }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation externalAndroidTestRunner
+    androidTestImplementation externalAndroidTestEspressoCore
+    testImplementation externalJunit
+    implementation externalAndroidAppCompatV7
+    implementation externalAndroidDesign
+    implementation externalAndroidCnstraint
+    implementation externalAndroidMultiDex
+    implementation externalEasypermissions
+    implementation externalBanner
+    implementation externalAndroidXRecyclerview
+    implementation externalSpringview
+    implementation project(':base')
+    implementation project(':okhttp')
+    implementation project(':camera')
+    implementation project(':media')
+    implementation project(':cropper')
+    implementation project(':dkplayer')
+    implementation files('libs/AMap3DMap_7.4.0_AMapLocation_4.9.0_20200416.jar')
+    implementation files('libs/open_sdk_r6019_lite.jar')
+    implementation files('libs/wechat-sdk-android-with-mta-5.3.1.jar')
+    implementation files('libs/alipaySdk-15.7.7-20200702160044.aar')
+    implementation 'com.sina.weibo.sdk:core:4.4.3:openDefaultRelease@aar'
+    implementation 'com.aliyun.video.android:upload:1.6.0'
+    // 腾讯视频播放器
+    implementation 'com.tencent.liteav:LiteAVSDK_Player:latest.release'
+}
