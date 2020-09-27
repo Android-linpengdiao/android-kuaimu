@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.baselibrary.utils.GlideLoader;
+import com.baselibrary.utils.StatusBarUtil;
 import com.kuaimu.android.app.R;
 import com.kuaimu.android.app.activity.SearchActivity;
 import com.kuaimu.android.app.adapter.PagerAdapter;
@@ -31,7 +32,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
-        setStatusBarHeight(binding.getRoot(), Color.TRANSPARENT);
+        setStatusBarHeight(binding.getRoot(), getResources().getColor(R.color.white));
 
         binding.search.setOnClickListener(this);
 
@@ -52,21 +53,21 @@ public class MainFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onResume() {
         super.onResume();
-        if (getUid() > 0) {
-            GlideLoader.LoderCircleImage(getActivity(), getUserInfo().getData().getAvatar(), binding.userIconView);
-        } else {
-            GlideLoader.LoderCircleImage(getActivity(), "", binding.userIconView);
-        }
+//        if (getUid() > 0) {
+//            GlideLoader.LoderCircleImage(getActivity(), getUserInfo().getData().getAvatar(), binding.userIconView);
+//        } else {
+//            GlideLoader.LoderCircleImage(getActivity(), "", binding.userIconView);
+//        }
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (getUid() > 0) {
-            GlideLoader.LoderCircleImage(getActivity(), getUserInfo().getData().getAvatar(), binding.userIconView);
-        } else {
-            GlideLoader.LoderCircleImage(getActivity(), "", binding.userIconView);
-        }
+//        if (getUid() > 0) {
+//            GlideLoader.LoderCircleImage(getActivity(), getUserInfo().getData().getAvatar(), binding.userIconView);
+//        } else {
+//            GlideLoader.LoderCircleImage(getActivity(), "", binding.userIconView);
+//        }
     }
 
     @Override
@@ -87,8 +88,8 @@ public class MainFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onPageSelected(int position) {
-        setStatusBarHeight(binding.getRoot(), position == 2 ? Color.TRANSPARENT : getResources().getColor(R.color.colorPrimary));
-        binding.topView.setBackgroundColor(position == 2 ? getResources().getColor(R.color.transparent) : getResources().getColor(R.color.colorPrimary));
+        binding.statusBar.setBackgroundColor(position == 2 ? Color.TRANSPARENT : getResources().getColor(R.color.white));
+        binding.topView.setBackgroundColor(position == 2 ? getResources().getColor(R.color.transparent) : getResources().getColor(R.color.white));
 
     }
 

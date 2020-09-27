@@ -6,21 +6,6 @@
 
     </data>
 
-<!--    <com.liaoinstan.springview.widget.SpringView-->
-<!--        android:id="@+id/springRefresh"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_marginRight="10dp"-->
-<!--        android:layout_marginLeft="10dp">-->
-
-<!--        <androidx.recyclerview.widget.RecyclerView-->
-<!--            android:id="@+id/recyclerView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="5dp"-->
-<!--            android:overScrollMode="never" />-->
-<!--    </com.liaoinstan.springview.widget.SpringView>-->
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
@@ -30,7 +15,7 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:overScrollMode="never"/>
+            android:overScrollMode="never" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

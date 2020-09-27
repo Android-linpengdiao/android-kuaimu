@@ -29,6 +29,7 @@ import com.dkplayer.widget.component.TikTokView;
 import com.kuaimu.android.app.MyApplication;
 import com.kuaimu.android.app.R;
 import com.kuaimu.android.app.activity.LoginActivity;
+import com.kuaimu.android.app.model.HomeLeaveData;
 import com.kuaimu.android.app.model.VideoDataBean;
 import com.kuaimu.android.app.view.OnClickListener;
 import com.okhttp.SendRequest;
@@ -50,6 +51,13 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     public TikTokAdapter(Context context, List<VideoDataBean> videos) {
         this.mContext = context;
         this.videos = videos;
+    }
+
+    public void refreshData(List<VideoDataBean> videos) {
+        if (null != videos) {
+            this.videos = videos;
+            notifyDataSetChanged();
+        }
     }
 
     private OnClickListener onClickListener;

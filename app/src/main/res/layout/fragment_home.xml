@@ -21,47 +21,62 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/status_bar" />
+            <View
+                android:id="@+id/status_bar"
+                android:layout_width="match_parent"
+                android:layout_height="60px"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/topView"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:background="@color/colorPrimary"
+                android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/userIconView"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_marginLeft="@dimen/padding"
-                    android:src="@mipmap/ic_app" />
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:padding="5dp"
+                    android:src="@mipmap/peoplelist"
+                    android:tint="@color/black"/>
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tabLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
+                    android:layout_weight="1"
                     app:tabGravity="fill"
-                    app:tabIndicatorColor="@color/white"
+                    app:tabIndicatorColor="#333333"
                     app:tabIndicatorFullWidth="false"
                     app:tabIndicatorHeight="3dp"
                     app:tabMode="fixed"
                     app:tabRippleColor="@android:color/transparent"
-                    app:tabSelectedTextColor="@color/white"
+                    app:tabSelectedTextColor="#333333"
                     app:tabTextAppearance="@style/TabLayoutTextSize18"
-                    app:tabTextColor="@color/white" />
+                    app:tabTextColor="#CCCCCC" />
 
                 <ImageView
                     android:id="@+id/search"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:layout_marginRight="6dp"
                     android:padding="10dp"
-                    android:layout_marginRight="@dimen/padding"
-                    android:src="@drawable/seach" />
+                    android:src="@mipmap/search"
+                    android:tint="@color/black"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="6dp"
+                    android:padding="10dp"
+                    android:src="@mipmap/recordfill"
+                    android:tint="@color/black"/>
             </LinearLayout>
 
         </LinearLayout>

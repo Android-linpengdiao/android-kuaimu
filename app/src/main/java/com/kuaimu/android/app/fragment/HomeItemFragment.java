@@ -62,7 +62,6 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
     private static final String TAG = "HomeItemFragment";
     private FragmentHomeItemBinding binding;
     private String busLabel;
-    private HomeWorkData homeWorkData;
 
     private TikTokController mController;
     private int mCurPos;
@@ -99,27 +98,46 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
         mVideoView.setLooping(true);
         mController = new TikTokController(getActivity());
         mVideoView.setVideoController(mController);
+        initRecyclerView();
 
-        searchWork();
+        binding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                searchWork();
+            }
+        });
 
         return binding.getRoot();
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.i(TAG, "onHiddenChanged: " + busLabel + "   hidden" + hidden);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume: " + busLabel);
+//        searchWork();
+    }
+
     private void searchWork() {
+        binding.swipeRefreshLayout.setRefreshing(true);
         SendRequest.homeCity(busLabel, SharedPreferencesUtils.getInstance().getCity(), new GenericsCallback<HomeWorkData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
-//                binding.springRefresh.onFinishFreshAndLoad();
                 binding.swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onResponse(HomeWorkData response, int id) {
-//                binding.springRefresh.onFinishFreshAndLoad();
                 binding.swipeRefreshLayout.setRefreshing(false);
                 if (response.getCode() == 200) {
-                    homeWorkData = response;
-                    initRecyclerView(response);
+                    mVideoList = response.getData().getData();
+                    mTikTokAdapter.refreshData(mVideoList);
                 } else {
                     ToastUtils.showShort(getActivity(), response.getMsg());
                 }
@@ -128,8 +146,7 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
         });
     }
 
-    private void initRecyclerView(HomeWorkData response) {
-        mVideoList = response.getData().getData();
+    private void initRecyclerView() {
         mTikTokAdapter = new TikTokAdapter(getActivity(), mVideoList);
         ViewPagerLayoutManager layoutManager = new ViewPagerLayoutManager(getActivity(), OrientationHelper.VERTICAL);
         binding.recyclerView.setLayoutManager(layoutManager);
@@ -240,7 +257,7 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
                 playUrl = PreloadManager.getInstance(getActivity()).getPlayUrl(GlideLoader.domain + item.getVideo());
             }
         }
-        Log.i(TAG, "startPlay: "+playUrl);
+        Log.i(TAG, "startPlay: " + playUrl);
         mVideoView.setUrl(playUrl);
         mController.addControlComponent(viewHolder.mTikTokView, true);
         viewHolder.mPlayerContainer.addView(mVideoView, 0);
@@ -456,7 +473,6 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
 
         }
     }
-
 
 
 }

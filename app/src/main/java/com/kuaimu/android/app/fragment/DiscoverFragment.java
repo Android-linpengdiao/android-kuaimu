@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +24,11 @@ import com.okhttp.SendRequest;
 import com.okhttp.callbacks.GenericsCallback;
 import com.okhttp.sample_okhttp.JsonGenericsSerializator;
 
+import androidx.viewpager.widget.ViewPager;
 import okhttp3.Call;
 
-public class DiscoverFragment extends BaseFragment implements View.OnClickListener{
-
+public class DiscoverFragment extends BaseFragment implements View.OnClickListener, ViewPager.OnPageChangeListener {
+    private static final String TAG = "DiscoverFragment";
     private FragmentDiscoverBinding binding;
     private PagerAdapter pagerAdapter;
 
@@ -43,7 +46,7 @@ public class DiscoverFragment extends BaseFragment implements View.OnClickListen
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) binding.viewLayout.getLayoutParams();
             layoutParams.topMargin = CommonUtil.getStatusBarHeight(getActivity()) + CommonUtil.dip2px(getActivity(), 76);
         }
-
+        binding.viewPager.addOnPageChangeListener(this);
         SendRequest.category(new GenericsCallback<NavData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -58,7 +61,7 @@ public class DiscoverFragment extends BaseFragment implements View.OnClickListen
                         pagerAdapter.addFragment(response.getData().get(i).getName(), HomeItemFragment.newInstance(response.getData().get(i).getName()));
                     }
                     binding.viewPager.setAdapter(pagerAdapter);
-                    binding.viewPager.setOffscreenPageLimit(1);
+                    binding.viewPager.setOffscreenPageLimit(response.getData().size());
                     binding.viewPager.setCurrentItem(0);
                     binding.tabLayout.setupWithViewPager(binding.viewPager);
                 } else {
@@ -76,5 +79,20 @@ public class DiscoverFragment extends BaseFragment implements View.OnClickListen
         switch (v.getId()) {
 
         }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        Log.i(TAG, "onPageSelected: " + position);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }
