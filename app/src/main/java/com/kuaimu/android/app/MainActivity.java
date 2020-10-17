@@ -7,31 +7,29 @@ import androidx.databinding.DataBindingUtil;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.RadioGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-import com.baselibrary.manager.DialogManager;
+import com.baselibrary.MessageBus;
+import com.baselibrary.UserInfo;
 import com.baselibrary.utils.CommonUtil;
+import com.baselibrary.utils.GlideLoader;
 import com.baselibrary.utils.ToastUtils;
-import com.cjt2325.cameralibrary.CameraActivity;
-import com.cjt2325.cameralibrary.JCameraView;
-import com.kuaimu.android.app.R;
 import com.kuaimu.android.app.activity.BaseActivity;
+import com.kuaimu.android.app.activity.ChatActivity;
 import com.kuaimu.android.app.activity.EditorActivity;
+import com.kuaimu.android.app.activity.SettingsActivity;
 import com.kuaimu.android.app.databinding.ActivityMainBinding;
-import com.kuaimu.android.app.fragment.FollowFragment;
-import com.kuaimu.android.app.fragment.HomeFragment;
-import com.kuaimu.android.app.fragment.MessageFragment;
-import com.kuaimu.android.app.fragment.MineFragment;
-import com.kuaimu.android.app.utils.ViewUtils;
-import com.okhttp.SendRequest;
-import com.okhttp.callbacks.StringCallback;
 
-import okhttp3.Call;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity {
 
@@ -50,6 +48,128 @@ public class MainActivity extends BaseActivity {
         mainBinding.drawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
+        intHeaderView();
+
+        EventBus.getDefault().register(this);
+    }
+
+    private ImageView userIcon;
+    private TextView userName;
+    private TextView userTouristId;
+    private TextView userAddr;
+    private TextView userLevel;
+    private ImageView userVip;
+    private ImageView isVip;
+    private TextView fanNumber;
+    private TextView followNumber;
+
+    private void intHeaderView() {
+        View headerView = mainBinding.navView.getHeaderView(0);
+        View userInfoView = headerView.findViewById(R.id.userInfoView);
+        userIcon = headerView.findViewById(R.id.user_icon);
+        userName = headerView.findViewById(R.id.user_name);
+        userTouristId = headerView.findViewById(R.id.user_tourist_id);
+        userVip = headerView.findViewById(R.id.user_vip);
+        View chatView = headerView.findViewById(R.id.chatView);
+        View fansView = headerView.findViewById(R.id.fansView);
+        View followView = headerView.findViewById(R.id.followView);
+        View workView = headerView.findViewById(R.id.workView);
+        View walletView = headerView.findViewById(R.id.walletView);
+        View vipView = headerView.findViewById(R.id.vipView);
+        View settingView = headerView.findViewById(R.id.settingView);
+
+        chatView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getUid(true) > 0) {
+//                    Intent intent = new Intent(MainActivity.this, MyWorkActivity.class);
+//                    intent.putExtra("uid", getUserInfo().getData().getId());
+//                    startActivity(intent);
+                }
+            }
+        });
+        workView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getUid(true) > 0) {
+                    openActivity(ChatActivity.class);
+                }
+            }
+        });
+        followView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getUid(true) > 0) {
+//                    openActivity(MyFollowActivity.class);
+                }
+            }
+        });
+        fansView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getUid(true) > 0) {
+//                    openActivity(MyFansActivity.class);
+                }
+            }
+        });
+        walletView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getUid(true) > 0) {
+//                    openActivity(MyWalletActivity.class);
+                }
+            }
+        });
+        vipView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getUid(true) > 0) {
+//                    openActivity(MyVIPActivity.class);
+                }
+            }
+        });
+        settingView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivity(SettingsActivity.class);
+            }
+        });
+        userInfoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getUid(true) > 0) {
+                    openActivity(EditorActivity.class);
+                }
+            }
+        });
+    }
+
+    private void intHeaderData(UserInfo userInfo) {
+        userName.setText(userInfo.getData().getName() + "");
+        userTouristId.setText(getString(R.string.app_name) + "：" + userInfo.getData().getTourist_id());
+        GlideLoader.LoderCircleImage(this, userInfo.getData().getAvatar(), userIcon);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getMainMessage(MessageBus messageBus) {
+        if (messageBus.getCodeType().equals(messageBus.msgId_openDrawer)) {
+            mainBinding.drawerLayout.openDrawer(Gravity.LEFT);
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (getUid() > 0) {
+            intHeaderData(getUserInfo());
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private long lastTime = 0;

@@ -125,6 +125,7 @@
                     android:textSize="16sp" />
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/chatView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -148,7 +149,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/my_work_view"
+            android:id="@+id/workView"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="?android:attr/selectableItemBackground"
@@ -194,7 +195,7 @@
 
 
         <TextView
-            android:id="@+id/my_wallet_view"
+            android:id="@+id/walletView"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="?android:attr/selectableItemBackground"
@@ -209,7 +210,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/my_competition_view"
+            android:id="@+id/vipView"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="?android:attr/selectableItemBackground"
@@ -254,6 +255,7 @@
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/settingView"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="?android:attr/selectableItemBackground"

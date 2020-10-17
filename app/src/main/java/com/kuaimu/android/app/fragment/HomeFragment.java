@@ -35,7 +35,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         setStatusBarHeight(binding.getRoot());
         setStatusBarDarkTheme(true);
 
-        binding.search.setOnClickListener(this);
+        binding.searchImageView.setOnClickListener(this);
 
         mainHomePagerAdapter = new PagerAdapter(getChildFragmentManager());
         mainHomePagerAdapter.addFragment("推荐", new RecommendFragment());
@@ -74,7 +74,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
-            case R.id.search:
+            case R.id.searchImageView:
                 intent = new Intent(getActivity(), SearchActivity.class);
                 startActivity(intent);
                 break;

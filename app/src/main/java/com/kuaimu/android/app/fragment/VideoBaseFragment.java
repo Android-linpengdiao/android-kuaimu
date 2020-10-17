@@ -39,18 +39,18 @@ public class VideoBaseFragment<T extends VideoView> extends BaseFragment {
                 mVideoView.pause();
             }
         }else {
-            if (mVideoView != null) {
-                mVideoView.resume();
-            }
+//            if (mVideoView != null) {
+//                mVideoView.resume();
+//            }
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (mVideoView != null) {
-            mVideoView.resume();
-        }
+//        if (mVideoView != null) {
+//            mVideoView.resume();
+//        }
     }
 
 

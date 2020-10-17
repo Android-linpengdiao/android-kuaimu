@@ -42,7 +42,7 @@ public class UserHomeActivity extends BaseActivity implements View.OnClickListen
         binding.headLoginLayout.tvChat.setOnClickListener(this);
         binding.headLoginLayout.tvChat.setVisibility(View.VISIBLE);
         binding.headLoginLayout.tvVip.setVisibility(View.GONE);
-        binding.headLoginLayout.tvSetting.setVisibility(View.GONE);
+        binding.headLoginLayout.settingView.setVisibility(View.GONE);
         binding.headLoginLayout.followersView.setOnClickListener(this);
         binding.headLoginLayout.likerView.setOnClickListener(this);
         binding.headLoginLayout.productView.setOnClickListener(this);

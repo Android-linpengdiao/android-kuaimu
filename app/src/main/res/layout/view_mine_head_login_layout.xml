@@ -101,7 +101,7 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/tv_setting"
+                        android:id="@+id/settingView"
                         android:layout_width="wrap_content"
                         android:layout_height="34dp"
                         android:background="@drawable/button_radius_theme"
