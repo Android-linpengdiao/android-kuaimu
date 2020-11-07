@@ -184,7 +184,7 @@ public class OpenedVIPActivity extends BaseActivity {
 //        bundle.putBoolean("flag", true);
 //        openActivity(PayResultActivity.class, bundle);
         baseInfo();
-        finishActivity(MyVIPActivity.class);
+        finishActivity(MyWalletActivity.class);
         finish();
     }
 

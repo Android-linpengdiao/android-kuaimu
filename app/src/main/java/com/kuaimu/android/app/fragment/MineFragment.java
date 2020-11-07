@@ -22,7 +22,7 @@ import com.kuaimu.android.app.activity.EditorActivity;
 import com.kuaimu.android.app.activity.MineFansActivity;
 import com.kuaimu.android.app.activity.MineFollowActivity;
 import com.kuaimu.android.app.activity.MyProductActivity;
-import com.kuaimu.android.app.activity.MyVIPActivity;
+import com.kuaimu.android.app.activity.MyWalletActivity;
 import com.kuaimu.android.app.activity.SettingsActivity;
 import com.kuaimu.android.app.adapter.CustomPagerAdapter;
 import com.kuaimu.android.app.databinding.FragmentMineBinding;
@@ -243,7 +243,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                 openActivity(EditorActivity.class);
                 break;
             case R.id.tv_vip:
-                openActivity(MyVIPActivity.class);
+                openActivity(MyWalletActivity.class);
                 break;
             case R.id.settingView:
                 openActivity(SettingsActivity.class);

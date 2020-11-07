@@ -4,23 +4,19 @@ package com.kuaimu.android.app;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.databinding.DataBindingUtil;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baselibrary.MessageBus;
 import com.baselibrary.UserInfo;
-import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.GlideLoader;
 import com.baselibrary.utils.ToastUtils;
 import com.kuaimu.android.app.activity.BaseActivity;
-import com.kuaimu.android.app.activity.ChatActivity;
 import com.kuaimu.android.app.activity.ChatListActivity;
 import com.kuaimu.android.app.activity.EditorActivity;
 import com.kuaimu.android.app.activity.MessageActivity;
@@ -29,15 +25,13 @@ import com.kuaimu.android.app.activity.MineFollowActivity;
 import com.kuaimu.android.app.activity.MineLikeActivity;
 import com.kuaimu.android.app.activity.MineWorkActivity;
 import com.kuaimu.android.app.activity.MyPointActivity;
-import com.kuaimu.android.app.activity.NoticeListActivity;
+import com.kuaimu.android.app.activity.MyWalletActivity;
 import com.kuaimu.android.app.activity.SettingsActivity;
 import com.kuaimu.android.app.databinding.ActivityMainBinding;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity {
 
@@ -146,7 +140,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (getUid(true) > 0) {
-//                    openActivity(MyWalletActivity.class);
+                    openActivity(MyWalletActivity.class);
                 }
             }
         });

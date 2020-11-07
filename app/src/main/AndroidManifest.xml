@@ -20,7 +20,8 @@
         android:roundIcon="@mipmap/ic_app"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MineWorkActivity"></activity>
+        <activity android:name=".activity.OrdersActivity"></activity>
+        <activity android:name=".activity.MineWorkActivity" />
         <activity android:name=".activity.ChatListActivity" />
         <activity android:name=".activity.MessageActivity" />
         <activity android:name=".activity.MineLikeActivity" />
@@ -31,7 +32,7 @@
         <activity android:name=".activity.ChatActivity" />
         <activity android:name=".activity.TimeLineActivity" />
         <activity android:name=".activity.OpenedVIPActivity" />
-        <activity android:name=".activity.MyVIPActivity" />
+        <activity android:name=".activity.MyWalletActivity" />
         <activity android:name=".activity.ProductDetailActivity" />
         <activity android:name=".activity.MyProductActivity" />
         <activity
