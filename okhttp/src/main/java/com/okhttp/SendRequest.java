@@ -356,6 +356,14 @@ public class SendRequest {
     }
 
 
+    public static void orders(int tourist_id, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.orders).build().execute(call);
+
+    }
+
+
     //======================================= 咖佬 =================================================
 
 

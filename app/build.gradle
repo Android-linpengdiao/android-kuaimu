@@ -57,6 +57,8 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     androidTestImplementation externalAndroidTestRunner
     androidTestImplementation externalAndroidTestEspressoCore
     testImplementation externalJunit

@@ -37,35 +37,12 @@ public class MineLikeWorkAdapter extends BaseRecyclerAdapter<VideoDataBean, Item
         if (mList != null && mList.size() > 0) {
             binding.tvAssist.setText(String.valueOf(dataBean.getAssist_num()));
             GlideLoader.LoderImage(mContext, dataBean.getImg(), binding.cover);
-//            binding.selection.setSelected(!CommonUtil.isBlank(dataBean.getContent())?dataBean.getContent().isSelection():false);
-//            binding.selection.setVisibility(isSelection ? View.VISIBLE : View.GONE);
-//            binding.selection.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    if (!CommonUtil.isBlank(dataBean.getContent())) {
-//                        dataBean.getContent().setSelection(!dataBean.getContent().isSelection());
-//                        binding.selection.setSelected(dataBean.getContent().isSelection());
-//                        notifyItemChanged(position);
-//                    }
-//                }
-//            });
             binding.viewLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onClickListener != null) {
                         onClickListener.onClick(v,position);
                     }
-                }
-            });
-            binding.viewLayout.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    if (onClickListener != null) {
-//                        isSelection = true;
-//                        onClickListener.onLongClick(view, true);
-//                        notifyDataSetChanged();
-                    }
-                    return true;
                 }
             });
         }

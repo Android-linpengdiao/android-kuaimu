@@ -38,33 +38,12 @@ public class MineWorkAdapter extends BaseRecyclerAdapter<VideoDataBean, ItemMine
         if (mList != null && mList.size() > 0) {
             binding.tvAssist.setText("" + dataBean.getAssist_num());
             GlideLoader.LoderImage(mContext, dataBean.getImg(), binding.cover);
-//            binding.selection.setSelected(dataBean.isSelection());
-//            binding.selection.setVisibility(isSelection ? View.VISIBLE : View.GONE);
-//            binding.selection.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    dataBean.setSelection(!dataBean.isSelection());
-//                    binding.selection.setSelected(dataBean.isSelection());
-//                    notifyItemChanged(position);
-//                }
-//            });
             binding.viewLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onClickListener != null) {
                         onClickListener.onClick(v,position);
                     }
-                }
-            });
-            binding.viewLayout.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    if (onClickListener != null) {
-//                        isSelection = true;
-//                        onClickListener.onLongClick(view, true);
-//                        notifyDataSetChanged();
-                    }
-                    return true;
                 }
             });
         }

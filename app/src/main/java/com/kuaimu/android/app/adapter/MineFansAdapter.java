@@ -39,21 +39,12 @@ public class MineFansAdapter extends BaseRecyclerAdapter<FansUserData.DataBean, 
                 binding.tvFollowers.setText(dataBean.isBe_attention() ? "已关注" : "关注");
                 GlideLoader.LoderCircleImage(mContext, dataBean.getTourist().getAvatar(), binding.userIcon);
             }
-//            binding.tvFollowers.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (onClickListener != null) {
-//                        onClickListener.onClick(v, dataBean);
-//                    }
-//                }
-//            });
             binding.viewLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (dataBean.getTourist() != null) {
                         Intent intent = new Intent(mContext, UserHomeActivity.class);
                         intent.putExtra("uid", dataBean.getTourist().getId());
-//                      intent.putExtra("isFollow", dataBean.isAttention());
                         mContext.startActivity(intent);
                     }
                 }

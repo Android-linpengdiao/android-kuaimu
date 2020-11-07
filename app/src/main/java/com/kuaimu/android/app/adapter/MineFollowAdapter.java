@@ -36,20 +36,11 @@ public class MineFollowAdapter extends BaseRecyclerAdapter<FollowUserData.DataBe
             binding.tvDesc.setText("粉丝：" + dataBean.getFollower_num());
             binding.tvFollowers.setText("已关注");
             GlideLoader.LoderCircleImage(mContext, dataBean.getAvatar(), binding.userIcon);
-//            binding.tvFollowers.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (onClickListener != null) {
-//                        onClickListener.onClick(v, dataBean);
-//                    }
-//                }
-//            });
             binding.viewLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, UserHomeActivity.class);
                     intent.putExtra("uid", dataBean.getId());
-//                    intent.putExtra("isFollow", dataBean.getAttention() != -1 ? true : false);
                     mContext.startActivity(intent);
                 }
             });

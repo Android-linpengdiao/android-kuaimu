@@ -82,6 +82,7 @@ public class APIUrls {
     public final static String cashPay = url_domain + "api/cash/pay";
     public final static String userPrice = url_domain + "api/common/userPrice";
     public final static String vipDetail = url_domain + "api/cash/vip/detail";
+    public final static String orders = url_domain + "api/cash/orders";
 
 
 

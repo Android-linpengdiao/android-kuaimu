@@ -21,7 +21,15 @@ import com.baselibrary.utils.GlideLoader;
 import com.baselibrary.utils.ToastUtils;
 import com.kuaimu.android.app.activity.BaseActivity;
 import com.kuaimu.android.app.activity.ChatActivity;
+import com.kuaimu.android.app.activity.ChatListActivity;
 import com.kuaimu.android.app.activity.EditorActivity;
+import com.kuaimu.android.app.activity.MessageActivity;
+import com.kuaimu.android.app.activity.MineFansActivity;
+import com.kuaimu.android.app.activity.MineFollowActivity;
+import com.kuaimu.android.app.activity.MineLikeActivity;
+import com.kuaimu.android.app.activity.MineWorkActivity;
+import com.kuaimu.android.app.activity.MyPointActivity;
+import com.kuaimu.android.app.activity.NoticeListActivity;
 import com.kuaimu.android.app.activity.SettingsActivity;
 import com.kuaimu.android.app.databinding.ActivityMainBinding;
 
@@ -70,21 +78,39 @@ public class MainActivity extends BaseActivity {
         userName = headerView.findViewById(R.id.user_name);
         userTouristId = headerView.findViewById(R.id.user_tourist_id);
         userVip = headerView.findViewById(R.id.user_vip);
+        View likeView = headerView.findViewById(R.id.likeView);
+        View messageView = headerView.findViewById(R.id.messageView);
         View chatView = headerView.findViewById(R.id.chatView);
         View fansView = headerView.findViewById(R.id.fansView);
         View followView = headerView.findViewById(R.id.followView);
         View workView = headerView.findViewById(R.id.workView);
         View walletView = headerView.findViewById(R.id.walletView);
-        View vipView = headerView.findViewById(R.id.vipView);
+        View myPointView = headerView.findViewById(R.id.myPointView);
         View settingView = headerView.findViewById(R.id.settingView);
 
+        likeView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getUid(true) > 0) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("uid", getUid());
+                    openActivity(MineLikeActivity.class, bundle);
+                }
+            }
+        });
+        messageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getUid(true) > 0) {
+                    openActivity(MessageActivity.class);
+                }
+            }
+        });
         chatView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (getUid(true) > 0) {
-//                    Intent intent = new Intent(MainActivity.this, MyWorkActivity.class);
-//                    intent.putExtra("uid", getUserInfo().getData().getId());
-//                    startActivity(intent);
+                    openActivity(ChatListActivity.class);
                 }
             }
         });
@@ -92,7 +118,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (getUid(true) > 0) {
-                    openActivity(ChatActivity.class);
+                    openActivity(MineWorkActivity.class);
                 }
             }
         });
@@ -100,7 +126,9 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (getUid(true) > 0) {
-//                    openActivity(MyFollowActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("uid", getUid());
+                    openActivity(MineFollowActivity.class, bundle);
                 }
             }
         });
@@ -108,7 +136,9 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (getUid(true) > 0) {
-//                    openActivity(MyFansActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("uid", getUid());
+                    openActivity(MineFansActivity.class, bundle);
                 }
             }
         });
@@ -120,11 +150,11 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
-        vipView.setOnClickListener(new View.OnClickListener() {
+        myPointView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (getUid(true) > 0) {
-//                    openActivity(MyVIPActivity.class);
+                    openActivity(MyPointActivity.class);
                 }
             }
         });
