@@ -80,12 +80,13 @@
                         android:textSize="17sp" />
 
                     <TextView
+                        android:id="@+id/walletTokenTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:drawableLeft="@mipmap/icon_lebi"
                         android:drawablePadding="5dp"
-                        android:text="100"
+                        android:text="0"
                         android:textColor="#ff666666"
                         android:textSize="25sp" />
 
@@ -111,10 +112,11 @@
                         android:textSize="17sp" />
 
                     <TextView
+                        android:id="@+id/incomeTokenTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:text="100"
+                        android:text="0"
                         android:textColor="#ff666666"
                         android:textSize="25sp" />
 

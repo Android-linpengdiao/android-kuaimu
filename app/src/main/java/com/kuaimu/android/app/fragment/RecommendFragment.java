@@ -14,15 +14,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.baselibrary.Constants;
 import com.baselibrary.utils.CommonUtil;
+import com.baselibrary.utils.SharedPreferencesUtils;
+import com.baselibrary.utils.ToastUtils;
 import com.kuaimu.android.app.R;
 import com.kuaimu.android.app.activity.WorkDetailActivity;
 import com.kuaimu.android.app.adapter.RecommendAdapter;
 import com.kuaimu.android.app.databinding.FragmentRecommendBinding;
 import com.kuaimu.android.app.model.BaseData;
 import com.kuaimu.android.app.model.RecommendData;
+import com.kuaimu.android.app.utils.SpringViewNewFooter;
+import com.kuaimu.android.app.utils.SpringViewNewHeader;
 import com.kuaimu.android.app.view.GridItemDecoration;
 import com.kuaimu.android.app.view.OnClickListener;
+import com.liaoinstan.springview.widget.SpringView;
 import com.okhttp.SendRequest;
 import com.okhttp.callbacks.GenericsCallback;
 import com.okhttp.sample_okhttp.JsonGenericsSerializator;
@@ -34,6 +40,7 @@ public class RecommendFragment extends BaseFragment {
     private FragmentRecommendBinding binding;
     private RecommendAdapter adapter;
     private RecommendData recommendData;
+    private boolean isRefresh = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,18 +60,18 @@ public class RecommendFragment extends BaseFragment {
         binding.recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         GridItemDecoration.Builder builder = new GridItemDecoration.Builder(getActivity());
         builder.color(R.color.transparent);
-        builder.size(CommonUtil.dip2px(getActivity(), 2));
+        builder.size(CommonUtil.dip2px(getActivity(), 10));
         binding.recyclerView.addItemDecoration(new GridItemDecoration(builder));
         binding.recyclerView.setAdapter(adapter);
         adapter.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view, Object object) {
-                if (recommendData!=null) {
+                if (recommendData != null) {
                     Intent intent = new Intent(getActivity(), WorkDetailActivity.class);
                     BaseData baseData = new BaseData();
-                    baseData.setData(recommendData.getData().getData());
-                    intent.putExtra("baseData",baseData );
-                    intent.putExtra("position",(int)object );
+                    baseData.setData(adapter.getList());
+                    intent.putExtra("baseData", baseData);
+                    intent.putExtra("position", (int) object);
                     getActivity().startActivity(intent);
                 }
             }
@@ -75,35 +82,62 @@ public class RecommendFragment extends BaseFragment {
             }
         });
 
-        binding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
-        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+        binding.springMine.setHeader(new SpringViewNewHeader(getContext()));
+        binding.springMine.setFooter(new SpringViewNewFooter(getContext()));
+        binding.springMine.setType(SpringView.Type.FOLLOW);
+        binding.springMine.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-                initData();
+                isRefresh = true;
+                initData(Constants.perPage, 1);
+            }
+
+            @Override
+            public void onLoadmore() {
+                if (recommendData != null && recommendData.getCode() == 200 && recommendData.getData() != null &&
+                        recommendData.getData().getCurrent_page() < recommendData.getData().getLast_page()) {
+                    isRefresh = false;
+                    initData(Constants.perPage, recommendData.getData().getCurrent_page() + 1);
+                } else {
+                    binding.springMine.onFinishFreshAndLoad();
+                    ToastUtils.showShort(getActivity(), "没有更多了");
+                }
             }
         });
-        binding.swipeRefreshLayout.setRefreshing(true);
-        initData();
-
 
         return binding.getRoot();
     }
 
-    private void initData() {
-        SendRequest.homeRecommend(getUid(), 10, 1, new GenericsCallback<RecommendData>(new JsonGenericsSerializator()) {
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (recommendData != null && recommendData.getCode() == 200 && recommendData.getData() != null) {
+            isRefresh = true;
+            initData(adapter.getList().size(), 1);
+        } else {
+            isRefresh = true;
+            initData(Constants.perPage, 1);
+        }
+    }
+
+    private void initData(int perPage, int currentPage) {
+        SendRequest.videoAttention(getUid(),perPage, currentPage, new GenericsCallback<RecommendData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
-                binding.swipeRefreshLayout.setRefreshing(false);
+                binding.springMine.onFinishFreshAndLoad();
             }
 
             @Override
             public void onResponse(RecommendData response, int id) {
-                binding.swipeRefreshLayout.setRefreshing(false);
+                binding.springMine.onFinishFreshAndLoad();
                 if (response.getCode() == 200 && response.getData() != null && response.getData().getData() != null) {
                     recommendData = response;
-                    adapter.refreshData(response.getData().getData());
-                } else {
-
+                    if (isRefresh) {
+                        adapter.refreshData(response.getData().getData());
+                    } else {
+                        adapter.loadMoreData(response.getData().getData());
+                    }
                 }
             }
 

@@ -5,10 +5,13 @@ import com.baselibrary.utils.LogUtil;
 import com.dueeeke.videoplayer.ijk.IjkPlayerFactory;
 import com.dueeeke.videoplayer.player.VideoViewConfig;
 import com.dueeeke.videoplayer.player.VideoViewManager;
+import com.kuaimu.android.app.manager.CityManager;
+import com.kuaimu.android.app.model.CityData;
 import com.okhttp.utils.HttpsUtils;
 import com.okhttp.utils.OkHttpUtils;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
@@ -53,5 +56,17 @@ public class MyApplication extends BaseApplication {
             e.printStackTrace();
         }
 
+        getAreaFirst();
+    }
+
+    public static List<CityData.FirstChildrenBean> areaList;
+
+    public void getAreaFirst() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                areaList = CityManager.getInstance().getAreaFirst();
+            }
+        }).start();
     }
 }

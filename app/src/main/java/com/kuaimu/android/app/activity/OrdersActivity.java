@@ -33,7 +33,7 @@ public class OrdersActivity extends BaseActivity {
         adapter = new OrdersAdapter(this);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(adapter);
-        SendRequest.orders(getUid(), new GenericsCallback<OrdersData>(new JsonGenericsSerializator()) {
+        SendRequest.walletRecord(getUid(), new GenericsCallback<OrdersData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
 

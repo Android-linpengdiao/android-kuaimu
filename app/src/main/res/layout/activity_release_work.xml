@@ -90,7 +90,7 @@
                     android:textSize="17sp" />
 
                 <RelativeLayout
-                    android:layout_width="105dp"
+                    android:layout_width="140dp"
                     android:layout_height="168dp"
                     android:layout_marginTop="15dp">
 
@@ -98,17 +98,18 @@
                         android:id="@+id/cover"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/placeholder"/>
+                        android:src="@drawable/placeholder" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="8dp"
-                        android:text="选封面"
+                        android:gravity="center"
+                        android:text="上传封面"
                         android:textColor="#ffffffff"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:background="@drawable/button_radius_bottom"/>
                 </RelativeLayout>
 
                 <TextView
@@ -149,6 +150,132 @@
                         android:textSize="16sp" />
 
                 </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="是否关联商品"
+                    android:textColor="#ff333333"
+                    android:textSize="17sp" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="2dp"
+                    app:cardPreventCornerOverlap="true"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/radio"
+                            android:drawablePadding="10dp"
+                            android:padding="15dp"
+                            android:text="是"
+                            android:textColor="#ff000000"
+                            android:textSize="15sp"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/radio"
+                            android:layout_marginLeft="60dp"
+                            android:drawablePadding="10dp"
+                            android:padding="15dp"
+                            android:text="否"
+                            android:textColor="#ff000000"
+                            android:textSize="15sp"
+                            />
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="商品名称"
+                    android:textColor="#ff333333"
+                    android:textSize="17sp" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="2dp"
+                    app:cardPreventCornerOverlap="true"
+                    app:cardUseCompatPadding="true">
+
+                    <EditText
+                        android:id="@+id/goodName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:gravity="left"
+                        android:hint="请输入商品名称"
+                        android:padding="@dimen/padding"
+                        android:textColor="#ff333333"
+                        android:textColorHint="#ff999999"
+                        android:textSize="16sp" />
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="商品购买链接"
+                    android:textColor="#ff333333"
+                    android:textSize="17sp" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="2dp"
+                    app:cardPreventCornerOverlap="true"
+                    app:cardUseCompatPadding="true">
+
+                    <EditText
+                        android:id="@+id/goodLink"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:gravity="left"
+                        android:hint="请输入商品购买链接"
+                        android:padding="@dimen/padding"
+                        android:textColor="#ff333333"
+                        android:textColorHint="#ff999999"
+                        android:textSize="16sp" />
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="商品主图"
+                    android:textColor="#ff333333"
+                    android:textSize="17sp" />
+
+                <ImageView
+                    android:id="@+id/goodImg"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:src="@mipmap/icon_pic"
+                    android:layout_marginTop="15dp"/>
 
             </LinearLayout>
         </ScrollView>

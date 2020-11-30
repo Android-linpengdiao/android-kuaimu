@@ -82,7 +82,8 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="10dp"
                         android:padding="15dp"
-                        android:src="@drawable/look" />
+                        android:src="@drawable/look"
+                        android:visibility="gone"/>
 
                 </LinearLayout>
 
@@ -194,7 +195,8 @@
                     android:gravity="center"
                     android:text="QQ登录"
                     android:textColor="#666666"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/login_wb"

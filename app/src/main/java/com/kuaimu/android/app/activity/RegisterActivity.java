@@ -175,6 +175,7 @@ public class RegisterActivity extends BaseActivity {
         String phone = binding.etPhone.getText().toString().trim();
         String authCode = binding.etCode.getText().toString().trim();
         String password = binding.etPassword.getText().toString().trim();
+        String passwordConfirmation = binding.etPasswordConfirmation.getText().toString().trim();
 
         if (phone.length() < 11) {
             ToastUtils.showShort(RegisterActivity.this, "手机号码不正确");
@@ -184,7 +185,7 @@ public class RegisterActivity extends BaseActivity {
             ToastUtils.showShort(RegisterActivity.this, "验证码不能为空");
             return;
         }
-        if (password.length() < 6) {
+        if (password.length() < 6 || passwordConfirmation.length() < 6) {
             ToastUtils.showShort(RegisterActivity.this, "密码不能小于6位");
             return;
         }
@@ -193,7 +194,7 @@ public class RegisterActivity extends BaseActivity {
             return;
         }
 
-        SendRequest.register(phone, password, authCode, third_type, third_value, new GenericsCallback<UserInfo>(new JsonGenericsSerializator()) {
+        SendRequest.register(phone, password, passwordConfirmation,authCode, new GenericsCallback<UserInfo>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
 

@@ -68,7 +68,7 @@
                     android:layout_marginRight="6dp"
                     android:padding="10dp"
                     android:src="@mipmap/search"
-                    android:tint="@color/black"/>
+                    app:tint="@color/black" />
 
                 <ImageView
                     android:id="@+id/videoImageView"
@@ -77,7 +77,7 @@
                     android:layout_marginRight="6dp"
                     android:padding="10dp"
                     android:src="@mipmap/recordfill"
-                    android:tint="@color/black"/>
+                    app:tint="@color/black" />
             </LinearLayout>
 
         </LinearLayout>

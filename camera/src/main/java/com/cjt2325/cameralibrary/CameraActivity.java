@@ -108,7 +108,7 @@ public class CameraActivity extends Activity {
                     public void onSuccess() {
                         try {
                             LoadingManager.hideLoadingDialog(CameraActivity.this);
-                            Class crop = Class.forName("com.kuaimu.activity.PreviewVideoActivity");
+                            Class crop = Class.forName("com.kuaimu.android.app.activity.ReleaseWorkActivity");
                             Intent intent = new Intent(CameraActivity.this, crop);
                             intent.putExtra("videoPath", destPath);
                             intent.putExtra("coverPath", path);
@@ -215,7 +215,7 @@ public class CameraActivity extends Activity {
                         String videoPath = data.getStringExtra("video");
                         String coverPath = data.getStringExtra("cover");
                         try {
-                            Class crop = Class.forName("com.kuaimu.activity.PreviewVideoActivity");
+                            Class crop = Class.forName("com.kuaimu.android.app.activity.ReleaseWorkActivity");
                             Intent intent = new Intent(CameraActivity.this, crop);
                             intent.putExtra("videoPath", videoPath);
                             intent.putExtra("coverPath", coverPath);

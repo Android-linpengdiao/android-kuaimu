@@ -3,7 +3,7 @@ package com.okhttp.utils;
 public class APIUrls {
 
 
-    public final static String url_domain = "http://kalao500q.com/";
+    public final static String url_domain = "http://quickeye.fengyunguoyuan.com/";
 
     public final static String url_fileUpload = url_domain + "api/common/fileUpload";
     public final static String url_createSecurityToken = url_domain + "api/common/ossToken";
@@ -29,6 +29,10 @@ public class APIUrls {
     public final static String url_profile = url_domain + "api/center/profile";
 
 
+    //同城
+    public final static String videoCity = url_domain + "api/video/city";
+    //关注
+    public final static String videoAttention = url_domain + "api/video/attention";
 
 
 
@@ -83,12 +87,8 @@ public class APIUrls {
     public final static String userPrice = url_domain + "api/common/userPrice";
     public final static String vipDetail = url_domain + "api/cash/vip/detail";
     public final static String orders = url_domain + "api/cash/orders";
-
-
-
-
-
-
+    public final static String walletInfo = url_domain + "api/wallet/info";
+    public final static String walletRecord = url_domain + "api/wallet/record";
 
 
     //首页-用户关注用户
@@ -152,7 +152,8 @@ public class APIUrls {
     public final static String url_favouriteContent = url_domain + "api/center/favouriteContent";
     //用户发表作品
     public final static String url_publishWork = url_domain + "api/center/publishWork";
-    public final static String url_publishVideo = url_domain + "api/publish/video";
+//    public final static String url_publishVideo = url_domain + "api/publish/video";
+    public final static String url_publishVideo = url_domain + "api/video/publish";
     //获取用户的点赞
     public final static String url_centerAssist = url_domain + "api/center/assist";
     //首页-视频-创建评论
