@@ -36,7 +36,7 @@ public class VideoDetailActivity extends BaseActivity {
         } else {
             finish();
         }
-        SendRequest.homeDetail(getUid(), id, new GenericsCallback<HomeDetail>(new JsonGenericsSerializator()) {
+        SendRequest.worksDetail(getUid(), id, new GenericsCallback<HomeDetail>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
 

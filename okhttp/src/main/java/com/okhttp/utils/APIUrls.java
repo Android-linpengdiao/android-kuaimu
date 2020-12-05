@@ -52,14 +52,14 @@ public class APIUrls {
     public final static String delVideo = url_domain + "api/person/delVideo";
 
     //推荐
-    public final static String homeAssist = url_domain + "api/home/assist";
-    public final static String homeDeleteAssist = url_domain + "api/home/deleteAssist";
-    public final static String homeDetail = url_domain + "api/home/detail";
+    public final static String homeAssist = url_domain + "api/video/assist";
+    public final static String homeDeleteAssist = url_domain + "api/video/cancelAssist";
+    public final static String worksDetail = url_domain + "api/person/worksDetail";
     public final static String homeShare = url_domain + "api/home/share";
 
     public final static String search = url_domain + "api/home/search";
 
-    public final static String personAssist = url_domain + "api/person/assist";
+    public final static String personAssist = url_domain + "api/message/assist";
     public final static String homeSelfAttention = url_domain + "api/home/selfAttention";
     public final static String homeLeave = url_domain + "api/home/leave";
     public final static String publishLeave = url_domain + "api/home/publishLeave";
@@ -80,8 +80,10 @@ public class APIUrls {
     public final static String deleteGood = url_domain + "api/person/deleteGood";
     public final static String personGood = url_domain + "api/person/good";
     public final static String goodDetail = url_domain + "api/person/goodDetail";
-    public final static String attention = url_domain + "api/person/attention";
-    public final static String follower = url_domain + "api/person/follower";
+//    public final static String attention = url_domain + "api/person/attention";
+    public final static String attention = url_domain + "api/message/flower";
+//    public final static String follower = url_domain + "api/person/follower";
+    public final static String follower = url_domain + "api/person/fans";
     public final static String personCategory = url_domain + "api/common/personCategory";
     public final static String cashPay = url_domain + "api/cash/pay";
     public final static String userPrice = url_domain + "api/common/userPrice";
@@ -130,10 +132,12 @@ public class APIUrls {
     public final static String url_centerAttention = url_domain + "api/center/attention";
     //取消关注用户接口
 //    public final static String url_centerUnFollow = url_domain + "api/center/unFollow";
-    public final static String url_centerUnFollow = url_domain + "api/home/removeAttention";
+//    public final static String url_centerUnFollow = url_domain + "api/home/removeAttention";
+    public final static String url_centerUnFollow = url_domain + "api/attention/unFollow";
     //关注用户接口
 //    public final static String url_centerFollow = url_domain + "api/center/follow";
-    public final static String url_centerFollow = url_domain + "api/home/attention";
+//    public final static String url_centerFollow = url_domain + "api/home/attention";
+    public final static String url_centerFollow = url_domain + "api/attention/follow";
 
     //查看作品是否被点赞
     public final static String url_contentIsAssist = url_domain + "api/center/contentIsAssist";
@@ -147,13 +151,14 @@ public class APIUrls {
     public final static String url_publishComment = url_domain + "api/center/publishComment";
     //获取用户作品
 //    public final static String url_centerSelfWork = url_domain + "api/center/selfWork";
-    public final static String url_personVideos = url_domain + "api/person/videos";
+//    public final static String url_personVideos = url_domain + "api/person/videos";
+    public final static String personWorks = url_domain + "api/person/works";
     //获取用户最爱的作品
     public final static String url_favouriteContent = url_domain + "api/center/favouriteContent";
     //用户发表作品
     public final static String url_publishWork = url_domain + "api/center/publishWork";
 //    public final static String url_publishVideo = url_domain + "api/publish/video";
-    public final static String url_publishVideo = url_domain + "api/video/publish";
+    public final static String publishVideo = url_domain + "api/video/publish";
     //获取用户的点赞
     public final static String url_centerAssist = url_domain + "api/center/assist";
     //首页-视频-创建评论

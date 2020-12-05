@@ -27,6 +27,16 @@ public class SharedPreferencesUtils {
         sharedPreferences = BaseApplication.getInstance().getSharedPreferences(SP_DATA, Context.MODE_PRIVATE);
     }
 
+    public int getUid() {
+        return sharedPreferences.getInt("uid", 0);
+    }
+
+    public void setUid(int uid) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("uid", uid);
+        editor.commit();
+    }
+
     public String getCity() {
         return sharedPreferences.getString("City", "北京市");
     }

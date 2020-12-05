@@ -6,10 +6,11 @@ import android.view.View;
 import com.baselibrary.utils.GlideLoader;
 import com.kuaimu.android.app.R;
 import com.kuaimu.android.app.databinding.ItemMineWorkLayoutBinding;
+import com.kuaimu.android.app.model.VideoBean;
 import com.kuaimu.android.app.model.VideoDataBean;
 import com.kuaimu.android.app.view.OnClickListener;
 
-public class MineLikeWorkAdapter extends BaseRecyclerAdapter<VideoDataBean, ItemMineWorkLayoutBinding> {
+public class MineLikeWorkAdapter extends BaseRecyclerAdapter<VideoBean, ItemMineWorkLayoutBinding> {
 
     private boolean isSelection = false;
     private OnClickListener onClickListener;
@@ -33,10 +34,10 @@ public class MineLikeWorkAdapter extends BaseRecyclerAdapter<VideoDataBean, Item
     }
 
     @Override
-    protected void onBindItem(final ItemMineWorkLayoutBinding binding, final VideoDataBean dataBean, final int position) {
+    protected void onBindItem(final ItemMineWorkLayoutBinding binding, final VideoBean dataBean, final int position) {
         if (mList != null && mList.size() > 0) {
-            binding.tvAssist.setText(String.valueOf(dataBean.getAssist_num()));
-            GlideLoader.LoderImage(mContext, dataBean.getImg(), binding.cover);
+//            binding.tvAssist.setText(String.valueOf(dataBean.getAssist_num()));
+            GlideLoader.LoderImage(mContext, dataBean.getContent().getImg(), binding.cover);
             binding.viewLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

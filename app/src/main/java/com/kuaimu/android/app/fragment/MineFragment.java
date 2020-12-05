@@ -62,7 +62,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
 
         binding.headLoginLayout.userIcon.setOnClickListener(this);
         binding.headLoginLayout.tvVip.setOnClickListener(this);
-        binding.headLoginLayout.settingView.setOnClickListener(this);
+        binding.headLoginLayout.tvSetting.setOnClickListener(this);
         binding.headLoginLayout.followersView.setOnClickListener(this);
         binding.headLoginLayout.likerView.setOnClickListener(this);
         binding.headLoginLayout.productView.setOnClickListener(this);

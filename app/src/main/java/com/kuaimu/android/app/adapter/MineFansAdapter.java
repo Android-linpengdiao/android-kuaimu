@@ -13,7 +13,7 @@ import com.kuaimu.android.app.model.FansUserData;
 import com.kuaimu.android.app.view.OnClickListener;
 
 
-public class MineFansAdapter extends BaseRecyclerAdapter<FansUserData.DataBean, ItemFriendsLayoutBinding> {
+public class MineFansAdapter extends BaseRecyclerAdapter<FansUserData.DataBeanX.DataBean, ItemFriendsLayoutBinding> {
 
     private OnClickListener onClickListener;
 
@@ -31,22 +31,18 @@ public class MineFansAdapter extends BaseRecyclerAdapter<FansUserData.DataBean, 
     }
 
     @Override
-    protected void onBindItem(final ItemFriendsLayoutBinding binding, final FansUserData.DataBean dataBean, final int position) {
+    protected void onBindItem(final ItemFriendsLayoutBinding binding, final FansUserData.DataBeanX.DataBean dataBean, final int position) {
         if (mList != null && mList.size() > 0) {
-            if (!CommonUtil.isBlank(dataBean.getTourist())) {
-                binding.tvTitle.setText(dataBean.getTourist().getName());
-                binding.tvDesc.setText("粉丝：" + dataBean.getFollower_num());
-                binding.tvFollowers.setText(dataBean.isBe_attention() ? "已关注" : "关注");
-                GlideLoader.LoderCircleImage(mContext, dataBean.getTourist().getAvatar(), binding.userIcon);
-            }
+            binding.tvTitle.setText(dataBean.getName());
+            binding.tvDesc.setText("粉丝：" + dataBean.getFan_number());
+            binding.tvFollowers.setText(dataBean.isIs_person_follow() ? "已关注" : "关注");
+            GlideLoader.LoderCircleImage(mContext, dataBean.getAvatar(), binding.userIcon);
             binding.viewLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (dataBean.getTourist() != null) {
-                        Intent intent = new Intent(mContext, UserHomeActivity.class);
-                        intent.putExtra("uid", dataBean.getTourist().getId());
-                        mContext.startActivity(intent);
-                    }
+                    Intent intent = new Intent(mContext, UserHomeActivity.class);
+                    intent.putExtra("uid", dataBean.getId());
+                    mContext.startActivity(intent);
                 }
             });
         }

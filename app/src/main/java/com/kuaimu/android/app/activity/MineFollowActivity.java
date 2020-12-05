@@ -23,16 +23,11 @@ public class MineFollowActivity extends BaseActivity implements View.OnClickList
     private ActivityMineFollowBinding binding;
     private MineFollowAdapter adapter;
     private FollowUserData followUserData;
-    private int uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_mine_follow);
-
-        if (getIntent().getExtras() != null) {
-            uid = getIntent().getExtras().getInt("uid");
-        }
 
         binding.back.setOnClickListener(this);
 
@@ -42,7 +37,7 @@ public class MineFollowActivity extends BaseActivity implements View.OnClickList
         adapter.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view, Object object) {
-                FollowUserData.DataBean dataBean = (FollowUserData.DataBean) object;
+                FollowUserData.DataBeanX.DataBean dataBean = (FollowUserData.DataBeanX.DataBean) object;
                 setFollow(dataBean);
             }
 
@@ -70,7 +65,7 @@ public class MineFollowActivity extends BaseActivity implements View.OnClickList
     }
 
     private void initData() {
-        SendRequest.attention(uid, new GenericsCallback<FollowUserData>(new JsonGenericsSerializator()) {
+        SendRequest.attention(getUid(), new GenericsCallback<FollowUserData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
                 binding.swipeRefreshLayout.setRefreshing(false);
@@ -81,7 +76,7 @@ public class MineFollowActivity extends BaseActivity implements View.OnClickList
                 followUserData = response;
                 binding.swipeRefreshLayout.setRefreshing(false);
                 if (response.getCode() == 200 && response.getData() != null && response.getData()!= null) {
-                    adapter.refreshData(response.getData());
+                    adapter.refreshData(response.getData().getData());
                 } else {
                     ToastUtils.showShort(MineFollowActivity.this, response.getMsg());
                 }
@@ -90,7 +85,7 @@ public class MineFollowActivity extends BaseActivity implements View.OnClickList
         });
     }
 
-    private void setFollow(final FollowUserData.DataBean dataBean) {
+    private void setFollow(final FollowUserData.DataBeanX.DataBean dataBean) {
 //        String url = dataBean.getAttention() != -1 ? APIUrls.url_centerUnFollow : APIUrls.url_centerFollow;
 //        SendRequest.centerFollow(getUserInfo().getData().getId(), dataBean.getId(), url, new StringCallback() {
 //            @Override

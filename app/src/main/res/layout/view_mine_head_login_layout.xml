@@ -12,29 +12,12 @@
         android:background="#454B6E"
         android:orientation="vertical">
 
-        <include layout="@layout/status_bar" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="50dp">
-
-            <ImageView
-                android:id="@+id/back"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:padding="15dp"
-                android:src="@drawable/video_back"
-                android:visibility="gone" />
-
-        </RelativeLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:layout_marginTop="74dp"
             android:orientation="horizontal">
 
             <RelativeLayout
@@ -47,7 +30,6 @@
                     android:layout_height="113dp"
                     android:background="@drawable/circle"
                     android:padding="2dp" />
-
                 <ImageView
                     android:id="@+id/user_vip"
                     android:layout_width="30dp"
@@ -55,7 +37,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
                     android:src="@mipmap/icon_vip"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
             </RelativeLayout>
 
             <LinearLayout
@@ -68,8 +50,8 @@
                     android:id="@+id/user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
                     android:text=""
+                    android:singleLine="true"
                     android:textColor="#ffffffff"
                     android:textSize="30sp" />
 
@@ -103,7 +85,7 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/settingView"
+                        android:id="@+id/tv_setting"
                         android:layout_width="wrap_content"
                         android:layout_height="34dp"
                         android:background="@drawable/button_radius_theme"
@@ -149,18 +131,22 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="23dp"
-                    android:text=""
-                    android:textColor="#fffafafa"
-                    android:textSize="15sp" />
-
             </LinearLayout>
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:maxLines="6"
+            android:ellipsize="end"
+            android:text=""
+            android:textColor="#fffafafa"
+            android:textSize="15sp" />
 
         <LinearLayout
             android:layout_width="match_parent"

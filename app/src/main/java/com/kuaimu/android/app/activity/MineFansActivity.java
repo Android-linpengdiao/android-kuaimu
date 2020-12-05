@@ -40,7 +40,7 @@ public class MineFansActivity extends BaseActivity implements View.OnClickListen
         adapter.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view, Object object) {
-                FansUserData.DataBean dataBean = (FansUserData.DataBean) object;
+                FansUserData.DataBeanX.DataBean dataBean = (FansUserData.DataBeanX.DataBean) object;
                 setFollow(dataBean);
             }
 
@@ -79,7 +79,7 @@ public class MineFansActivity extends BaseActivity implements View.OnClickListen
                 fansUserData = response;
                 binding.swipeRefreshLayout.setRefreshing(false);
                 if (response.getCode() == 200 && response.getData() != null && response.getData() != null) {
-                    adapter.refreshData(response.getData());
+                    adapter.refreshData(response.getData().getData());
                 } else {
                     ToastUtils.showShort(MineFansActivity.this, response.getMsg());
                 }
@@ -88,7 +88,7 @@ public class MineFansActivity extends BaseActivity implements View.OnClickListen
         });
     }
 
-    private void setFollow(final FansUserData.DataBean dataBean) {
+    private void setFollow(final FansUserData.DataBeanX.DataBean dataBean) {
 //        String url = dataBean.isAttention() ? APIUrls.url_centerUnFollow : APIUrls.url_centerFollow;
 //        SendRequest.centerFollow(getUserInfo().getData().getId(), dataBean.getId(), url, new StringCallback() {
 //            @Override

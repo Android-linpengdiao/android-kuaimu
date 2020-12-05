@@ -91,7 +91,7 @@ public class MineLikeActivity extends AppCompatActivity {
             public void onResponse(MineLikeWorkData response, int id) {
                 if (response.getCode() == 200 && response.getData() != null) {
                     mineLikeWorkData = response;
-                    adapter.refreshData(response.getData());
+                    adapter.refreshData(response.getData().getData());
                 } else {
                     ToastUtils.showShort(MineLikeActivity.this, response.getMsg());
                 }

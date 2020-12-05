@@ -9,11 +9,17 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
+import com.baselibrary.MessageBus;
 import com.baselibrary.UserInfo;
+import com.baselibrary.manager.DialogManager;
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.GlideLoader;
 import com.baselibrary.utils.ToastUtils;
@@ -23,6 +29,7 @@ import com.kuaimu.android.app.activity.MineFansActivity;
 import com.kuaimu.android.app.activity.MineFollowActivity;
 import com.kuaimu.android.app.activity.MyProductActivity;
 import com.kuaimu.android.app.adapter.MinePagerAdapter;
+import com.kuaimu.android.app.adapter.UserPagerAdapter;
 import com.kuaimu.android.app.databinding.FragmentWorkUserHomeBinding;
 import com.okhttp.SendRequest;
 import com.okhttp.callbacks.GenericsCallback;
@@ -30,8 +37,10 @@ import com.okhttp.callbacks.StringCallback;
 import com.okhttp.sample_okhttp.JsonGenericsSerializator;
 import com.okhttp.utils.APIUrls;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
+import androidx.viewpager.widget.ViewPager;
 import okhttp3.Call;
 
 public class WorkUserHomeFragment extends BaseFragment implements View.OnClickListener {
@@ -50,6 +59,8 @@ public class WorkUserHomeFragment extends BaseFragment implements View.OnClickLi
 
     public interface OnUserFragmentInteractionListener {
         void onUserFragmentInteraction();
+
+        void onUserFragmentInteractionFollow(boolean follow);
     }
 
     @Override
@@ -77,39 +88,64 @@ public class WorkUserHomeFragment extends BaseFragment implements View.OnClickLi
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_work_user_home, container, false);
         setStatusBarHeight(binding.getRoot());
 
-        binding.headLoginLayout.back.setOnClickListener(this);
-        binding.headLoginLayout.back.setVisibility(View.VISIBLE);
+        binding.back.setOnClickListener(this);
+        binding.back.setVisibility(View.VISIBLE);
+        binding.menuView.setOnClickListener(this);
+        binding.menuView.setVisibility(View.VISIBLE);
         binding.headLoginLayout.tvIsFollow.setVisibility(View.VISIBLE);
         binding.headLoginLayout.tvChat.setOnClickListener(this);
         binding.headLoginLayout.tvChat.setVisibility(View.VISIBLE);
         binding.headLoginLayout.tvVip.setVisibility(View.GONE);
-        binding.headLoginLayout.settingView.setVisibility(View.GONE);
+        binding.headLoginLayout.tvSetting.setVisibility(View.GONE);
         binding.headLoginLayout.followersView.setOnClickListener(this);
         binding.headLoginLayout.likerView.setOnClickListener(this);
         binding.headLoginLayout.productView.setOnClickListener(this);
-
-        initData();
 
         return binding.getRoot();
 
     }
 
+    private static final String TAG = "WorkUserHomeFragment";
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        Log.i(TAG, "onResume: ");
+//        initData();
+//    }
+//
+//    @Override
+//    public void onHiddenChanged(boolean hidden) {
+//        super.onHiddenChanged(hidden);
+//        Log.i(TAG, "onHiddenChanged: ");
+//        initData();
+//    }
+
     public void updateUser(int uid) {
+        Log.i(TAG, "updateUser: " + uid);
         this.uid = uid;
         initData();
     }
 
-    private void initData() {
+    public void followUser(boolean follow) {
+        binding.headLoginLayout.tvIsFollow.setSelected(follow);
+        binding.headLoginLayout.tvIsFollow.setText(binding.headLoginLayout.tvIsFollow.isSelected() ? "已关注TA" : "关注TA");
+    }
 
+    private void initData() {
+        Log.i(TAG, "initData: "+uid);
         SendRequest.baseInfo(uid, new GenericsCallback<UserInfo>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
+                initView(null);
             }
 
             @Override
             public void onResponse(UserInfo response, int id) {
                 if (response.getCode() == 200 && response.getData() != null) {
                     initView(response);
+                } else {
+                    initView(null);
                 }
             }
 
@@ -144,47 +180,97 @@ public class WorkUserHomeFragment extends BaseFragment implements View.OnClickLi
 
     private void initView(UserInfo userInfo) {
 
-        binding.headLoginLayout.tvIsFollow.setOnClickListener(this);
+        if (userInfo != null && userInfo.getData() != null) {
+            binding.headLoginLayout.tvIsFollow.setOnClickListener(this);
 
-        binding.headLoginLayout.userName.setText(userInfo.getData().getName());
-        binding.headLoginLayout.touristId.setText("ID：" + userInfo.getData().getTourist_id());
-        GlideLoader.LoderCircleImage(getContext(), userInfo.getData().getAvatar(), binding.headLoginLayout.userIcon);
-        binding.headLoginLayout.userVip.setVisibility(userInfo.getData().getIs_vip() == 1 ? View.VISIBLE : View.GONE);
-        binding.headLoginLayout.userVip.setImageResource(userInfo.getData().getVip_type() == 1 ? R.mipmap.qi : R.mipmap.icon_vip);
+            binding.headLoginLayout.userName.setText(userInfo.getData().getName());
+            binding.headLoginLayout.touristId.setText("ID：" + userInfo.getData().getTourist_id());
+            GlideLoader.LoderCircleImage(getContext(), userInfo.getData().getAvatar(), binding.headLoginLayout.userIcon);
+            binding.headLoginLayout.userVip.setVisibility(userInfo.getData().getIs_vip() == 1 ? View.VISIBLE : View.GONE);
+            binding.headLoginLayout.userVip.setImageResource(userInfo.getData().getVip_type() == 1 ? R.mipmap.qi : R.mipmap.icon_vip);
 
+            binding.headLoginLayout.tvIsFollow.setVisibility(getUid() == userInfo.getData().getId() ? View.GONE : View.VISIBLE);
+            binding.headLoginLayout.tvChat.setVisibility(getUid() == userInfo.getData().getId() ? View.GONE : View.VISIBLE);
 
-        binding.headLoginLayout.label.setVisibility(View.VISIBLE);
-        if (!CommonUtil.isBlank(userInfo.getData().getPerson_label()) && !CommonUtil.isBlank(userInfo.getData().getBus_label())) {
-            binding.headLoginLayout.label.setText(userInfo.getData().getPerson_label() + "  |  " + userInfo.getData().getBus_label());
-        } else if (!CommonUtil.isBlank(userInfo.getData().getPerson_label())) {
-            binding.headLoginLayout.label.setText(userInfo.getData().getPerson_label());
-        } else if (!CommonUtil.isBlank(userInfo.getData().getBus_label())) {
-            binding.headLoginLayout.label.setText(userInfo.getData().getBus_label());
+//        binding.headLoginLayout.label.setVisibility(View.VISIBLE);
+//        if (!CommonUtil.isBlank(userInfo.getData().getPerson_label()) && !CommonUtil.isBlank(userInfo.getData().getBus_label()) && !CommonUtil.isBlank(userInfo.getData().getDesc())) {
+//            binding.headLoginLayout.label.setText(userInfo.getData().getPerson_label() + "  |  " + userInfo.getData().getBus_label()+ "   " + userInfo.getData().getDesc());
+//        }else if (!CommonUtil.isBlank(userInfo.getData().getPerson_label()) && !CommonUtil.isBlank(userInfo.getData().getBus_label())) {
+//            binding.headLoginLayout.label.setText(userInfo.getData().getPerson_label() + "  |  " + userInfo.getData().getBus_label());
+//        } else if (!CommonUtil.isBlank(userInfo.getData().getPerson_label())) {
+//            binding.headLoginLayout.label.setText(userInfo.getData().getPerson_label());
+//        } else if (!CommonUtil.isBlank(userInfo.getData().getBus_label())) {
+//            binding.headLoginLayout.label.setText(userInfo.getData().getBus_label());
+//        } else {
+//            binding.headLoginLayout.label.setVisibility(View.GONE);
+//        }
+
+            binding.headLoginLayout.label.setText((!CommonUtil.isBlank(userInfo.getData().getPerson_label()) ? userInfo.getData().getPerson_label() + "  |  " : "")
+                    + (!CommonUtil.isBlank(userInfo.getData().getBus_label()) ? userInfo.getData().getBus_label() + "  |  " : "")
+                    + (!CommonUtil.isBlank(userInfo.getData().getDesc()) ? userInfo.getData().getDesc() : ""));
+
+            binding.headLoginLayout.label.setVisibility(CommonUtil.isBlank(userInfo.getData().getPerson_label()) && CommonUtil.isBlank(userInfo.getData().getBus_label()) && CommonUtil.isBlank(userInfo.getData().getDesc()) ? View.GONE : View.VISIBLE);
+
+            binding.headLoginLayout.tvFollowers.setText(String.valueOf(userInfo.getData().getAttention_num()));
+            binding.headLoginLayout.tvLiker.setText(String.valueOf(userInfo.getData().getFollower_num()));
+            binding.headLoginLayout.tvAssistNum.setText(String.valueOf(userInfo.getData().getGood_num()));
+
         } else {
+            binding.headLoginLayout.tvIsFollow.setOnClickListener(this);
+
+            binding.headLoginLayout.userName.setText("");
+            binding.headLoginLayout.touristId.setText("ID：");
+            GlideLoader.LoderCircleImage(getContext(), "http", binding.headLoginLayout.userIcon);
+            binding.headLoginLayout.userVip.setVisibility(View.GONE);
+            binding.headLoginLayout.tvIsFollow.setVisibility(View.GONE);
+            binding.headLoginLayout.tvChat.setVisibility(View.GONE);
+            binding.headLoginLayout.label.setText("");
             binding.headLoginLayout.label.setVisibility(View.GONE);
+            binding.headLoginLayout.tvFollowers.setText("");
+            binding.headLoginLayout.tvLiker.setText("");
+            binding.headLoginLayout.tvAssistNum.setText("");
         }
-        binding.headLoginLayout.tvFollowers.setText(String.valueOf(userInfo.getData().getAttention_num()));
-        binding.headLoginLayout.tvLiker.setText(String.valueOf(userInfo.getData().getFollower_num()));
-        binding.headLoginLayout.tvAssistNum.setText(String.valueOf(userInfo.getData().getGood_num()));
-
-//        binding.headLoginLayout.tvFollowers.setText(getUserInfo().getData().getFollowers() + "");
-//        binding.headLoginLayout.tvLiker.setText(getUserInfo().getData().getLiker() + "");
-
-//        binding.headLoginLayout.tvIsFollow.setSelected(isFollow);
-//        binding.headLoginLayout.tvIsFollow.setText(isFollow ? "已关注" : "关注");
 
         initTab(userInfo);
 
     }
 
     private void initTab(UserInfo userInfo) {
-        MinePagerAdapter mainHomePagerAdapter = new MinePagerAdapter(getChildFragmentManager(), uid);
-        mainHomePagerAdapter.addTitle("作品 " + (userInfo.getData() != null ? userInfo.getData().getVideo_num() : 0));
-        mainHomePagerAdapter.addTitle("喜欢 " + (userInfo.getData() != null ? userInfo.getData().getLike_video_num() : 0));
+        UserPagerAdapter mainHomePagerAdapter = new UserPagerAdapter(getChildFragmentManager());
+        mainHomePagerAdapter.addFragment("作品 " + (userInfo != null && userInfo.getData() != null ? userInfo.getData().getVideo_num() : 0),UserWorkFragment.newInstance(uid));
+        mainHomePagerAdapter.addFragment("喜欢 " + (userInfo != null && userInfo.getData() != null ? userInfo.getData().getLike_video_num() : 0),UserLikeFragment.newInstance(uid));
         binding.viewPager.setAdapter(mainHomePagerAdapter);
         binding.viewPager.setOffscreenPageLimit(1);
         binding.viewPager.setCurrentItem(0);
         binding.tabLayout.setupWithViewPager(binding.viewPager);
+        binding.viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                MessageBus.Builder builder = new MessageBus.Builder();
+                MessageBus messageBus = builder
+                        .codeType(MessageBus.msgId_pageScrolled)
+                        .message(position)
+                        .build();
+                EventBus.getDefault().post(messageBus);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        MessageBus.Builder builder = new MessageBus.Builder();
+        MessageBus messageBus = builder
+                .codeType(MessageBus.msgId_userHomeUid)
+                .message(uid)
+                .build();
+        EventBus.getDefault().post(messageBus);
     }
 
     @Override
@@ -195,57 +281,120 @@ public class WorkUserHomeFragment extends BaseFragment implements View.OnClickLi
                 mListener.onUserFragmentInteraction();
                 break;
             case R.id.tv_chat:
-                bundle.putInt("uid", uid);
-                openActivity(ChatActivity.class, bundle);
+                if (getUid(true) > 0) {
+                    bundle.putInt("uid", uid);
+                    openActivity(ChatActivity.class, bundle);
+                }
                 break;
             case R.id.tv_is_follow:
-                if (CommonUtil.isBlank(uid)) {
-                    return;
-                }
-                String url = binding.headLoginLayout.tvIsFollow.isSelected() ? APIUrls.url_centerUnFollow : APIUrls.url_centerFollow;
-                SendRequest.centerFollow(getUserInfo().getData().getId(), uid, url, new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-
+                if (getUid(true) > 0) {
+                    if (CommonUtil.isBlank(uid)) {
+                        return;
                     }
+                    String url = binding.headLoginLayout.tvIsFollow.isSelected() ? APIUrls.url_centerUnFollow : APIUrls.url_centerFollow;
+                    SendRequest.centerFollow(getUserInfo().getData().getId(), uid, url, new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
 
-                    @Override
-                    public void onResponse(String response, int id) {
-                        try {
-                            if (!CommonUtil.isBlank(response)) {
-                                JSONObject jsonObject = new JSONObject(response);
-                                if (jsonObject.optInt("code") == 200) {
-                                    binding.headLoginLayout.tvIsFollow.setSelected(!binding.headLoginLayout.tvIsFollow.isSelected());
-                                    binding.headLoginLayout.tvIsFollow.setText(binding.headLoginLayout.tvIsFollow.isSelected() ? "已关注TA" : "关注TA");
-                                    if (binding.headLoginLayout.tvIsFollow.isSelected()) {
-                                        ToastUtils.showShort(getActivity(), "已关注TA");
-                                    }
-                                } else {
-                                    ToastUtils.showShort(getActivity(), jsonObject.optString("msg"));
-                                }
-                            } else {
-                                ToastUtils.showShort(getActivity(), "请求失败");
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            ToastUtils.showShort(getActivity(), "请求失败");
                         }
 
-                    }
-                });
+                        @Override
+                        public void onResponse(String response, int id) {
+                            try {
+                                if (!CommonUtil.isBlank(response)) {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    if (jsonObject.optInt("code") == 200) {
+                                        binding.headLoginLayout.tvIsFollow.setSelected(!binding.headLoginLayout.tvIsFollow.isSelected());
+                                        binding.headLoginLayout.tvIsFollow.setText(binding.headLoginLayout.tvIsFollow.isSelected() ? "已关注TA" : "关注TA");
+                                        mListener.onUserFragmentInteractionFollow(binding.headLoginLayout.tvIsFollow.isSelected());
+                                        if (binding.headLoginLayout.tvIsFollow.isSelected()) {
+                                            ToastUtils.showShort(getActivity(), "已关注TA");
+                                        }
+                                    } else {
+                                        ToastUtils.showShort(getActivity(), jsonObject.optString("msg"));
+                                    }
+                                } else {
+                                    ToastUtils.showShort(getActivity(), "请求失败");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                ToastUtils.showShort(getActivity(), "请求失败");
+                            }
+
+                        }
+                    });
+                }
                 break;
             case R.id.followers_view:
-                bundle.putInt("uid", uid);
-                openActivity(MineFollowActivity.class, bundle);
+                if (getUid(true) > 0) {
+                    bundle.putInt("uid", uid);
+                    openActivity(MineFollowActivity.class, bundle);
+                }
                 break;
             case R.id.liker_view:
-                bundle.putInt("uid", uid);
-                openActivity(MineFansActivity.class, bundle);
+                if (getUid(true) > 0) {
+                    bundle.putInt("uid", uid);
+                    openActivity(MineFansActivity.class, bundle);
+                }
                 break;
             case R.id.product_view:
                 bundle.putInt("uid", uid);
                 openActivity(MyProductActivity.class, bundle);
                 break;
+            case R.id.menuView:
+                createMenuPopup();
+
+                break;
         }
+    }
+
+    private void createMenuPopup() {
+//        final PopupWindow popupWindow = new PopupWindow(getActivity());
+//        LayoutInflater mInflater = getLayoutInflater();
+//        View rootView = mInflater.inflate(R.layout.view_user_menu_layout, null);
+//        TextView confirm = rootView.findViewById(R.id.confirm);
+//        TextView cancel = rootView.findViewById(R.id.cancel);
+//        confirm.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                popupWindow.dismiss();
+//                DialogManager.showReportDialog(getActivity(), new DialogManager.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view, Object object) {
+//                        SendRequest.report(getUid(), String.valueOf(object), new GenericsCallback(new JsonGenericsSerializator()) {
+//                            @Override
+//                            public void onError(Call call, Exception e, int id) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onResponse(Object response, int id) {
+//
+//                            }
+//                        });
+//                    }
+//                });
+//            }
+//        });
+//        cancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                popupWindow.dismiss();
+//            }
+//        });
+//        popupWindow.setContentView(rootView);
+//        popupWindow.setAnimationStyle(R.style.PopupAnimation);
+//        popupWindow.setWidth(-1);
+//        popupWindow.setHeight(-2);
+//        popupWindow.setFocusable(true);
+//        popupWindow.setOutsideTouchable(true);
+//        popupWindow.setBackgroundDrawable(getResources().getDrawable(android.R.color.transparent));
+//        popupWindow.showAtLocation(getActivity().getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
+//        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+//            public void onDismiss() {
+//            }
+//        });
+
+
     }
 }

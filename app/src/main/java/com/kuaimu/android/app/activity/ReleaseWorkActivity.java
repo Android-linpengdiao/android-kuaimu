@@ -162,8 +162,7 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
                     ToastUtils.showShort(ReleaseWorkActivity.this, "封面地址无效，请重新选择");
                     return;
                 }
-//                uploadFile(coverPath);
-                publishWork("upload/20200922101026U4zjg.jpg", "http://oss-coffee.oss-cn-beijing.aliyuncs.com/1600679171274.mp4");
+                uploadFile(coverPath);
                 break;
         }
     }

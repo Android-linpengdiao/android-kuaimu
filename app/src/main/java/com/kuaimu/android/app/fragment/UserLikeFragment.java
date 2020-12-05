@@ -1,18 +1,15 @@
 package com.kuaimu.android.app.fragment;
 
-import androidx.databinding.DataBindingUtil;
-
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.GridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.baselibrary.MessageBus;
 import com.baselibrary.utils.CommonUtil;
+import com.baselibrary.utils.SharedPreferencesUtils;
 import com.baselibrary.utils.ToastUtils;
 import com.kuaimu.android.app.R;
 import com.kuaimu.android.app.activity.WorkDetailActivity;
@@ -30,30 +27,38 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.GridLayoutManager;
 import okhttp3.Call;
 
-public class MineLikeFragment extends BaseFragment {
+public class UserLikeFragment extends BaseFragment {
 
+    private static final String TAG = "UserLikeFragment";
     private FragmentMineWorkBinding binding;
     private MineLikeWorkAdapter adapter;
     private MineLikeWorkData mineLikeWorkData;
     private int uid;
 
-    public static MineLikeFragment newInstance(int uid) {
-        MineLikeFragment fragment = new MineLikeFragment();
+    public static UserLikeFragment newInstance(int uid) {
+        UserLikeFragment fragment = new UserLikeFragment();
         Bundle args = new Bundle();
         args.putInt("uid", uid);
         fragment.setArguments(args);
+        SharedPreferencesUtils.getInstance().setUid(uid);
         return fragment;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            uid = getArguments().getInt("uid");
-        }
-    }
+//    @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        if (getArguments() != null) {
+//            uid = getArguments().getInt("uid");
+//        }
+//    }
 
     @Nullable
     @Override
@@ -70,15 +75,16 @@ public class MineLikeFragment extends BaseFragment {
         binding.recyclerView.addItemDecoration(new GridItemDecoration(builder));
         binding.recyclerView.setNestedScrollingEnabled(false);
         binding.recyclerView.setAdapter(adapter);
+        binding.recyclerView.setVisibility(View.GONE);
         adapter.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view, Object object) {
-                if (mineLikeWorkData!=null) {
+                if (mineLikeWorkData != null) {
                     Intent intent = new Intent(getActivity(), WorkDetailActivity.class);
                     BaseData baseData = new BaseData();
                     baseData.setData(mineLikeWorkData.getData());
-                    intent.putExtra("baseData",baseData );
-                    intent.putExtra("position",(int)object );
+                    intent.putExtra("baseData", baseData);
+                    intent.putExtra("position", (int) object);
                     getActivity().startActivity(intent);
                 }
             }
@@ -95,12 +101,15 @@ public class MineLikeFragment extends BaseFragment {
         });
         EventBus.getDefault().register(this);
 
+        uid = SharedPreferencesUtils.getInstance().getUid();
+
         return binding.getRoot();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        Log.i(TAG, "onResume: ");
         initData(uid);
     }
 
@@ -129,6 +138,14 @@ public class MineLikeFragment extends BaseFragment {
             if (tag == 1) {
                 adapter.setSelection(false);
             }
+        } else if (messageBus.getCodeType().equals(messageBus.msgId_pageScrolled)) {
+            int position = (int) messageBus.getMessage();
+            binding.recyclerView.setVisibility(position==1?View.VISIBLE:View.GONE);
+
+        } else if (messageBus.getCodeType().equals(messageBus.msgId_userHomeUid)) {
+            int uid = (int) messageBus.getMessage();
+//            initData(uid);
+
         }
 
     }
@@ -148,11 +165,12 @@ public class MineLikeFragment extends BaseFragment {
 
             @Override
             public void onResponse(MineLikeWorkData response, int id) {
-                if (response.getCode() == 200 && response.getData() != null ) {
+                if (response.getCode() == 200 && response.getData() != null && adapter != null) {
                     mineLikeWorkData = response;
                     adapter.refreshData(response.getData().getData());
                 } else {
-                    ToastUtils.showShort(getActivity(), response.getMsg());
+                    adapter.refreshData(new ArrayList<>());
+//                    ToastUtils.showShort(getActivity(), response.getMsg());
                 }
             }
 
@@ -169,7 +187,7 @@ public class MineLikeFragment extends BaseFragment {
 
                     @Override
                     public void onResponse(BaseData response, int id) {
-                        if (response.getCode() == 200){
+                        if (response.getCode() == 200) {
                             initData(uid);
                         } else {
                             ToastUtils.showShort(getActivity(), response.getMsg());

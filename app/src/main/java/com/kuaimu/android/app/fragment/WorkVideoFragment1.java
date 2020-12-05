@@ -217,7 +217,7 @@ public class WorkVideoFragment1 extends BaseFragment implements View.OnClickList
 
     private void releaseVideo(int index) {
         Log.i(TAG, "releaseVideo: ");
-        OkHttpUtils.getInstance().cancelTag(APIUrls.homeDetail);
+        OkHttpUtils.getInstance().cancelTag(APIUrls.worksDetail);
         View itemView = binding.recyclerView.getChildAt(index);
         if (itemView != null) {
             ImageView thumbnails = itemView.findViewById(R.id.thumbnails);
@@ -329,7 +329,7 @@ public class WorkVideoFragment1 extends BaseFragment implements View.OnClickList
     }
 
     private void homeDetail(final int position, boolean isBottom) {
-        SendRequest.homeDetail(getUid(), list.get(position).getId(), new GenericsCallback<HomeDetail>(new JsonGenericsSerializator()) {
+        SendRequest.worksDetail(getUid(), list.get(position).getId(), new GenericsCallback<HomeDetail>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
 

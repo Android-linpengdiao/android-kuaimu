@@ -4,16 +4,15 @@ import java.util.List;
 
 public class FansUserData {
 
-
     /**
      * code : 200
      * msg : 成功
-     * data : [{"id":9,"likeable_id":14,"likeable_type":"App\\Tourist","liker_id":4,"liker_type":"App\\Tourist","created_at":"2020-09-10 13:47:01","updated_at":"2020-09-10 13:47:01","tourist":{"id":4,"name":"sSxthv","phone":"13521614827","avatar":"upload/20200808111900DYxMk.jpg","created_at":"2020-08-06 08:27:21","updated_at":"2020-09-10 15:30:33","password":"$2y$10$m6XTuydE98mhuX2nVDvireMwf/LYSHEBjxU8pomI.3kwARcp1arhq","weixin_bind":2,"qq_bind":2,"qq":null,"weixin":null,"tourist_id":132131,"person_label":"天成云","bus_label":"解决方案","is_vip":1,"vip_type":2,"vip_time":"2021-09-02 18:29:14","apple_identifier":null,"apple_email":null,"ios_bind":2},"follower_num":3,"be_attention":true}]
+     * data : {"current_page":1,"data":[{"id":28,"name":"r2ohl1","phone":"13521614825","avatar":"users/default.png","password":"$2y$10$njMziUBuj9a9VXcjJGY81.ATN8asQUarIobcuwZ3cfqfnKhOu5tPK","remember_token":null,"created_at":"2020-12-05 18:17:18","updated_at":"2020-12-05 18:17:23","sex":1,"cancel":1,"wallet_token":0,"fan_number":0,"follow_number":1,"level":1,"age":0,"credit":100,"income_token":0,"tourist_id":"74733021","is_person_follow":false,"pivot":{"likeable_id":27,"liker_id":28,"likeable_type":"App\\Tourist","liker_type":"App\\Tourist","created_at":"2020-12-05T10:17:23.000000Z","updated_at":"2020-12-05T10:17:23.000000Z"}}],"first_page_url":"http://quickeye.fengyunguoyuan.com/api/person/fans?page=1","from":1,"last_page":1,"last_page_url":"http://quickeye.fengyunguoyuan.com/api/person/fans?page=1","next_page_url":null,"path":"http://quickeye.fengyunguoyuan.com/api/person/fans","per_page":10,"prev_page_url":null,"to":1,"total":1}
      */
 
     private int code;
     private String msg;
-    private List<DataBean> data;
+    private DataBeanX data;
 
     public int getCode() {
         return code;
@@ -31,163 +30,183 @@ public class FansUserData {
         this.msg = msg;
     }
 
-    public List<DataBean> getData() {
+    public DataBeanX getData() {
         return data;
     }
 
-    public void setData(List<DataBean> data) {
+    public void setData(DataBeanX data) {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBeanX {
         /**
-         * id : 9
-         * likeable_id : 14
-         * likeable_type : App\Tourist
-         * liker_id : 4
-         * liker_type : App\Tourist
-         * created_at : 2020-09-10 13:47:01
-         * updated_at : 2020-09-10 13:47:01
-         * tourist : {"id":4,"name":"sSxthv","phone":"13521614827","avatar":"upload/20200808111900DYxMk.jpg","created_at":"2020-08-06 08:27:21","updated_at":"2020-09-10 15:30:33","password":"$2y$10$m6XTuydE98mhuX2nVDvireMwf/LYSHEBjxU8pomI.3kwARcp1arhq","weixin_bind":2,"qq_bind":2,"qq":null,"weixin":null,"tourist_id":132131,"person_label":"天成云","bus_label":"解决方案","is_vip":1,"vip_type":2,"vip_time":"2021-09-02 18:29:14","apple_identifier":null,"apple_email":null,"ios_bind":2}
-         * follower_num : 3
-         * be_attention : true
+         * current_page : 1
+         * data : [{"id":28,"name":"r2ohl1","phone":"13521614825","avatar":"users/default.png","password":"$2y$10$njMziUBuj9a9VXcjJGY81.ATN8asQUarIobcuwZ3cfqfnKhOu5tPK","remember_token":null,"created_at":"2020-12-05 18:17:18","updated_at":"2020-12-05 18:17:23","sex":1,"cancel":1,"wallet_token":0,"fan_number":0,"follow_number":1,"level":1,"age":0,"credit":100,"income_token":0,"tourist_id":"74733021","is_person_follow":false,"pivot":{"likeable_id":27,"liker_id":28,"likeable_type":"App\\Tourist","liker_type":"App\\Tourist","created_at":"2020-12-05T10:17:23.000000Z","updated_at":"2020-12-05T10:17:23.000000Z"}}]
+         * first_page_url : http://quickeye.fengyunguoyuan.com/api/person/fans?page=1
+         * from : 1
+         * last_page : 1
+         * last_page_url : http://quickeye.fengyunguoyuan.com/api/person/fans?page=1
+         * next_page_url : null
+         * path : http://quickeye.fengyunguoyuan.com/api/person/fans
+         * per_page : 10
+         * prev_page_url : null
+         * to : 1
+         * total : 1
          */
 
-        private int id;
-        private int likeable_id;
-        private String likeable_type;
-        private int liker_id;
-        private String liker_type;
-        private String created_at;
-        private String updated_at;
-        private TouristBean tourist;
-        private int follower_num;
-        private boolean be_attention;
+        private int current_page;
+        private String first_page_url;
+        private int from;
+        private int last_page;
+        private String last_page_url;
+        private Object next_page_url;
+        private String path;
+        private int per_page;
+        private Object prev_page_url;
+        private int to;
+        private int total;
+        private List<DataBean> data;
 
-        public int getId() {
-            return id;
+        public int getCurrent_page() {
+            return current_page;
         }
 
-        public void setId(int id) {
-            this.id = id;
+        public void setCurrent_page(int current_page) {
+            this.current_page = current_page;
         }
 
-        public int getLikeable_id() {
-            return likeable_id;
+        public String getFirst_page_url() {
+            return first_page_url;
         }
 
-        public void setLikeable_id(int likeable_id) {
-            this.likeable_id = likeable_id;
+        public void setFirst_page_url(String first_page_url) {
+            this.first_page_url = first_page_url;
         }
 
-        public String getLikeable_type() {
-            return likeable_type;
+        public int getFrom() {
+            return from;
         }
 
-        public void setLikeable_type(String likeable_type) {
-            this.likeable_type = likeable_type;
+        public void setFrom(int from) {
+            this.from = from;
         }
 
-        public int getLiker_id() {
-            return liker_id;
+        public int getLast_page() {
+            return last_page;
         }
 
-        public void setLiker_id(int liker_id) {
-            this.liker_id = liker_id;
+        public void setLast_page(int last_page) {
+            this.last_page = last_page;
         }
 
-        public String getLiker_type() {
-            return liker_type;
+        public String getLast_page_url() {
+            return last_page_url;
         }
 
-        public void setLiker_type(String liker_type) {
-            this.liker_type = liker_type;
+        public void setLast_page_url(String last_page_url) {
+            this.last_page_url = last_page_url;
         }
 
-        public String getCreated_at() {
-            return created_at;
+        public Object getNext_page_url() {
+            return next_page_url;
         }
 
-        public void setCreated_at(String created_at) {
-            this.created_at = created_at;
+        public void setNext_page_url(Object next_page_url) {
+            this.next_page_url = next_page_url;
         }
 
-        public String getUpdated_at() {
-            return updated_at;
+        public String getPath() {
+            return path;
         }
 
-        public void setUpdated_at(String updated_at) {
-            this.updated_at = updated_at;
+        public void setPath(String path) {
+            this.path = path;
         }
 
-        public TouristBean getTourist() {
-            return tourist;
+        public int getPer_page() {
+            return per_page;
         }
 
-        public void setTourist(TouristBean tourist) {
-            this.tourist = tourist;
+        public void setPer_page(int per_page) {
+            this.per_page = per_page;
         }
 
-        public int getFollower_num() {
-            return follower_num;
+        public Object getPrev_page_url() {
+            return prev_page_url;
         }
 
-        public void setFollower_num(int follower_num) {
-            this.follower_num = follower_num;
+        public void setPrev_page_url(Object prev_page_url) {
+            this.prev_page_url = prev_page_url;
         }
 
-        public boolean isBe_attention() {
-            return be_attention;
+        public int getTo() {
+            return to;
         }
 
-        public void setBe_attention(boolean be_attention) {
-            this.be_attention = be_attention;
+        public void setTo(int to) {
+            this.to = to;
         }
 
-        public static class TouristBean {
+        public int getTotal() {
+            return total;
+        }
+
+        public void setTotal(int total) {
+            this.total = total;
+        }
+
+        public List<DataBean> getData() {
+            return data;
+        }
+
+        public void setData(List<DataBean> data) {
+            this.data = data;
+        }
+
+        public static class DataBean {
             /**
-             * id : 4
-             * name : sSxthv
-             * phone : 13521614827
-             * avatar : upload/20200808111900DYxMk.jpg
-             * created_at : 2020-08-06 08:27:21
-             * updated_at : 2020-09-10 15:30:33
-             * password : $2y$10$m6XTuydE98mhuX2nVDvireMwf/LYSHEBjxU8pomI.3kwARcp1arhq
-             * weixin_bind : 2
-             * qq_bind : 2
-             * qq : null
-             * weixin : null
-             * tourist_id : 132131
-             * person_label : 天成云
-             * bus_label : 解决方案
-             * is_vip : 1
-             * vip_type : 2
-             * vip_time : 2021-09-02 18:29:14
-             * apple_identifier : null
-             * apple_email : null
-             * ios_bind : 2
+             * id : 28
+             * name : r2ohl1
+             * phone : 13521614825
+             * avatar : users/default.png
+             * password : $2y$10$njMziUBuj9a9VXcjJGY81.ATN8asQUarIobcuwZ3cfqfnKhOu5tPK
+             * remember_token : null
+             * created_at : 2020-12-05 18:17:18
+             * updated_at : 2020-12-05 18:17:23
+             * sex : 1
+             * cancel : 1
+             * wallet_token : 0
+             * fan_number : 0
+             * follow_number : 1
+             * level : 1
+             * age : 0
+             * credit : 100
+             * income_token : 0
+             * tourist_id : 74733021
+             * is_person_follow : false
+             * pivot : {"likeable_id":27,"liker_id":28,"likeable_type":"App\\Tourist","liker_type":"App\\Tourist","created_at":"2020-12-05T10:17:23.000000Z","updated_at":"2020-12-05T10:17:23.000000Z"}
              */
 
             private int id;
             private String name;
             private String phone;
             private String avatar;
+            private String password;
+            private Object remember_token;
             private String created_at;
             private String updated_at;
-            private String password;
-            private int weixin_bind;
-            private int qq_bind;
-            private Object qq;
-            private Object weixin;
-            private int tourist_id;
-            private String person_label;
-            private String bus_label;
-            private int is_vip;
-            private int vip_type;
-            private String vip_time;
-            private Object apple_identifier;
-            private Object apple_email;
-            private int ios_bind;
+            private int sex;
+            private int cancel;
+            private int wallet_token;
+            private int fan_number;
+            private int follow_number;
+            private int level;
+            private int age;
+            private int credit;
+            private int income_token;
+            private String tourist_id;
+            private boolean is_person_follow;
+            private PivotBean pivot;
 
             public int getId() {
                 return id;
@@ -221,6 +240,22 @@ public class FansUserData {
                 this.avatar = avatar;
             }
 
+            public String getPassword() {
+                return password;
+            }
+
+            public void setPassword(String password) {
+                this.password = password;
+            }
+
+            public Object getRemember_token() {
+                return remember_token;
+            }
+
+            public void setRemember_token(Object remember_token) {
+                this.remember_token = remember_token;
+            }
+
             public String getCreated_at() {
                 return created_at;
             }
@@ -237,116 +272,166 @@ public class FansUserData {
                 this.updated_at = updated_at;
             }
 
-            public String getPassword() {
-                return password;
+            public int getSex() {
+                return sex;
             }
 
-            public void setPassword(String password) {
-                this.password = password;
+            public void setSex(int sex) {
+                this.sex = sex;
             }
 
-            public int getWeixin_bind() {
-                return weixin_bind;
+            public int getCancel() {
+                return cancel;
             }
 
-            public void setWeixin_bind(int weixin_bind) {
-                this.weixin_bind = weixin_bind;
+            public void setCancel(int cancel) {
+                this.cancel = cancel;
             }
 
-            public int getQq_bind() {
-                return qq_bind;
+            public int getWallet_token() {
+                return wallet_token;
             }
 
-            public void setQq_bind(int qq_bind) {
-                this.qq_bind = qq_bind;
+            public void setWallet_token(int wallet_token) {
+                this.wallet_token = wallet_token;
             }
 
-            public Object getQq() {
-                return qq;
+            public int getFan_number() {
+                return fan_number;
             }
 
-            public void setQq(Object qq) {
-                this.qq = qq;
+            public void setFan_number(int fan_number) {
+                this.fan_number = fan_number;
             }
 
-            public Object getWeixin() {
-                return weixin;
+            public int getFollow_number() {
+                return follow_number;
             }
 
-            public void setWeixin(Object weixin) {
-                this.weixin = weixin;
+            public void setFollow_number(int follow_number) {
+                this.follow_number = follow_number;
             }
 
-            public int getTourist_id() {
+            public int getLevel() {
+                return level;
+            }
+
+            public void setLevel(int level) {
+                this.level = level;
+            }
+
+            public int getAge() {
+                return age;
+            }
+
+            public void setAge(int age) {
+                this.age = age;
+            }
+
+            public int getCredit() {
+                return credit;
+            }
+
+            public void setCredit(int credit) {
+                this.credit = credit;
+            }
+
+            public int getIncome_token() {
+                return income_token;
+            }
+
+            public void setIncome_token(int income_token) {
+                this.income_token = income_token;
+            }
+
+            public String getTourist_id() {
                 return tourist_id;
             }
 
-            public void setTourist_id(int tourist_id) {
+            public void setTourist_id(String tourist_id) {
                 this.tourist_id = tourist_id;
             }
 
-            public String getPerson_label() {
-                return person_label;
+            public boolean isIs_person_follow() {
+                return is_person_follow;
             }
 
-            public void setPerson_label(String person_label) {
-                this.person_label = person_label;
+            public void setIs_person_follow(boolean is_person_follow) {
+                this.is_person_follow = is_person_follow;
             }
 
-            public String getBus_label() {
-                return bus_label;
+            public PivotBean getPivot() {
+                return pivot;
             }
 
-            public void setBus_label(String bus_label) {
-                this.bus_label = bus_label;
+            public void setPivot(PivotBean pivot) {
+                this.pivot = pivot;
             }
 
-            public int getIs_vip() {
-                return is_vip;
-            }
+            public static class PivotBean {
+                /**
+                 * likeable_id : 27
+                 * liker_id : 28
+                 * likeable_type : App\Tourist
+                 * liker_type : App\Tourist
+                 * created_at : 2020-12-05T10:17:23.000000Z
+                 * updated_at : 2020-12-05T10:17:23.000000Z
+                 */
 
-            public void setIs_vip(int is_vip) {
-                this.is_vip = is_vip;
-            }
+                private int likeable_id;
+                private int liker_id;
+                private String likeable_type;
+                private String liker_type;
+                private String created_at;
+                private String updated_at;
 
-            public int getVip_type() {
-                return vip_type;
-            }
+                public int getLikeable_id() {
+                    return likeable_id;
+                }
 
-            public void setVip_type(int vip_type) {
-                this.vip_type = vip_type;
-            }
+                public void setLikeable_id(int likeable_id) {
+                    this.likeable_id = likeable_id;
+                }
 
-            public String getVip_time() {
-                return vip_time;
-            }
+                public int getLiker_id() {
+                    return liker_id;
+                }
 
-            public void setVip_time(String vip_time) {
-                this.vip_time = vip_time;
-            }
+                public void setLiker_id(int liker_id) {
+                    this.liker_id = liker_id;
+                }
 
-            public Object getApple_identifier() {
-                return apple_identifier;
-            }
+                public String getLikeable_type() {
+                    return likeable_type;
+                }
 
-            public void setApple_identifier(Object apple_identifier) {
-                this.apple_identifier = apple_identifier;
-            }
+                public void setLikeable_type(String likeable_type) {
+                    this.likeable_type = likeable_type;
+                }
 
-            public Object getApple_email() {
-                return apple_email;
-            }
+                public String getLiker_type() {
+                    return liker_type;
+                }
 
-            public void setApple_email(Object apple_email) {
-                this.apple_email = apple_email;
-            }
+                public void setLiker_type(String liker_type) {
+                    this.liker_type = liker_type;
+                }
 
-            public int getIos_bind() {
-                return ios_bind;
-            }
+                public String getCreated_at() {
+                    return created_at;
+                }
 
-            public void setIos_bind(int ios_bind) {
-                this.ios_bind = ios_bind;
+                public void setCreated_at(String created_at) {
+                    this.created_at = created_at;
+                }
+
+                public String getUpdated_at() {
+                    return updated_at;
+                }
+
+                public void setUpdated_at(String updated_at) {
+                    this.updated_at = updated_at;
+                }
             }
         }
     }

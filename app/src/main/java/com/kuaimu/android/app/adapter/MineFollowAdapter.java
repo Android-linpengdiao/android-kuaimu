@@ -12,7 +12,7 @@ import com.kuaimu.android.app.model.FollowUserData;
 import com.kuaimu.android.app.view.OnClickListener;
 
 
-public class MineFollowAdapter extends BaseRecyclerAdapter<FollowUserData.DataBean, ItemFriendsLayoutBinding> {
+public class MineFollowAdapter extends BaseRecyclerAdapter<FollowUserData.DataBeanX.DataBean, ItemFriendsLayoutBinding> {
 
     private OnClickListener onClickListener;
 
@@ -30,12 +30,14 @@ public class MineFollowAdapter extends BaseRecyclerAdapter<FollowUserData.DataBe
     }
 
     @Override
-    protected void onBindItem(final ItemFriendsLayoutBinding binding, final FollowUserData.DataBean dataBean, final int position) {
+    protected void onBindItem(final ItemFriendsLayoutBinding binding, final FollowUserData.DataBeanX.DataBean dataBean, final int position) {
         if (mList != null && mList.size() > 0) {
-            binding.tvTitle.setText(dataBean.getName());
-            binding.tvDesc.setText("粉丝：" + dataBean.getFollower_num());
-            binding.tvFollowers.setText("已关注");
-            GlideLoader.LoderCircleImage(mContext, dataBean.getAvatar(), binding.userIcon);
+            if (dataBean.getTourist()!=null) {
+                binding.tvTitle.setText(dataBean.getTourist().getName());
+                binding.tvDesc.setText("粉丝：" + dataBean.getTourist().getFan_number());
+                binding.tvFollowers.setText("已关注");
+                GlideLoader.LoderCircleImage(mContext,dataBean.getTourist().getAvatar(), binding.userIcon);
+            }
             binding.viewLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

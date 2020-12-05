@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.baselibrary.MessageBus;
 import com.baselibrary.manager.DialogManager;
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.GlideLoader;
@@ -43,6 +44,7 @@ import com.okhttp.sample_okhttp.JsonGenericsSerializator;
 import com.okhttp.utils.APIUrls;
 import com.okhttp.utils.OkHttpUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -58,6 +60,7 @@ public class WorkVideoFragment extends VideoBaseFragment implements View.OnClick
 
     private BaseData baseData;
     private int position;
+    private String scrollTag;
 
     private TikTokController mController;
     private int mCurPos;
@@ -65,11 +68,12 @@ public class WorkVideoFragment extends VideoBaseFragment implements View.OnClick
     private TikTokAdapter mTikTokAdapter;
 
 
-    public static WorkVideoFragment newInstance(BaseData baseData, int position) {
+    public static WorkVideoFragment newInstance(BaseData baseData, int position, String scrollTag) {
         WorkVideoFragment fragment = new WorkVideoFragment();
         Bundle args = new Bundle();
         args.putSerializable("baseData", baseData);
         args.putInt("position", position);
+        args.putString("scrollTag", scrollTag);
         fragment.setArguments(args);
         return fragment;
     }
@@ -77,6 +81,8 @@ public class WorkVideoFragment extends VideoBaseFragment implements View.OnClick
     public interface OnVideoFragmentInteractionListener {
         //type 0 关闭  1 打开用户主页  2 切换视频更新用户
         void onVideoFragmentInteraction(int type, int uid);
+
+        void onVideoFragmentInteractionFollow(boolean follow);
     }
 
     @Override
@@ -96,6 +102,7 @@ public class WorkVideoFragment extends VideoBaseFragment implements View.OnClick
         if (getArguments() != null) {
             baseData = (BaseData) getArguments().getSerializable("baseData");
             position = getArguments().getInt("position");
+            scrollTag = getArguments().getString("scrollTag");
         }
     }
 
@@ -117,6 +124,10 @@ public class WorkVideoFragment extends VideoBaseFragment implements View.OnClick
         initRecyclerView();
 
         return binding.getRoot();
+    }
+
+    public void followUser(boolean follow) {
+        homeDetail(mCurPos);
     }
 
     private void initRecyclerView() {
@@ -142,10 +153,18 @@ public class WorkVideoFragment extends VideoBaseFragment implements View.OnClick
             public void onClick(View view, Object object) {
                 switch (view.getId()) {
                     case R.id.userInfoView:
-                        mListener.onVideoFragmentInteraction(1, 0);
-                        if (mVideoView != null) {
-                            mVideoView.pause();
+                        if (object instanceof VideoDataBean) {
+                            VideoDataBean dataBean = (VideoDataBean) object;
+                            if (getUid() != dataBean.getTourist_id()) {
+                                mListener.onVideoFragmentInteraction(1, 0);
+                                if (mVideoView != null) {
+                                    mVideoView.pause();
+                                }
+                            }
                         }
+                        break;
+                    case R.id.ivFollow:
+//                        mListener.onVideoFragmentInteractionFollow(true);
                         break;
                     case R.id.tv_like:
 //                        if (getUid(true) > 0) {
@@ -202,7 +221,7 @@ public class WorkVideoFragment extends VideoBaseFragment implements View.OnClick
             public void onPageRelease(boolean isNext, int position) {
                 if (mCurPos == position) {
                     mVideoView.release();
-                    OkHttpUtils.getInstance().cancelTag(APIUrls.homeDetail);
+                    OkHttpUtils.getInstance().cancelTag(APIUrls.worksDetail);
                 }
             }
 
@@ -260,8 +279,22 @@ public class WorkVideoFragment extends VideoBaseFragment implements View.OnClick
         }
     }
 
+    private TextView tvComment;
+    private TextView tvShare;
+    private HomeDetail homeDetail;
+
     private void homeDetail(final int index) {
-        SendRequest.homeDetail(getUid(), mVideoList.get(index).getId(), new GenericsCallback<HomeDetail>(new JsonGenericsSerializator()) {
+
+        MessageBus.Builder builder = new MessageBus.Builder();
+        MessageBus messageBus = builder
+                .codeType(MessageBus.msgId_playPosition)
+                .param1(mVideoList.get(index).getId())
+                .param2(index)
+                .param3(scrollTag)
+                .build();
+        EventBus.getDefault().post(messageBus);
+
+        SendRequest.worksDetail(getUid(), mVideoList.get(index).getId(), new GenericsCallback<HomeDetail>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
 
@@ -270,17 +303,31 @@ public class WorkVideoFragment extends VideoBaseFragment implements View.OnClick
             @Override
             public void onResponse(HomeDetail response, int id) {
                 if (response.getCode() == 200) {
+                    homeDetail = response;
                     View itemView = binding.recyclerView.getChildAt(0);
                     ImageView ivFollow = itemView.findViewById(R.id.ivFollow);
                     TextView tvLike = itemView.findViewById(R.id.tv_like);
-                    TextView tvComment = itemView.findViewById(R.id.tv_comment);
-                    TextView tvShare = itemView.findViewById(R.id.tv_share);
+                    tvComment = itemView.findViewById(R.id.tv_comment);
+                    tvShare = itemView.findViewById(R.id.tv_share);
                     ImageView deleteView = itemView.findViewById(R.id.deleteView);
                     tvLike.setSelected(response.getData().isIs_assist());
                     tvLike.setText(String.valueOf(response.getData().getAssist_num()));
                     tvComment.setText(String.valueOf(response.getData().getComment_num()));
                     tvShare.setText(String.valueOf(response.getData().getShare_num()));
-                    ivFollow.setVisibility(response.getData().isIs_liker() ? View.INVISIBLE : View.VISIBLE);
+                    if (getUid() == response.getData().getTourist_id()) {
+                        ivFollow.setVisibility(View.INVISIBLE);
+                    } else {
+                        ivFollow.setVisibility(response.getData().isIs_liker() ? View.INVISIBLE : View.VISIBLE);
+                    }
+                    ivFollow.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (getUid(true) > 0) {
+                                centerFollow(ivFollow, response.getData().getTourist_id());
+                            }
+
+                        }
+                    });
                     tvLike.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -309,7 +356,43 @@ public class WorkVideoFragment extends VideoBaseFragment implements View.OnClick
 
                         }
                     });
+                } else {
+                    View itemView = binding.recyclerView.getChildAt(0);
+                    TextView tvLike = itemView.findViewById(R.id.tv_like);
+                    tvLike.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            getUid(true);
+
+                        }
+                    });
                 }
+            }
+        });
+    }
+
+    private void centerFollow(final ImageView ivFollow, int uid) {
+        String url = ivFollow.isSelected() ? APIUrls.url_centerUnFollow : APIUrls.url_centerFollow;
+        SendRequest.centerFollow(getUserInfo().getData().getId(), uid, url, new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                try {
+                    if (!CommonUtil.isBlank(response)) {
+                        JSONObject jsonObject = new JSONObject(response);
+                        if (jsonObject.optInt("code") == 200) {
+                            ivFollow.setVisibility(View.INVISIBLE);
+                            mListener.onVideoFragmentInteractionFollow(true);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
         });
     }
@@ -388,7 +471,10 @@ public class WorkVideoFragment extends VideoBaseFragment implements View.OnClick
             @Override
             public void onResponse(BaseData response, int id) {
                 if (response.getCode() == 200) {
-
+                    if (homeDetail != null && tvShare != null) {
+                        homeDetail.getData().setShare_num(homeDetail.getData().getShare_num() + 1);
+                        tvShare.setText(String.valueOf(homeDetail.getData().getShare_num()));
+                    }
                 }
             }
         });
@@ -418,6 +504,7 @@ public class WorkVideoFragment extends VideoBaseFragment implements View.OnClick
 
     }
 
+
     private void homePageVideosCreateComment(final int video_id, String content) {
         SendRequest.homePageVideosCreateComment(getUid(), video_id, content, new StringCallback() {
             @Override
@@ -431,6 +518,10 @@ public class WorkVideoFragment extends VideoBaseFragment implements View.OnClick
                     JSONObject jsonObject = new JSONObject(response);
                     if (jsonObject.optInt("code") == 200) {
                         homePageVideosComment(video_id);
+                        if (homeDetail != null && tvComment != null) {
+                            homeDetail.getData().setComment_num(homeDetail.getData().getComment_num() + 1);
+                            tvComment.setText(String.valueOf(homeDetail.getData().getComment_num()));
+                        }
                     } else {
                         ToastUtils.showShort(getActivity(), jsonObject.optString("msg"));
                     }

@@ -28,9 +28,10 @@ public class WorkDetailActivity extends BaseActivity implements ViewPager.OnPage
 
         BaseData baseData = (BaseData) getIntent().getSerializableExtra("baseData");
         int position = getIntent().getIntExtra("position", 0);
+        String scrollTag = getIntent().getStringExtra("scrollTag");
 
         PagerAdapter mainHomePagerAdapter = new PagerAdapter(getSupportFragmentManager());
-        workVideoFragment = WorkVideoFragment.newInstance(baseData, position);
+        workVideoFragment = WorkVideoFragment.newInstance(baseData, position,scrollTag);
         workUserHomeFragment = WorkUserHomeFragment.newInstance();
         mainHomePagerAdapter.addFragment("视频", workVideoFragment);
         mainHomePagerAdapter.addFragment("用户", workUserHomeFragment);
@@ -47,6 +48,11 @@ public class WorkDetailActivity extends BaseActivity implements ViewPager.OnPage
     }
 
     @Override
+    public void onUserFragmentInteractionFollow(boolean follow) {
+        workVideoFragment.followUser(follow);
+    }
+
+    @Override
     public void onVideoFragmentInteraction(int type, int uid) {
         if (type == 0) {
             finish();
@@ -55,6 +61,11 @@ public class WorkDetailActivity extends BaseActivity implements ViewPager.OnPage
         } else if (type == 2) {
             workUserHomeFragment.updateUser(uid);
         }
+    }
+
+    @Override
+    public void onVideoFragmentInteractionFollow(boolean follow) {
+        workUserHomeFragment.followUser(follow);
     }
 
 
@@ -88,3 +99,4 @@ public class WorkDetailActivity extends BaseActivity implements ViewPager.OnPage
 
     }
 }
+

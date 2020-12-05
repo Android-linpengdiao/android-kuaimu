@@ -2,6 +2,7 @@ package com.baselibrary.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.baselibrary.R;
@@ -12,14 +13,15 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.Target;
 
 public class GlideLoader {
-
-    public final static String domain = "http://kalao500q.com/";
+    private static final String TAG = "GlideLoader";
+    public final static String domain = "http://quickeye.fengyunguoyuan.com/";
 
     public static void LoderImage(Context context, String url, ImageView view) {
         LoderImage(context, url, view, 0);
     }
 
     public static void LoderImage(Context context, String url, ImageView view, int round) {
+        Log.i(TAG, "LoderImage: "+(domain + url));
         Glide.with(context)
                 .load(domain + url)
                 .centerCrop()

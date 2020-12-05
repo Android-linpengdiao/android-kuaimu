@@ -68,9 +68,10 @@ public class UserInfo implements Serializable {
          */
 
         private int id;
-        private String name;
+        private String name="";
         private String phone;
         private String avatar;
+        private String desc ="";
         private String created_at;
         private String updated_at;
         private String password;
@@ -92,6 +93,7 @@ public class UserInfo implements Serializable {
         private int good_num;
         private int video_num;
         private int like_video_num;
+        private int discover_num;
 
         public int getId() {
             return id;
@@ -123,6 +125,14 @@ public class UserInfo implements Serializable {
 
         public void setAvatar(String avatar) {
             this.avatar = avatar;
+        }
+
+        public String getDesc() {
+            return desc;
+        }
+
+        public void setDesc(String desc) {
+            this.desc = desc;
         }
 
         public String getCreated_at() {
@@ -291,6 +301,14 @@ public class UserInfo implements Serializable {
 
         public void setLike_video_num(int like_video_num) {
             this.like_video_num = like_video_num;
+        }
+
+        public int getDiscover_num() {
+            return discover_num;
+        }
+
+        public void setDiscover_num(int discover_num) {
+            this.discover_num = discover_num;
         }
     }
 }

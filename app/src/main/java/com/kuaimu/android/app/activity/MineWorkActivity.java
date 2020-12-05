@@ -26,7 +26,7 @@ import com.okhttp.sample_okhttp.JsonGenericsSerializator;
 
 import org.greenrobot.eventbus.EventBus;
 
-public class MineWorkActivity extends AppCompatActivity {
+public class MineWorkActivity extends BaseActivity {
     private ActivityMineWorkBinding binding;
 
     private MineWorkAdapter adapter;
@@ -77,15 +77,11 @@ public class MineWorkActivity extends AppCompatActivity {
             }
         });
 
-        if (getIntent().getExtras() != null) {
-            uid = getIntent().getExtras().getInt("uid");
-            initData(uid);
-        }
+        initData();
     }
 
-    public void initData(int uid) {
-        this.uid = uid;
-        SendRequest.centerSelfWork(uid, new GenericsCallback<MineWorkData>(new JsonGenericsSerializator()) {
+    public void initData() {
+        SendRequest.centerSelfWork(getUid(), new GenericsCallback<MineWorkData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
             }

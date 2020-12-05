@@ -227,7 +227,7 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
             public void onPageRelease(boolean isNext, int position) {
                 if (mCurPos == position) {
                     mVideoView.release();
-                    OkHttpUtils.getInstance().cancelTag(APIUrls.homeDetail);
+                    OkHttpUtils.getInstance().cancelTag(APIUrls.worksDetail);
                 }
             }
 
@@ -267,7 +267,7 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
     }
 
     private void homeDetail(final int index) {
-        SendRequest.homeDetail(getUid(), mVideoList.get(index).getId(), new GenericsCallback<HomeDetail>(new JsonGenericsSerializator()) {
+        SendRequest.worksDetail(getUid(), mVideoList.get(index).getId(), new GenericsCallback<HomeDetail>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
 

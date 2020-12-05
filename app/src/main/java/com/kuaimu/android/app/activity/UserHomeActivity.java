@@ -6,21 +6,27 @@ import android.os.Bundle;
 
 import android.view.View;
 
+import com.baselibrary.MessageBus;
 import com.baselibrary.UserInfo;
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.GlideLoader;
 import com.baselibrary.utils.ToastUtils;
 import com.kuaimu.android.app.R;
 import com.kuaimu.android.app.adapter.MinePagerAdapter;
+import com.kuaimu.android.app.adapter.UserPagerAdapter;
 import com.kuaimu.android.app.databinding.ActivityUserHomeBinding;
+import com.kuaimu.android.app.fragment.UserLikeFragment;
+import com.kuaimu.android.app.fragment.UserWorkFragment;
 import com.okhttp.SendRequest;
 import com.okhttp.callbacks.GenericsCallback;
 import com.okhttp.callbacks.StringCallback;
 import com.okhttp.sample_okhttp.JsonGenericsSerializator;
 import com.okhttp.utils.APIUrls;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
+import androidx.viewpager.widget.ViewPager;
 import okhttp3.Call;
 
 public class UserHomeActivity extends BaseActivity implements View.OnClickListener {
@@ -36,13 +42,13 @@ public class UserHomeActivity extends BaseActivity implements View.OnClickListen
 
         uid = getIntent().getIntExtra("uid", 0);
 
-        binding.headLoginLayout.back.setOnClickListener(this);
-        binding.headLoginLayout.back.setVisibility(View.VISIBLE);
+        binding.back.setOnClickListener(this);
+        binding.back.setVisibility(View.VISIBLE);
         binding.headLoginLayout.tvIsFollow.setVisibility(View.VISIBLE);
         binding.headLoginLayout.tvChat.setOnClickListener(this);
         binding.headLoginLayout.tvChat.setVisibility(View.VISIBLE);
         binding.headLoginLayout.tvVip.setVisibility(View.GONE);
-        binding.headLoginLayout.settingView.setVisibility(View.GONE);
+        binding.headLoginLayout.tvSetting.setVisibility(View.GONE);
         binding.headLoginLayout.followersView.setOnClickListener(this);
         binding.headLoginLayout.likerView.setOnClickListener(this);
         binding.headLoginLayout.productView.setOnClickListener(this);
@@ -104,16 +110,29 @@ public class UserHomeActivity extends BaseActivity implements View.OnClickListen
         binding.headLoginLayout.userVip.setVisibility(userInfo.getData().getIs_vip() == 1 ? View.VISIBLE : View.GONE);
         binding.headLoginLayout.userVip.setImageResource(userInfo.getData().getVip_type() == 1 ? R.mipmap.qi : R.mipmap.icon_vip);
 
-        binding.headLoginLayout.label.setVisibility(View.VISIBLE);
-        if (!CommonUtil.isBlank(userInfo.getData().getPerson_label()) && !CommonUtil.isBlank(userInfo.getData().getBus_label())) {
-            binding.headLoginLayout.label.setText(userInfo.getData().getPerson_label() + "  |  " + userInfo.getData().getBus_label());
-        } else if (!CommonUtil.isBlank(userInfo.getData().getPerson_label())) {
-            binding.headLoginLayout.label.setText(userInfo.getData().getPerson_label());
-        } else if (!CommonUtil.isBlank(userInfo.getData().getBus_label())) {
-            binding.headLoginLayout.label.setText(userInfo.getData().getBus_label());
-        } else {
-            binding.headLoginLayout.label.setVisibility(View.GONE);
-        }
+        binding.headLoginLayout.tvIsFollow.setVisibility(getUid()==userInfo.getData().getId()?View.GONE:View.VISIBLE);
+        binding.headLoginLayout.tvChat.setVisibility(getUid()==userInfo.getData().getId()?View.GONE:View.VISIBLE);
+
+
+//        binding.headLoginLayout.label.setVisibility(View.VISIBLE);
+//        if (!CommonUtil.isBlank(userInfo.getData().getPerson_label()) && !CommonUtil.isBlank(userInfo.getData().getBus_label()) && !CommonUtil.isBlank(userInfo.getData().getDesc())) {
+//            binding.headLoginLayout.label.setText(userInfo.getData().getPerson_label() + "  |  " + userInfo.getData().getBus_label()+ "   " + userInfo.getData().getDesc());
+//        }else if (!CommonUtil.isBlank(userInfo.getData().getPerson_label()) && !CommonUtil.isBlank(userInfo.getData().getBus_label())) {
+//            binding.headLoginLayout.label.setText(userInfo.getData().getPerson_label() + "  |  " + userInfo.getData().getBus_label());
+//        } else if (!CommonUtil.isBlank(userInfo.getData().getPerson_label())) {
+//            binding.headLoginLayout.label.setText(userInfo.getData().getPerson_label());
+//        } else if (!CommonUtil.isBlank(userInfo.getData().getBus_label())) {
+//            binding.headLoginLayout.label.setText(userInfo.getData().getBus_label());
+//        } else {
+//            binding.headLoginLayout.label.setVisibility(View.GONE);
+//        }
+
+        binding.headLoginLayout.label.setText((!CommonUtil.isBlank(userInfo.getData().getPerson_label()) ? userInfo.getData().getPerson_label() + "  |  " : "")
+                + (!CommonUtil.isBlank(userInfo.getData().getBus_label()) ? userInfo.getData().getBus_label() + "  |  " : "")
+                + (!CommonUtil.isBlank(userInfo.getData().getDesc()) ? userInfo.getData().getDesc() : ""));
+
+        binding.headLoginLayout.label.setVisibility(CommonUtil.isBlank(userInfo.getData().getPerson_label()) && CommonUtil.isBlank(userInfo.getData().getBus_label()) && CommonUtil.isBlank(userInfo.getData().getDesc()) ? View.GONE : View.VISIBLE);
+
         binding.headLoginLayout.tvFollowers.setText(String.valueOf(userInfo.getData().getAttention_num()));
         binding.headLoginLayout.tvLiker.setText(String.valueOf(userInfo.getData().getFollower_num()));
         binding.headLoginLayout.tvAssistNum.setText(String.valueOf(userInfo.getData().getGood_num()));
@@ -129,13 +148,34 @@ public class UserHomeActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void initTab(UserInfo userInfo) {
-        MinePagerAdapter mainHomePagerAdapter = new MinePagerAdapter(getSupportFragmentManager(),uid);
-        mainHomePagerAdapter.addTitle("作品 " + (userInfo.getData() != null ? userInfo.getData().getVideo_num() : 0));
-        mainHomePagerAdapter.addTitle("喜欢 " + (userInfo.getData() != null ? userInfo.getData().getLike_video_num() : 0));
+        UserPagerAdapter mainHomePagerAdapter = new UserPagerAdapter(getSupportFragmentManager());
+        mainHomePagerAdapter.addFragment("作品 " + (userInfo != null && userInfo.getData() != null ? userInfo.getData().getVideo_num() : 0), UserWorkFragment.newInstance(uid));
+        mainHomePagerAdapter.addFragment("喜欢 " + (userInfo != null && userInfo.getData() != null ? userInfo.getData().getLike_video_num() : 0), UserLikeFragment.newInstance(uid));
         binding.viewPager.setAdapter(mainHomePagerAdapter);
         binding.viewPager.setOffscreenPageLimit(1);
         binding.viewPager.setCurrentItem(0);
         binding.tabLayout.setupWithViewPager(binding.viewPager);
+        binding.viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                MessageBus.Builder builder = new MessageBus.Builder();
+                MessageBus messageBus = builder
+                        .codeType(MessageBus.msgId_pageScrolled)
+                        .message(position)
+                        .build();
+                EventBus.getDefault().post(messageBus);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override
@@ -146,8 +186,8 @@ public class UserHomeActivity extends BaseActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.tv_chat:
-                bundle.putInt("uid",uid);
-                openActivity(ChatActivity.class,bundle);
+                bundle.putInt("uid", uid);
+                openActivity(ChatActivity.class, bundle);
                 break;
             case R.id.tv_is_follow:
                 if (CommonUtil.isBlank(uid)) {
@@ -186,16 +226,20 @@ public class UserHomeActivity extends BaseActivity implements View.OnClickListen
                 });
                 break;
             case R.id.followers_view:
-                bundle.putInt("uid",uid);
-                openActivity(MineFollowActivity.class,bundle);
+                if (getUid(true) > 0) {
+                    bundle.putInt("uid", uid);
+                    openActivity(MineFollowActivity.class, bundle);
+                }
                 break;
             case R.id.liker_view:
-                bundle.putInt("uid",uid);
-                openActivity(MineFansActivity.class,bundle);
+                if (getUid(true) > 0) {
+                    bundle.putInt("uid", uid);
+                    openActivity(MineFansActivity.class, bundle);
+                }
                 break;
             case R.id.product_view:
-                bundle.putInt("uid",uid);
-                openActivity(MyProductActivity.class,bundle);
+                bundle.putInt("uid", uid);
+                openActivity(MyProductActivity.class, bundle);
                 break;
         }
     }

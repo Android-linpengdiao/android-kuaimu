@@ -384,11 +384,11 @@ public class SendRequest {
      * @param video_id
      * @param call
      */
-    public static void homeDetail(int tourist_id, int video_id, Callback call) {
+    public static void worksDetail(int tourist_id, int video_id, Callback call) {
         Map<String, String> map = new HashMap<>();
-        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("browse_tourist_id", String.valueOf(tourist_id));
         map.put("video_id", String.valueOf(video_id));
-        OkHttpUtils.getInstance().post().tag(APIUrls.homeDetail).params(map).url(APIUrls.homeDetail).build().execute(call);
+        OkHttpUtils.getInstance().post().tag(APIUrls.worksDetail).params(map).url(APIUrls.worksDetail).build().execute(call);
 
     }
 
@@ -933,7 +933,7 @@ public class SendRequest {
             map.put("good_img", good_img);
         }
         Log.i(TAG, "publishVideo: " + map.toString());
-        OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_publishVideo).build().execute(call);
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.publishVideo).build().execute(call);
     }
 
     /**
@@ -1249,7 +1249,15 @@ public class SendRequest {
     public static void centerSelfWork(int tourist_id, Callback call) {
         Map<String, String> map = new HashMap<>();
         map.put("tourist_id", String.valueOf(tourist_id));
-        OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_personVideos).build().execute(call);
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.personWorks).build().execute(call);
+    }
+
+    public static void centerSelfWork(int tourist_id, int per_page, int page, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("per_page", String.valueOf(per_page));
+        map.put("page", String.valueOf(page));
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.personWorks).build().execute(call);
     }
 
     public static void favouriteContent(int tourist_id, int per_page, int page, Callback call) {
@@ -1272,10 +1280,10 @@ public class SendRequest {
         OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_centerComment).build().execute(call);
     }
 
-    public static void centerFollow(int tourist_id, int attention_id, String followUrl, Callback call) {
+    public static void centerFollow(int tourist_id, int follow_id, String followUrl, Callback call) {
         Map<String, String> map = new HashMap<>();
         map.put("tourist_id", String.valueOf(tourist_id));
-        map.put("attention_id", String.valueOf(attention_id));
+        map.put("follow_id", String.valueOf(follow_id));
         OkHttpUtils.getInstance().post().params(map).url(followUrl).build().execute(call);
     }
 

@@ -186,6 +186,10 @@ public class MessageBus {
     public static final String msgId_searchCancel = "searchCancel";
     public static final String msgId_searchLabel = "searchLabel";
     public static final String msgId_openDrawer = "openDrawer";
+    public static final String msgId_pageScrolled = "pageScrolled";
+    public static final String msgId_playPosition = "playPosition";
+    public static final String msgId_logout = "logout";
+    public static final String msgId_userHomeUid = "userHomeUid";
 
     public static final String msgId_playTime = "playTime";
     public static final String msgId_closePlay = "closePlay";
