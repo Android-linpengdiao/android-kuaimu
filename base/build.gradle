@@ -23,4 +23,5 @@ dependencies {
     api externalAndroidCardview
     api externalGlide
     api externalEventBus
+    api files('libs/TinyPinyin.jar')
 }

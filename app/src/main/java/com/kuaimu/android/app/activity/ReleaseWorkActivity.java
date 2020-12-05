@@ -42,6 +42,7 @@ import com.baselibrary.utils.FileUtils;
 import com.baselibrary.utils.GlideLoader;
 import com.baselibrary.utils.LogUtil;
 import com.baselibrary.utils.PermissionUtils;
+import com.baselibrary.utils.SharedPreferencesUtils;
 import com.baselibrary.utils.ToastUtils;
 import com.kuaimu.android.app.NavData;
 import com.kuaimu.android.app.R;
@@ -161,7 +162,8 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
                     ToastUtils.showShort(ReleaseWorkActivity.this, "封面地址无效，请重新选择");
                     return;
                 }
-                uploadFile(coverPath);
+//                uploadFile(coverPath);
+                publishWork("upload/20200922101026U4zjg.jpg", "http://oss-coffee.oss-cn-beijing.aliyuncs.com/1600679171274.mp4");
                 break;
         }
     }
@@ -442,7 +444,9 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
     private void publishWork(String coverUrl, String videoUrl) {
         Log.i(TAG, "publishWork: coverUrl " + coverUrl);
         Log.i(TAG, "publishWork: videoUrl " + videoUrl);
-        SendRequest.publishVideo(getUserInfo().getData().getId(), binding.content.getText().toString().trim(), coverUrl, videoUrl, dataBean.getName(), addr, new StringCallback() {
+        SendRequest.publishVideo(getUserInfo().getData().getId(), binding.content.getText().toString(), coverUrl, videoUrl,
+                String.valueOf(dataBean.getId()), addr,
+                2,binding.goodName.getText().toString(),binding.goodLink.getText().toString(),"",new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 ToastUtils.showShort(ReleaseWorkActivity.this, "发布失败");
@@ -508,6 +512,7 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
                 addr = amapLocation.getCity();
                 LogUtil.e(TAG, "onLocationChanged: " + amapLocation.getCity());
             } else {
+                addr = SharedPreferencesUtils.getInstance().getCity();
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                 LogUtil.e(TAG, "AmapError: " + "location Error, ErrCode:"
                         + amapLocation.getErrorCode() + ", errInfo:"

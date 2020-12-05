@@ -9,8 +9,7 @@ import android.view.View;
 
 import com.kuaimu.android.app.R;
 import com.kuaimu.android.app.databinding.ActivityMyWalletBinding;
-import com.kuaimu.android.app.model.UserPriceData;
-import com.kuaimu.android.app.model.VipDetailData;
+import com.kuaimu.android.app.model.WalletInfoData;
 import com.okhttp.SendRequest;
 import com.okhttp.callbacks.GenericsCallback;
 import com.okhttp.sample_okhttp.JsonGenericsSerializator;
@@ -43,47 +42,21 @@ public class MyWalletActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        initData();
+        walletInfo();
     }
 
-    private void initData() {
-        /**
-         * is_vip 1是vip 2不是 vip_type1 企业 2个人 vip_time vip到期时间
-         */
-        if (getUserInfo().getData().getIs_vip() == 1) {
-            vipDetail();
-        } else {
-            userPrice();
-
-        }
-    }
-
-    private void vipDetail() {
-        SendRequest.vipDetail(getUid(true), new GenericsCallback<VipDetailData>(new JsonGenericsSerializator()) {
+    private void walletInfo() {
+        SendRequest.walletInfo(getUid(true), new GenericsCallback<WalletInfoData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
 
             }
 
             @Override
-            public void onResponse(VipDetailData response, int id) {
+            public void onResponse(WalletInfoData response, int id) {
                 if (response.getCode() == 200) {
-                }
-            }
-        });
-    }
-
-    private void userPrice() {
-        SendRequest.userPrice(getUid(true), new GenericsCallback<UserPriceData>(new JsonGenericsSerializator()) {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-
-            }
-
-            @Override
-            public void onResponse(UserPriceData response, int id) {
-                if (response.getCode() == 200) {
-
+                    binding.walletTokenTextView.setText(response.getData().getWallet_token()+"");
+                    binding.incomeTokenTextView.setText(response.getData().getIncome_token()+"");
                 }
             }
         });

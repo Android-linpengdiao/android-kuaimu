@@ -20,7 +20,8 @@
         android:roundIcon="@mipmap/ic_app"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.OrdersActivity"></activity>
+        <activity android:name=".activity.CitySelectionActivity"></activity>
+        <activity android:name=".activity.OrdersActivity" />
         <activity android:name=".activity.MineWorkActivity" />
         <activity android:name=".activity.ChatListActivity" />
         <activity android:name=".activity.MessageActivity" />
