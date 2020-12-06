@@ -1,6 +1,8 @@
 package com.baselibrary;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserInfo implements Serializable {
 
@@ -38,7 +40,7 @@ public class UserInfo implements Serializable {
         this.data = data;
     }
 
-    public static class DataBean implements Serializable{
+    public static class DataBean implements Serializable {
         /**
          * id : 2
          * name : 888888
@@ -68,10 +70,10 @@ public class UserInfo implements Serializable {
          */
 
         private int id;
-        private String name="";
+        private String name = "";
         private String phone;
         private String avatar;
-        private String desc ="";
+        private String desc = "";
         private String created_at;
         private String updated_at;
         private String password;
@@ -94,6 +96,7 @@ public class UserInfo implements Serializable {
         private int video_num;
         private int like_video_num;
         private int discover_num;
+        private List<String> profiles = new ArrayList<>();
 
         public int getId() {
             return id;
@@ -309,6 +312,121 @@ public class UserInfo implements Serializable {
 
         public void setDiscover_num(int discover_num) {
             this.discover_num = discover_num;
+        }
+
+        public List<String> getProfiles() {
+            return profiles;
+        }
+
+        public void setProfiles(List<String> profiles) {
+            this.profiles = profiles;
+        }
+
+        public class ProfileBean implements Serializable {
+
+            /**
+             * id : 4
+             * tourist_id : 27
+             * created_at : 2020-12-06 09:54:49
+             * updated_at : 2020-12-06 09:54:49
+             * real_name : 商家
+             * idcard : 1234567890123456
+             * front_photo : upload/20201206095439jCLQz.jpg
+             * back_photo : upload/20201206095436GyaQ9.jpg
+             * auth : 1
+             * license_photo : upload/20201206095443fVyxm.jpg
+             */
+
+            private int id;
+            private int tourist_id;
+            private String created_at;
+            private String updated_at;
+            private String real_name;
+            private String idcard;
+            private String front_photo;
+            private String back_photo;
+            private int auth;
+            private String license_photo;
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public int getTourist_id() {
+                return tourist_id;
+            }
+
+            public void setTourist_id(int tourist_id) {
+                this.tourist_id = tourist_id;
+            }
+
+            public String getCreated_at() {
+                return created_at;
+            }
+
+            public void setCreated_at(String created_at) {
+                this.created_at = created_at;
+            }
+
+            public String getUpdated_at() {
+                return updated_at;
+            }
+
+            public void setUpdated_at(String updated_at) {
+                this.updated_at = updated_at;
+            }
+
+            public String getReal_name() {
+                return real_name;
+            }
+
+            public void setReal_name(String real_name) {
+                this.real_name = real_name;
+            }
+
+            public String getIdcard() {
+                return idcard;
+            }
+
+            public void setIdcard(String idcard) {
+                this.idcard = idcard;
+            }
+
+            public String getFront_photo() {
+                return front_photo;
+            }
+
+            public void setFront_photo(String front_photo) {
+                this.front_photo = front_photo;
+            }
+
+            public String getBack_photo() {
+                return back_photo;
+            }
+
+            public void setBack_photo(String back_photo) {
+                this.back_photo = back_photo;
+            }
+
+            public int getAuth() {
+                return auth;
+            }
+
+            public void setAuth(int auth) {
+                this.auth = auth;
+            }
+
+            public String getLicense_photo() {
+                return license_photo;
+            }
+
+            public void setLicense_photo(String license_photo) {
+                this.license_photo = license_photo;
+            }
         }
     }
 }

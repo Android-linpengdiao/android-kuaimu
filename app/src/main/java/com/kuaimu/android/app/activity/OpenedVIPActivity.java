@@ -105,7 +105,7 @@ public class OpenedVIPActivity extends BaseActivity {
                 if (response.getCode() == 200 && response.getData() != null && response.getData().size() > 0) {
                     for (UserPriceData.DataBean dataBean : response.getData()) {
                         if (dataBean.getPurpose() == purpose) {
-                            cashPay(dataBean.getPrice(), name, idcard);
+//                            cashPay(dataBean.getPrice(), name, idcard);
                             return;
                         }
                     }
@@ -116,62 +116,62 @@ public class OpenedVIPActivity extends BaseActivity {
         });
     }
 
-    private void cashPay(String money, String name, String idcard) {
-        SendRequest.cashPay(getUserInfo().getData().getId(), money, payType, purpose, name, idcard, new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-
-            }
-
-            @Override
-            public void onResponse(String response, int id) {
-                try {
-                    JSONObject object = new JSONObject(response);
-                    if (object.optInt("code") == 200) {
-                        JSONObject data = object.optJSONObject("data");
-                        String msg = data.optString("content");
-                        if (payType.equals("wechat")) {
-                            try {
-                                if (!CommonUtil.isBlank(msg)) {
-                                    JSONObject dataJson = new JSONObject(msg);
-                                    String appId = dataJson.getString("appid");
-                                    String partnerId = dataJson.getString("partnerid");
-                                    String prepayId = dataJson.getString("prepayid");
-                                    String nonceStr = dataJson.getString("noncestr");
-                                    String timeStamp = dataJson.getString("timestamp");
-                                    String sign = dataJson.getString("sign");
-                                    PayManager.WeChatPay(OpenedVIPActivity.this, appId, partnerId, prepayId, nonceStr, timeStamp, sign);
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        } else if (payType.equals("alipay")) {
-                            PayManager.aliPay(OpenedVIPActivity.this, msg, new PayManager.PayListener() {
-                                @Override
-                                public void onSuccess() {
-                                    paySuccess();
-                                }
-
-                                @Override
-                                public void onFail() {
-                                    payFail();
-
-                                }
-
-                                @Override
-                                public void onCancel() {
-                                    ToastUtils.showShort(OpenedVIPActivity.this, "取消支付");
-                                }
-                            });
-                        }
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
+//    private void cashPay(String money, String name, String idcard) {
+//        SendRequest.cashPay(getUserInfo().getData().getId(), money, payType, purpose, name, idcard, new StringCallback() {
+//            @Override
+//            public void onError(Call call, Exception e, int id) {
+//
+//            }
+//
+//            @Override
+//            public void onResponse(String response, int id) {
+//                try {
+//                    JSONObject object = new JSONObject(response);
+//                    if (object.optInt("code") == 200) {
+//                        JSONObject data = object.optJSONObject("data");
+//                        String msg = data.optString("content");
+//                        if (payType.equals("wechat")) {
+//                            try {
+//                                if (!CommonUtil.isBlank(msg)) {
+//                                    JSONObject dataJson = new JSONObject(msg);
+//                                    String appId = dataJson.getString("appid");
+//                                    String partnerId = dataJson.getString("partnerid");
+//                                    String prepayId = dataJson.getString("prepayid");
+//                                    String nonceStr = dataJson.getString("noncestr");
+//                                    String timeStamp = dataJson.getString("timestamp");
+//                                    String sign = dataJson.getString("sign");
+//                                    PayManager.WeChatPay(OpenedVIPActivity.this, appId, partnerId, prepayId, nonceStr, timeStamp, sign);
+//                                }
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                        } else if (payType.equals("alipay")) {
+//                            PayManager.aliPay(OpenedVIPActivity.this, msg, new PayManager.PayListener() {
+//                                @Override
+//                                public void onSuccess() {
+//                                    paySuccess();
+//                                }
+//
+//                                @Override
+//                                public void onFail() {
+//                                    payFail();
+//
+//                                }
+//
+//                                @Override
+//                                public void onCancel() {
+//                                    ToastUtils.showShort(OpenedVIPActivity.this, "取消支付");
+//                                }
+//                            });
+//                        }
+//                    }
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//    }
 
     private static final String TAG = "OpenedVIPActivity";
 

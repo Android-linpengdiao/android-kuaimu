@@ -11,7 +11,7 @@ import com.kuaimu.android.app.model.CommentData;
 import com.kuaimu.android.app.view.OnClickListener;
 
 
-public class CommentListAdapter extends BaseRecyclerAdapter<CommentData.DataBean.CommentBean, ItemCommentListLayoutBinding> {
+public class CommentListAdapter extends BaseRecyclerAdapter<CommentData.DataBeanX.DataBean, ItemCommentListLayoutBinding> {
 
     private OnClickListener onClickListener;
 
@@ -29,14 +29,14 @@ public class CommentListAdapter extends BaseRecyclerAdapter<CommentData.DataBean
     }
 
     @Override
-    protected void onBindItem(final ItemCommentListLayoutBinding binding, final CommentData.DataBean.CommentBean dataBean, final int position) {
+    protected void onBindItem(final ItemCommentListLayoutBinding binding, final CommentData.DataBeanX.DataBean dataBean, final int position) {
         if (mList != null && mList.size() > 0) {
             if (!CommonUtil.isBlank(dataBean.getTourist())) {
                 binding.userName.setText(dataBean.getTourist().getName());
                 GlideLoader.LoderCircleImage(mContext, dataBean.getTourist().getAvatar(), binding.userIcon);
             }
             binding.tvTime.setText(dataBean.getUpdated_at());
-            binding.tvComment.setText(dataBean.getContent());
+            binding.tvComment.setText(dataBean.getBody());
             binding.viewLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

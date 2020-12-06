@@ -36,6 +36,12 @@ public class MyWalletActivity extends BaseActivity {
                 openActivity(OrdersActivity.class);
             }
         });
+        binding.cashPayTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openActivity(CashPayActivity.class);
+            }
+        });
 
     }
 
@@ -55,8 +61,8 @@ public class MyWalletActivity extends BaseActivity {
             @Override
             public void onResponse(WalletInfoData response, int id) {
                 if (response.getCode() == 200) {
-                    binding.walletTokenTextView.setText(response.getData().getWallet_token()+"");
-                    binding.incomeTokenTextView.setText(response.getData().getIncome_token()+"");
+                    binding.walletTokenTextView.setText(response.getData().getWallet_token() + "");
+                    binding.incomeTokenTextView.setText(response.getData().getIncome_token() + "");
                 }
             }
         });

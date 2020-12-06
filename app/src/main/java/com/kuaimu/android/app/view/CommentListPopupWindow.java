@@ -28,7 +28,7 @@ public class CommentListPopupWindow extends BasePopupWindow {
         super(context);
     }
 
-    public void setCommentData(List<CommentData.DataBean.CommentBean> commentDatas) {
+    public void setCommentData(List<CommentData.DataBeanX.DataBean> commentDatas) {
         if (commentDatas != null) {
             adapter.refreshData(commentDatas);
             tvCommentNumber.setText("全部评论(" + commentDatas.size() + ")");

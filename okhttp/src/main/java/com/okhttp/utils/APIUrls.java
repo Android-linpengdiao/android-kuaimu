@@ -22,7 +22,8 @@ public class APIUrls {
     public final static String url_cancel = url_domain + "api/center/cancel";
     public final static String url_baseInfo = url_domain + "api/person/info";
     public final static String url_editBase = url_domain + "api/person/editBase";
-    public final static String url_isFollow = url_domain + "api/home/isAttention";
+//    public final static String url_isFollow = url_domain + "api/home/isAttention";
+    public final static String url_isFollow = url_domain + "api/video/isAssist";
     public final static String url_resetPassword = url_domain + "api/common/resetPassword";
     public final static String url_editPersonal = url_domain + "api/center/editPersonal";
     public final static String url_report = url_domain + "api/center/report";
@@ -31,6 +32,7 @@ public class APIUrls {
 
     //同城
     public final static String videoCity = url_domain + "api/video/city";
+    public final static String videoSearch = url_domain + "api/video/search";
     //关注
     public final static String videoAttention = url_domain + "api/video/attention";
 
@@ -39,7 +41,8 @@ public class APIUrls {
     //===================================== 咖佬 ===================================================
 
     public final static String homeRecommend = url_domain + "api/home/recommend";
-    public final static String homeCity = url_domain + "api/home/city";
+//    public final static String homeCity = url_domain + "api/home/city";
+    public final static String homeCity = url_domain + "api/video/line";
     public final static String category = url_domain + "api/common/category";
 
     //发现
@@ -63,7 +66,8 @@ public class APIUrls {
     public final static String homeSelfAttention = url_domain + "api/home/selfAttention";
     public final static String homeLeave = url_domain + "api/home/leave";
     public final static String publishLeave = url_domain + "api/home/publishLeave";
-    public final static String homeComment = url_domain + "api/home/comment";
+//    public final static String homeComment = url_domain + "api/home/comment";
+    public final static String homeComment = url_domain + "api/video/comment";
     public final static String leaveUser = url_domain + "api/message/leaveUser";
     public final static String leaveUserDetail = url_domain + "api/message/leaveUserDetail";
 
@@ -86,11 +90,14 @@ public class APIUrls {
     public final static String follower = url_domain + "api/person/fans";
     public final static String personCategory = url_domain + "api/common/personCategory";
     public final static String cashPay = url_domain + "api/cash/pay";
+    public final static String walletSet = url_domain + "api/common/walletSet";
     public final static String userPrice = url_domain + "api/common/userPrice";
     public final static String vipDetail = url_domain + "api/cash/vip/detail";
     public final static String orders = url_domain + "api/cash/orders";
     public final static String walletInfo = url_domain + "api/wallet/info";
     public final static String walletRecord = url_domain + "api/wallet/record";
+    public final static String personAuth = url_domain + "api/person/auth";
+    public final static String businessBanner = url_domain + "api/person/businessBanner";
 
 
     //首页-用户关注用户
@@ -163,7 +170,8 @@ public class APIUrls {
     public final static String url_centerAssist = url_domain + "api/center/assist";
     //首页-视频-创建评论
 //    public final static String url_homePageVideosCreateComment = url_domain + "api/homepageVideos/createComment";
-    public final static String url_homePageVideosCreateComment = url_domain + "api/home/publishComment";
+//    public final static String url_homePageVideosCreateComment = url_domain + "api/home/publishComment";
+    public final static String url_homePageVideosCreateComment = url_domain + "api/video/createComment";
     //首页-视频-获取评论
     public final static String url_homePageVideosComment = url_domain + "api/homepageVideos/comment";
 

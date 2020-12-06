@@ -58,7 +58,7 @@ public class DiscoverFragment extends BaseFragment implements View.OnClickListen
                 if (response.getCode() == 200 && response.getData() != null) {
                     pagerAdapter = new PagerAdapter(getChildFragmentManager());
                     for (int i = 0; i < response.getData().size(); i++) {
-                        pagerAdapter.addFragment(response.getData().get(i).getName(), HomeItemFragment.newInstance(response.getData().get(i).getName()));
+                        pagerAdapter.addFragment(response.getData().get(i).getName(), HomeItemFragment.newInstance(response.getData().get(i).getId()));
                     }
                     binding.viewPager.setAdapter(pagerAdapter);
                     binding.viewPager.setOffscreenPageLimit(response.getData().size());

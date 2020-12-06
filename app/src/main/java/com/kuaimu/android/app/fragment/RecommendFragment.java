@@ -60,7 +60,7 @@ public class RecommendFragment extends BaseFragment {
         binding.recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         GridItemDecoration.Builder builder = new GridItemDecoration.Builder(getActivity());
         builder.color(R.color.transparent);
-        builder.size(CommonUtil.dip2px(getActivity(), 10));
+        builder.size(CommonUtil.dip2px(getActivity(), 1));
         binding.recyclerView.addItemDecoration(new GridItemDecoration(builder));
         binding.recyclerView.setAdapter(adapter);
         adapter.setOnClickListener(new OnClickListener() {

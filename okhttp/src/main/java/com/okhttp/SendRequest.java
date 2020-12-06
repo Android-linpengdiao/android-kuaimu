@@ -274,6 +274,24 @@ public class SendRequest {
     }
 
     /**
+     * 视频-搜索
+     *
+     * @param tourist_id
+     * @param keyword
+     * @param page
+     * @param call
+     */
+    public static void videoSearch(int tourist_id, String keyword, int page, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("keyword", keyword);
+        map.put("per_page", String.valueOf(10));
+        map.put("page", String.valueOf(page));
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.videoSearch).build().execute(call);
+
+    }
+
+    /**
      * 视频-关注
      *
      * @param tourist_id
@@ -301,37 +319,34 @@ public class SendRequest {
 
     }
 
+    public static void walletSet(int tourist_id, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        OkHttpUtils.getInstance().get().params(map).url(APIUrls.walletSet).build().execute(call);
+
+    }
+
     /**
-     * 我的-开通会员
-     * <p>
      * tourist_id	String
      * 用户id
      * <p>
      * money	String
-     * 金额
+     * 充值金额
      * <p>
      * type	String
-     * alipay/wechat/ios 支付宝/微信/ios内购
+     * 充值渠道 wechat=>微信 alipay=>支付宝 ios=>苹果
      * <p>
-     * purpose	String
-     * 1/2 企业/个人
-     * <p>
-     * name	String
-     * 姓名/企业名称
-     * <p>
-     * idcard	String
-     * 身份证/组织机构代码
+     * wallet_token	Number
+     * 钱包充值兑换的平台币数量
      *
      * @param call
      */
-    public static void cashPay(int tourist_id, String money, String type, int purpose, String name, String idcard, Callback call) {
+    public static void cashPay(int tourist_id, String money, String type, int wallet_token, Callback call) {
         Map<String, String> map = new HashMap<>();
         map.put("tourist_id", String.valueOf(tourist_id));
         map.put("money", money);
         map.put("type", type);
-        map.put("purpose", String.valueOf(purpose));
-        map.put("name", name);
-        map.put("idcard", idcard);
+        map.put("wallet_token", String.valueOf(wallet_token));
         OkHttpUtils.getInstance().post().params(map).url(APIUrls.cashPay).build().execute(call);
 
     }
@@ -353,6 +368,78 @@ public class SendRequest {
         Map<String, String> map = new HashMap<>();
         map.put("tourist_id", String.valueOf(tourist_id));
         OkHttpUtils.getInstance().post().params(map).url(APIUrls.vipDetail).build().execute(call);
+
+    }
+
+    /**
+     * 我的-认证
+     * <p>
+     * tourist_id	String
+     * 用户id
+     * <p>
+     * real_name	String
+     * 真实姓名/法人姓名
+     * <p>
+     * idcard	String
+     * 身份证号码
+     * <p>
+     * front_photo	String
+     * 身份证正面照
+     * <p>
+     * back_photo	String
+     * 身份证背面照
+     * <p>
+     * license_photo	String
+     * 营业执照
+     * <p>
+     * auth	String
+     * 1 商家 2个人
+     */
+    public static void personAuth(int tourist_id, String real_name, String idcard, String front_photo, String back_photo, String license_photo, int auth, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("real_name", real_name);
+        map.put("idcard", idcard);
+        map.put("front_photo", front_photo);
+        map.put("back_photo", back_photo);
+        map.put("license_photo", license_photo);
+        map.put("auth", String.valueOf(auth));
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.personAuth).build().execute(call);
+
+    }
+
+    /**
+     * tourist_id	Number
+     * 用户id
+     * <p>
+     * name	String
+     * 商家名称
+     * <p>
+     * industry	String
+     * 行业
+     * <p>
+     * desc	String
+     * 详情页
+     * <p>
+     * link	String
+     * 联系方式
+     * <p>
+     * logo	String
+     * logo
+     * <p>
+     * qrcode	String
+     * 二维码
+     */
+    public static void businessBanner(int tourist_id, String name, String industry, String desc, String link, String logo, String qrcode, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        map.put("name", name);
+        map.put("industry", industry);
+        map.put("desc", desc);
+        map.put("link", link);
+        map.put("logo", logo);
+        map.put("qrcode", qrcode);
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.businessBanner).build().execute(call);
 
     }
 
@@ -458,14 +545,11 @@ public class SendRequest {
     /**
      * category_id	String
      * 行业id
-     *
-     * @param bus_label
-     * @param addr
      */
-    public static void homeCity(String bus_label, String addr, Callback call) {
+    public static void homeCity(int category_id, Callback call) {
         Map<String, String> map = new HashMap<>();
-        map.put("bus_label", bus_label);
-        map.put("addr", addr);
+        map.put("per_page", String.valueOf(10));
+        map.put("category_id", String.valueOf(category_id));
         OkHttpUtils.getInstance().post().params(map).url(APIUrls.homeCity).build().execute(call);
 
     }
@@ -874,7 +958,7 @@ public class SendRequest {
     public static void isFollow(int tourist_id, int follow_id, Callback call) {
         Map<String, String> map = new HashMap<>();
         map.put("tourist_id", String.valueOf(tourist_id));
-        map.put("attention_id", String.valueOf(follow_id));
+        map.put("video_id", String.valueOf(follow_id));
         OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_isFollow).build().execute(call);
 
     }
@@ -1046,14 +1130,14 @@ public class SendRequest {
      *
      * @param tourist_id
      * @param video_id
-     * @param content
+     * @param body
      * @param call
      */
-    public static void homePageVideosCreateComment(int tourist_id, int video_id, String content, Callback call) {
+    public static void homePageVideosCreateComment(int tourist_id, int video_id, String body, Callback call) {
         Map<String, String> map = new HashMap<>();
         map.put("tourist_id", String.valueOf(tourist_id));
         map.put("video_id", String.valueOf(video_id));
-        map.put("content", content);
+        map.put("body", body);
         OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_homePageVideosCreateComment).build().execute(call);
 
     }

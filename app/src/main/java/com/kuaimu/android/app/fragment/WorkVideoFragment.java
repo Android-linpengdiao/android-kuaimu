@@ -491,7 +491,7 @@ public class WorkVideoFragment extends VideoBaseFragment implements View.OnClick
             public void onResponse(CommentData response, int id) {
                 if (response != null && response.getCode() == 200 && response.getData() != null) {
                     if (commentListPopupWindow != null) {
-                        commentListPopupWindow.setCommentData(response.getData().getComment());
+                        commentListPopupWindow.setCommentData(response.getData().getData());
                     } else {
                         CommentView(response, video_id);
                     }
@@ -549,6 +549,6 @@ public class WorkVideoFragment extends VideoBaseFragment implements View.OnClick
             }
         });
         commentListPopupWindow.showAtLocation(getActivity().getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
-        commentListPopupWindow.setCommentData(commentData.getData().getComment());
+        commentListPopupWindow.setCommentData(commentData.getData().getData());
     }
 }

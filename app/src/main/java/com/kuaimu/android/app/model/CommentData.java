@@ -4,15 +4,16 @@ import java.util.List;
 
 public class CommentData {
 
+
     /**
      * code : 200
      * msg : 成功
-     * data : {"comment":[{"id":1,"content":"好视频","created_at":"2020-07-09 12:03:33","updated_at":"2020-07-09 12:03:33","tourist_id":1,"video_id":2,"tourist":{"id":1,"name":"QWpX8E","phone":"18322233491","avatar":"users/default.png","created_at":"2020-07-09 10:40:45","updated_at":"2020-07-09 11:17:00","password":"$2y$10$utyjNAlYqrU9VnHIxOFWMO2aWqAA2tstYsn5ANQmsCg/klCk96QFa","weixin_bind":1,"qq_bind":2,"qq":"qq_11","weixin":"","tourist_id":null,"person_label":null,"bus_label":null,"is_vip":2,"vip_type":0,"vip_time":null,"apple_identifier":null}}],"comment_tot":1}
+     * data : {"current_page":1,"data":[{"id":58,"created_at":"2020-12-05 22:51:04","updated_at":"2020-12-05 22:51:04","tourist_id":27,"content_id":51,"body":"第三代","tourist_name":"安妮海瑟薇","tourist":{"id":27,"name":"安妮海瑟薇","avatar":"upload/20201205042323qK8AO.jpg","phone":"13521614827"}}],"first_page_url":"http://quickeye.fengyunguoyuan.com/api/video/comment?page=1","from":1,"last_page":1,"last_page_url":"http://quickeye.fengyunguoyuan.com/api/video/comment?page=1","next_page_url":null,"path":"http://quickeye.fengyunguoyuan.com/api/video/comment","per_page":10,"prev_page_url":null,"to":1,"total":1}
      */
 
     private int code;
     private String msg;
-    private DataBean data;
+    private DataBeanX data;
 
     public int getCode() {
         return code;
@@ -30,56 +31,158 @@ public class CommentData {
         this.msg = msg;
     }
 
-    public DataBean getData() {
+    public DataBeanX getData() {
         return data;
     }
 
-    public void setData(DataBean data) {
+    public void setData(DataBeanX data) {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBeanX {
         /**
-         * comment : [{"id":1,"content":"好视频","created_at":"2020-07-09 12:03:33","updated_at":"2020-07-09 12:03:33","tourist_id":1,"video_id":2,"tourist":{"id":1,"name":"QWpX8E","phone":"18322233491","avatar":"users/default.png","created_at":"2020-07-09 10:40:45","updated_at":"2020-07-09 11:17:00","password":"$2y$10$utyjNAlYqrU9VnHIxOFWMO2aWqAA2tstYsn5ANQmsCg/klCk96QFa","weixin_bind":1,"qq_bind":2,"qq":"qq_11","weixin":"","tourist_id":null,"person_label":null,"bus_label":null,"is_vip":2,"vip_type":0,"vip_time":null,"apple_identifier":null}}]
-         * comment_tot : 1
+         * current_page : 1
+         * data : [{"id":58,"created_at":"2020-12-05 22:51:04","updated_at":"2020-12-05 22:51:04","tourist_id":27,"content_id":51,"body":"第三代","tourist_name":"安妮海瑟薇","tourist":{"id":27,"name":"安妮海瑟薇","avatar":"upload/20201205042323qK8AO.jpg","phone":"13521614827"}}]
+         * first_page_url : http://quickeye.fengyunguoyuan.com/api/video/comment?page=1
+         * from : 1
+         * last_page : 1
+         * last_page_url : http://quickeye.fengyunguoyuan.com/api/video/comment?page=1
+         * next_page_url : null
+         * path : http://quickeye.fengyunguoyuan.com/api/video/comment
+         * per_page : 10
+         * prev_page_url : null
+         * to : 1
+         * total : 1
          */
 
-        private int comment_tot;
-        private List<CommentBean> comment;
+        private int current_page;
+        private String first_page_url;
+        private int from;
+        private int last_page;
+        private String last_page_url;
+        private Object next_page_url;
+        private String path;
+        private int per_page;
+        private Object prev_page_url;
+        private int to;
+        private int total;
+        private List<DataBean> data;
 
-        public int getComment_tot() {
-            return comment_tot;
+        public int getCurrent_page() {
+            return current_page;
         }
 
-        public void setComment_tot(int comment_tot) {
-            this.comment_tot = comment_tot;
+        public void setCurrent_page(int current_page) {
+            this.current_page = current_page;
         }
 
-        public List<CommentBean> getComment() {
-            return comment;
+        public String getFirst_page_url() {
+            return first_page_url;
         }
 
-        public void setComment(List<CommentBean> comment) {
-            this.comment = comment;
+        public void setFirst_page_url(String first_page_url) {
+            this.first_page_url = first_page_url;
         }
 
-        public static class CommentBean {
+        public int getFrom() {
+            return from;
+        }
+
+        public void setFrom(int from) {
+            this.from = from;
+        }
+
+        public int getLast_page() {
+            return last_page;
+        }
+
+        public void setLast_page(int last_page) {
+            this.last_page = last_page;
+        }
+
+        public String getLast_page_url() {
+            return last_page_url;
+        }
+
+        public void setLast_page_url(String last_page_url) {
+            this.last_page_url = last_page_url;
+        }
+
+        public Object getNext_page_url() {
+            return next_page_url;
+        }
+
+        public void setNext_page_url(Object next_page_url) {
+            this.next_page_url = next_page_url;
+        }
+
+        public String getPath() {
+            return path;
+        }
+
+        public void setPath(String path) {
+            this.path = path;
+        }
+
+        public int getPer_page() {
+            return per_page;
+        }
+
+        public void setPer_page(int per_page) {
+            this.per_page = per_page;
+        }
+
+        public Object getPrev_page_url() {
+            return prev_page_url;
+        }
+
+        public void setPrev_page_url(Object prev_page_url) {
+            this.prev_page_url = prev_page_url;
+        }
+
+        public int getTo() {
+            return to;
+        }
+
+        public void setTo(int to) {
+            this.to = to;
+        }
+
+        public int getTotal() {
+            return total;
+        }
+
+        public void setTotal(int total) {
+            this.total = total;
+        }
+
+        public List<DataBean> getData() {
+            return data;
+        }
+
+        public void setData(List<DataBean> data) {
+            this.data = data;
+        }
+
+        public static class DataBean {
             /**
-             * id : 1
-             * content : 好视频
-             * created_at : 2020-07-09 12:03:33
-             * updated_at : 2020-07-09 12:03:33
-             * tourist_id : 1
-             * video_id : 2
-             * tourist : {"id":1,"name":"QWpX8E","phone":"18322233491","avatar":"users/default.png","created_at":"2020-07-09 10:40:45","updated_at":"2020-07-09 11:17:00","password":"$2y$10$utyjNAlYqrU9VnHIxOFWMO2aWqAA2tstYsn5ANQmsCg/klCk96QFa","weixin_bind":1,"qq_bind":2,"qq":"qq_11","weixin":"","tourist_id":null,"person_label":null,"bus_label":null,"is_vip":2,"vip_type":0,"vip_time":null,"apple_identifier":null}
+             * id : 58
+             * created_at : 2020-12-05 22:51:04
+             * updated_at : 2020-12-05 22:51:04
+             * tourist_id : 27
+             * content_id : 51
+             * body : 第三代
+             * tourist_name : 安妮海瑟薇
+             * tourist : {"id":27,"name":"安妮海瑟薇","avatar":"upload/20201205042323qK8AO.jpg","phone":"13521614827"}
              */
 
             private int id;
-            private String content;
             private String created_at;
             private String updated_at;
             private int tourist_id;
-            private int video_id;
+            private int content_id;
+            private String body;
+            private String tourist_name;
             private TouristBean tourist;
 
             public int getId() {
@@ -88,14 +191,6 @@ public class CommentData {
 
             public void setId(int id) {
                 this.id = id;
-            }
-
-            public String getContent() {
-                return content;
-            }
-
-            public void setContent(String content) {
-                this.content = content;
             }
 
             public String getCreated_at() {
@@ -122,12 +217,28 @@ public class CommentData {
                 this.tourist_id = tourist_id;
             }
 
-            public int getVideo_id() {
-                return video_id;
+            public int getContent_id() {
+                return content_id;
             }
 
-            public void setVideo_id(int video_id) {
-                this.video_id = video_id;
+            public void setContent_id(int content_id) {
+                this.content_id = content_id;
+            }
+
+            public String getBody() {
+                return body;
+            }
+
+            public void setBody(String body) {
+                this.body = body;
+            }
+
+            public String getTourist_name() {
+                return tourist_name;
+            }
+
+            public void setTourist_name(String tourist_name) {
+                this.tourist_name = tourist_name;
             }
 
             public TouristBean getTourist() {
@@ -140,44 +251,16 @@ public class CommentData {
 
             public static class TouristBean {
                 /**
-                 * id : 1
-                 * name : QWpX8E
-                 * phone : 18322233491
-                 * avatar : users/default.png
-                 * created_at : 2020-07-09 10:40:45
-                 * updated_at : 2020-07-09 11:17:00
-                 * password : $2y$10$utyjNAlYqrU9VnHIxOFWMO2aWqAA2tstYsn5ANQmsCg/klCk96QFa
-                 * weixin_bind : 1
-                 * qq_bind : 2
-                 * qq : qq_11
-                 * weixin :
-                 * tourist_id : null
-                 * person_label : null
-                 * bus_label : null
-                 * is_vip : 2
-                 * vip_type : 0
-                 * vip_time : null
-                 * apple_identifier : null
+                 * id : 27
+                 * name : 安妮海瑟薇
+                 * avatar : upload/20201205042323qK8AO.jpg
+                 * phone : 13521614827
                  */
 
                 private int id;
                 private String name;
-                private String phone;
                 private String avatar;
-                private String created_at;
-                private String updated_at;
-                private String password;
-                private int weixin_bind;
-                private int qq_bind;
-                private String qq;
-                private String weixin;
-                private Object tourist_id;
-                private Object person_label;
-                private Object bus_label;
-                private int is_vip;
-                private int vip_type;
-                private Object vip_time;
-                private Object apple_identifier;
+                private String phone;
 
                 public int getId() {
                     return id;
@@ -195,14 +278,6 @@ public class CommentData {
                     this.name = name;
                 }
 
-                public String getPhone() {
-                    return phone;
-                }
-
-                public void setPhone(String phone) {
-                    this.phone = phone;
-                }
-
                 public String getAvatar() {
                     return avatar;
                 }
@@ -211,116 +286,12 @@ public class CommentData {
                     this.avatar = avatar;
                 }
 
-                public String getCreated_at() {
-                    return created_at;
+                public String getPhone() {
+                    return phone;
                 }
 
-                public void setCreated_at(String created_at) {
-                    this.created_at = created_at;
-                }
-
-                public String getUpdated_at() {
-                    return updated_at;
-                }
-
-                public void setUpdated_at(String updated_at) {
-                    this.updated_at = updated_at;
-                }
-
-                public String getPassword() {
-                    return password;
-                }
-
-                public void setPassword(String password) {
-                    this.password = password;
-                }
-
-                public int getWeixin_bind() {
-                    return weixin_bind;
-                }
-
-                public void setWeixin_bind(int weixin_bind) {
-                    this.weixin_bind = weixin_bind;
-                }
-
-                public int getQq_bind() {
-                    return qq_bind;
-                }
-
-                public void setQq_bind(int qq_bind) {
-                    this.qq_bind = qq_bind;
-                }
-
-                public String getQq() {
-                    return qq;
-                }
-
-                public void setQq(String qq) {
-                    this.qq = qq;
-                }
-
-                public String getWeixin() {
-                    return weixin;
-                }
-
-                public void setWeixin(String weixin) {
-                    this.weixin = weixin;
-                }
-
-                public Object getTourist_id() {
-                    return tourist_id;
-                }
-
-                public void setTourist_id(Object tourist_id) {
-                    this.tourist_id = tourist_id;
-                }
-
-                public Object getPerson_label() {
-                    return person_label;
-                }
-
-                public void setPerson_label(Object person_label) {
-                    this.person_label = person_label;
-                }
-
-                public Object getBus_label() {
-                    return bus_label;
-                }
-
-                public void setBus_label(Object bus_label) {
-                    this.bus_label = bus_label;
-                }
-
-                public int getIs_vip() {
-                    return is_vip;
-                }
-
-                public void setIs_vip(int is_vip) {
-                    this.is_vip = is_vip;
-                }
-
-                public int getVip_type() {
-                    return vip_type;
-                }
-
-                public void setVip_type(int vip_type) {
-                    this.vip_type = vip_type;
-                }
-
-                public Object getVip_time() {
-                    return vip_time;
-                }
-
-                public void setVip_time(Object vip_time) {
-                    this.vip_time = vip_time;
-                }
-
-                public Object getApple_identifier() {
-                    return apple_identifier;
-                }
-
-                public void setApple_identifier(Object apple_identifier) {
-                    this.apple_identifier = apple_identifier;
+                public void setPhone(String phone) {
+                    this.phone = phone;
                 }
             }
         }

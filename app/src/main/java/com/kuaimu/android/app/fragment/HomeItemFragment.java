@@ -61,17 +61,17 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
 
     private static final String TAG = "HomeItemFragment";
     private FragmentHomeItemBinding binding;
-    private String busLabel;
+    private int category_id;
 
     private TikTokController mController;
     private int mCurPos;
     private List<VideoDataBean> mVideoList = new ArrayList<>();
     private TikTokAdapter mTikTokAdapter;
 
-    public static HomeItemFragment newInstance(String busLabel) {
+    public static HomeItemFragment newInstance(int category_id) {
         HomeItemFragment fragment = new HomeItemFragment();
         Bundle args = new Bundle();
-        args.putString("busLabel", busLabel);
+        args.putInt("category_id", category_id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -80,7 +80,7 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            busLabel = getArguments().getString("busLabel");
+            category_id = getArguments().getInt("category_id");
         }
     }
 
@@ -111,22 +111,9 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
         return binding.getRoot();
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        Log.i(TAG, "onHiddenChanged: " + busLabel + "   hidden" + hidden);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume: " + busLabel);
-//        searchWork();
-    }
-
     private void searchWork() {
         binding.swipeRefreshLayout.setRefreshing(true);
-        SendRequest.homeCity(busLabel, SharedPreferencesUtils.getInstance().getCity(), new GenericsCallback<HomeWorkData>(new JsonGenericsSerializator()) {
+        SendRequest.homeCity(category_id, new GenericsCallback<HomeWorkData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
                 binding.swipeRefreshLayout.setRefreshing(false);
@@ -411,7 +398,7 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
             public void onResponse(CommentData response, int id) {
                 if (response != null && response.getCode() == 200 && response.getData() != null) {
                     if (commentListPopupWindow != null) {
-                        commentListPopupWindow.setCommentData(response.getData().getComment());
+                        commentListPopupWindow.setCommentData(response.getData().getData());
                     } else {
                         CommentView(response, video_id);
                     }
@@ -464,7 +451,7 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
             }
         });
         commentListPopupWindow.showAtLocation(getActivity().getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
-        commentListPopupWindow.setCommentData(commentData.getData().getComment());
+        commentListPopupWindow.setCommentData(commentData.getData().getData());
     }
 
     @Override

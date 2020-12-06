@@ -19,6 +19,7 @@ import com.baselibrary.utils.ToastUtils;
 import com.kuaimu.android.app.activity.BaseActivity;
 import com.kuaimu.android.app.activity.ChatListActivity;
 import com.kuaimu.android.app.activity.EditorActivity;
+import com.kuaimu.android.app.activity.MerchantActivity;
 import com.kuaimu.android.app.activity.MessageActivity;
 import com.kuaimu.android.app.activity.MineFansActivity;
 import com.kuaimu.android.app.activity.MineFollowActivity;
@@ -26,6 +27,7 @@ import com.kuaimu.android.app.activity.MineLikeActivity;
 import com.kuaimu.android.app.activity.MineWorkActivity;
 import com.kuaimu.android.app.activity.MyPointActivity;
 import com.kuaimu.android.app.activity.MyWalletActivity;
+import com.kuaimu.android.app.activity.PersonAuthActivity;
 import com.kuaimu.android.app.activity.SettingsActivity;
 import com.kuaimu.android.app.databinding.ActivityMainBinding;
 
@@ -79,6 +81,8 @@ public class MainActivity extends BaseActivity {
         View followView = headerView.findViewById(R.id.followView);
         View workView = headerView.findViewById(R.id.workView);
         View walletView = headerView.findViewById(R.id.walletView);
+        View personAuthView = headerView.findViewById(R.id.personAuthView);
+        View merchantAuthView = headerView.findViewById(R.id.merchantAuthView);
         View myPointView = headerView.findViewById(R.id.myPointView);
         View settingView = headerView.findViewById(R.id.settingView);
 
@@ -141,6 +145,26 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
                 if (getUid(true) > 0) {
                     openActivity(MyWalletActivity.class);
+                }
+            }
+        });
+        personAuthView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getUid(true) > 0) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("auth", 2);
+                    openActivity(PersonAuthActivity.class, bundle);
+                }
+            }
+        });
+        merchantAuthView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getUid(true) > 0) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("auth", 1);
+                    openActivity(MerchantActivity.class, bundle);
                 }
             }
         });
