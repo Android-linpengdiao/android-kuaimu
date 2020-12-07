@@ -15,6 +15,7 @@ import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.ToastUtils;
 import com.kuaimu.android.app.R;
 import com.kuaimu.android.app.adapter.MineWorkAdapter;
+import com.kuaimu.android.app.adapter.WorkAdapter;
 import com.kuaimu.android.app.databinding.ActivityMineWorkBinding;
 import com.kuaimu.android.app.model.BaseData;
 import com.kuaimu.android.app.model.MineWorkData;
@@ -29,7 +30,7 @@ import org.greenrobot.eventbus.EventBus;
 public class MineWorkActivity extends BaseActivity {
     private ActivityMineWorkBinding binding;
 
-    private MineWorkAdapter adapter;
+    private WorkAdapter adapter;
     private MineWorkData mineWorkData;
     private int uid;
 
@@ -45,7 +46,7 @@ public class MineWorkActivity extends BaseActivity {
             }
         });
 
-        adapter = new MineWorkAdapter(this);
+        adapter = new WorkAdapter(this);
         binding.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         GridItemDecoration.Builder builder = new GridItemDecoration.Builder(this);
         builder.color(R.color.transparent);

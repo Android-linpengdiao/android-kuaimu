@@ -180,22 +180,22 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
             binding.headLoginLayout.userName.setText(getUserInfo().getData().getName());
             binding.headLoginLayout.touristId.setText("ID：" + getUserInfo().getData().getTourist_id());
             GlideLoader.LoderCircleImage(getActivity(), getUserInfo().getData().getAvatar(), binding.headLoginLayout.userIcon);
-            binding.headLoginLayout.userVip.setVisibility(getUserInfo().getData().getIs_vip() == 1 ? View.VISIBLE : View.GONE);
-            binding.headLoginLayout.userVip.setImageResource(getUserInfo().getData().getVip_type() == 1 ? R.mipmap.qi : R.mipmap.icon_vip);
+//            binding.headLoginLayout.userVip.setVisibility(getUserInfo().getData().getIs_vip() == 1 ? View.VISIBLE : View.GONE);
+//            binding.headLoginLayout.userVip.setImageResource(getUserInfo().getData().getVip_type() == 1 ? R.mipmap.qi : R.mipmap.icon_vip);
 
-            binding.headLoginLayout.label.setVisibility(View.VISIBLE);
-            if (!CommonUtil.isBlank(getUserInfo().getData().getPerson_label()) && !CommonUtil.isBlank(getUserInfo().getData().getBus_label())) {
-                binding.headLoginLayout.label.setText(getUserInfo().getData().getPerson_label() + "  |  " + getUserInfo().getData().getBus_label());
-            } else if (!CommonUtil.isBlank(getUserInfo().getData().getPerson_label())) {
-                binding.headLoginLayout.label.setText(getUserInfo().getData().getPerson_label());
-            } else if (!CommonUtil.isBlank(getUserInfo().getData().getBus_label())) {
-                binding.headLoginLayout.label.setText(getUserInfo().getData().getBus_label());
-            } else {
-                binding.headLoginLayout.label.setVisibility(View.GONE);
-            }
-            binding.headLoginLayout.tvFollowers.setText(String.valueOf(getUserInfo().getData().getAttention_num()));
-            binding.headLoginLayout.tvLiker.setText(String.valueOf(getUserInfo().getData().getFollower_num()));
-            binding.headLoginLayout.tvAssistNum.setText(String.valueOf(getUserInfo().getData().getGood_num()));
+//            binding.headLoginLayout.label.setVisibility(View.VISIBLE);
+//            if (!CommonUtil.isBlank(getUserInfo().getData().getPerson_label()) && !CommonUtil.isBlank(getUserInfo().getData().getBus_label())) {
+//                binding.headLoginLayout.label.setText(getUserInfo().getData().getPerson_label() + "  |  " + getUserInfo().getData().getBus_label());
+//            } else if (!CommonUtil.isBlank(getUserInfo().getData().getPerson_label())) {
+//                binding.headLoginLayout.label.setText(getUserInfo().getData().getPerson_label());
+//            } else if (!CommonUtil.isBlank(getUserInfo().getData().getBus_label())) {
+//                binding.headLoginLayout.label.setText(getUserInfo().getData().getBus_label());
+//            } else {
+//                binding.headLoginLayout.label.setVisibility(View.GONE);
+//            }
+//            binding.headLoginLayout.tvFollowers.setText(String.valueOf(getUserInfo().getData().getAttention_num()));
+//            binding.headLoginLayout.tvLiker.setText(String.valueOf(getUserInfo().getData().getFollower_num()));
+//            binding.headLoginLayout.tvAssistNum.setText(String.valueOf(getUserInfo().getData().getGood_num()));
 
         } else {
             binding.headLoginLayout.headLoginView.setVisibility(View.GONE);

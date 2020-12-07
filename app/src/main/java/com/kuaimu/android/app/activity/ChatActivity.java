@@ -87,7 +87,7 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void publishLeave(String content) {
-        SendRequest.publishLeave(getUid(), uid, content, uid, new GenericsCallback<PublishLeaveData>(new JsonGenericsSerializator()) {
+        SendRequest.publishLeave(getUid(), uid, content, new GenericsCallback<PublishLeaveData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
 

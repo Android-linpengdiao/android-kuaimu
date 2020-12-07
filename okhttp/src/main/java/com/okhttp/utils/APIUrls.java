@@ -3,7 +3,7 @@ package com.okhttp.utils;
 public class APIUrls {
 
 
-    public final static String url_domain = "http://quickeye.fengyunguoyuan.com/";
+    public final static String url_domain = "https://kuaimutj.com/";
 
     public final static String url_fileUpload = url_domain + "api/common/fileUpload";
     public final static String url_createSecurityToken = url_domain + "api/common/ossToken";
@@ -22,8 +22,6 @@ public class APIUrls {
     public final static String url_cancel = url_domain + "api/center/cancel";
     public final static String url_baseInfo = url_domain + "api/person/info";
     public final static String url_editBase = url_domain + "api/person/editBase";
-//    public final static String url_isFollow = url_domain + "api/home/isAttention";
-    public final static String url_isFollow = url_domain + "api/video/isAssist";
     public final static String url_resetPassword = url_domain + "api/common/resetPassword";
     public final static String url_editPersonal = url_domain + "api/center/editPersonal";
     public final static String url_report = url_domain + "api/center/report";
@@ -65,7 +63,7 @@ public class APIUrls {
     public final static String personAssist = url_domain + "api/message/assist";
     public final static String homeSelfAttention = url_domain + "api/home/selfAttention";
     public final static String homeLeave = url_domain + "api/home/leave";
-    public final static String publishLeave = url_domain + "api/home/publishLeave";
+    public final static String publishLeave = url_domain + "api/message/publishLeave";
 //    public final static String homeComment = url_domain + "api/home/comment";
     public final static String homeComment = url_domain + "api/video/comment";
     public final static String leaveUser = url_domain + "api/message/leaveUser";
@@ -138,13 +136,11 @@ public class APIUrls {
     // 获取关注我的人
     public final static String url_centerAttention = url_domain + "api/center/attention";
     //取消关注用户接口
-//    public final static String url_centerUnFollow = url_domain + "api/center/unFollow";
-//    public final static String url_centerUnFollow = url_domain + "api/home/removeAttention";
     public final static String url_centerUnFollow = url_domain + "api/attention/unFollow";
     //关注用户接口
-//    public final static String url_centerFollow = url_domain + "api/center/follow";
-//    public final static String url_centerFollow = url_domain + "api/home/attention";
     public final static String url_centerFollow = url_domain + "api/attention/follow";
+    //用户是否关注用户
+    public final static String url_isFollow = url_domain + "api/attention/isFollow";
 
     //查看作品是否被点赞
     public final static String url_contentIsAssist = url_domain + "api/center/contentIsAssist";

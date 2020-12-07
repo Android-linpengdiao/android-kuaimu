@@ -70,8 +70,8 @@ public class EditorActivity extends BaseActivity implements View.OnClickListener
 
     private void initView() {
         binding.userName.setText(getUserInfo().getData().getName());
-        binding.personLabel.setText(getUserInfo().getData().getPerson_label());
-        binding.busLabel.setText(getUserInfo().getData().getBus_label());
+//        binding.personLabel.setText(getUserInfo().getData().getPerson_label());
+//        binding.busLabel.setText(getUserInfo().getData().getBus_label());
         GlideLoader.LoderCircleImage(this, getUserInfo().getData().getAvatar(), binding.userIcon);
     }
 

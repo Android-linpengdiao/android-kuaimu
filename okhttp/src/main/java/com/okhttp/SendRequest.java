@@ -703,18 +703,14 @@ public class SendRequest {
      * <p>
      * content	String
      * 留言内容
-     * <p>
-     * parent_id	String
-     * 留言父级id
      *
      * @param tourist_id
      * @param call
      */
-    public static void publishLeave(int tourist_id, int be_tourist_id, String content, int parent_id, Callback call) {
+    public static void publishLeave(int tourist_id, int be_tourist_id, String content, Callback call) {
         Map<String, String> map = new HashMap<>();
         map.put("tourist_id", String.valueOf(tourist_id));
         map.put("be_tourist_id", String.valueOf(be_tourist_id));
-        map.put("parent_id", String.valueOf(parent_id));
         map.put("content", content);
         OkHttpUtils.getInstance().post().params(map).url(APIUrls.publishLeave).build().execute(call);
 

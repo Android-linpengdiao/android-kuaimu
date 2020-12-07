@@ -14,7 +14,7 @@ import com.bumptech.glide.request.target.Target;
 
 public class GlideLoader {
     private static final String TAG = "GlideLoader";
-    public final static String domain = "http://quickeye.fengyunguoyuan.com/";
+    public final static String domain = "https://kuaimutj.com/";
 
     public static void LoderImage(Context context, String url, ImageView view) {
         LoderImage(context, url, view, 0);
