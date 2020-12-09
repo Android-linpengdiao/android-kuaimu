@@ -20,7 +20,8 @@
         android:roundIcon="@mipmap/ic_app"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.CashPayActivity"></activity>
+        <activity android:name=".activity.TixianActivity"></activity>
+        <activity android:name=".activity.CashPayActivity" />
         <activity android:name=".activity.MerchantActivity" />
         <activity android:name=".activity.PersonAuthActivity" />
         <activity android:name=".activity.CitySelectionActivity" />

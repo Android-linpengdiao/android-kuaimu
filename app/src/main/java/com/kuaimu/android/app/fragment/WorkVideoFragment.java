@@ -30,19 +30,25 @@ import com.dueeeke.videoplayer.player.VideoView;
 import com.kuaimu.android.app.R;
 import com.kuaimu.android.app.adapter.TikTokAdapter;
 import com.kuaimu.android.app.databinding.FragmentWorkVideoBinding;
+import com.kuaimu.android.app.manager.TencentHelper;
+import com.kuaimu.android.app.manager.WXManager;
 import com.kuaimu.android.app.model.BaseData;
 import com.kuaimu.android.app.model.CommentData;
 import com.kuaimu.android.app.model.HomeDetail;
 import com.kuaimu.android.app.model.VideoDataBean;
 import com.dkplayer.widget.render.TikTokRenderViewFactory;
 import com.kuaimu.android.app.view.CommentListPopupWindow;
+import com.kuaimu.android.app.view.GiftPopupWindow;
 import com.kuaimu.android.app.view.OnClickListener;
+import com.kuaimu.android.app.view.SharePopupWindow;
 import com.okhttp.SendRequest;
 import com.okhttp.callbacks.GenericsCallback;
 import com.okhttp.callbacks.StringCallback;
 import com.okhttp.sample_okhttp.JsonGenericsSerializator;
 import com.okhttp.utils.APIUrls;
 import com.okhttp.utils.OkHttpUtils;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.UiError;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -197,6 +203,30 @@ public class WorkVideoFragment extends VideoBaseFragment implements View.OnClick
 
                                 }
                             });
+                        }
+                        break;
+                    case R.id.iv_gift:
+                        if (object instanceof VideoDataBean) {
+                            VideoDataBean dataBean = (VideoDataBean) object;
+                            GiftPopupWindow giftPopupWindow = new GiftPopupWindow(getActivity());
+                            giftPopupWindow.setOnClickListener(new OnClickListener() {
+
+                                @Override
+                                public void onClick(View view, Object object) {
+                                    switch (view.getId()) {
+                                        case R.id.shareWx:
+
+
+                                            break;
+                                    }
+                                }
+
+                                @Override
+                                public void onLongClick(View view, Object object) {
+
+                                }
+                            });
+                            giftPopupWindow.showAtLocation(getActivity().getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
                         }
                         break;
                     case R.id.videoView:

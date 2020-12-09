@@ -80,8 +80,8 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         if (dataBean.getTourist() != null) {
             holder.userName.setText(dataBean.getTourist().getName());
             GlideLoader.LoderCircleImage(mContext, dataBean.getTourist().getAvatar(), holder.userIcon);
-            holder.deleteView.setVisibility(dataBean.getTourist().getId()==getUid()?View.VISIBLE:View.GONE);
-        }else {
+            holder.deleteView.setVisibility(dataBean.getTourist().getId() == getUid() ? View.VISIBLE : View.GONE);
+        } else {
             holder.deleteView.setVisibility(View.GONE);
         }
         holder.userDesc.setText(dataBean.getDesc());
@@ -121,6 +121,14 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             }
         });
         holder.tvShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onClickListener != null) {
+                    onClickListener.onClick(view, dataBean);
+                }
+            }
+        });
+        holder.ivGift.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (onClickListener != null) {
@@ -171,7 +179,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     @Override
     public void onViewDetachedFromWindow(@NonNull VideoHolder holder) {
         super.onViewDetachedFromWindow(holder);
-        if (holder.mPosition>=videos.size()){
+        if (holder.mPosition >= videos.size()) {
             return;
         }
         VideoDataBean item = videos.get(holder.mPosition);
@@ -205,6 +213,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         private TextView tvLike;
         private TextView tvComment;
         private TextView tvShare;
+        private ImageView ivGift;
         private ImageView deleteView;
         public LoadingView loadingView;
         private View liveAnimateView;
@@ -222,6 +231,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             tvLike = itemView.findViewById(R.id.tv_like);
             tvComment = itemView.findViewById(R.id.tv_comment);
             tvShare = itemView.findViewById(R.id.tv_share);
+            ivGift = itemView.findViewById(R.id.iv_gift);
             deleteView = itemView.findViewById(R.id.deleteView);
             loadingView = itemView.findViewById(R.id.loadingView);
             liveAnimateView = itemView.findViewById(R.id.live_animate_view);

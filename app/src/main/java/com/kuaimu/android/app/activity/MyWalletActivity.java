@@ -42,6 +42,12 @@ public class MyWalletActivity extends BaseActivity {
                 openActivity(CashPayActivity.class);
             }
         });
+        binding.tixianTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openActivity(TixianActivity.class);
+            }
+        });
 
     }
 

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/viewLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selection_gift"
+        android:paddingTop="10dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:src="@mipmap/gift"
+            android:scaleType="center"
+            />
+
+        <TextView
+            android:id="@+id/nameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="棒棒糖"
+            android:gravity="center"
+            android:textColor="#ffe6e6e6"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="10乐币"
+            android:gravity="center"
+            android:textColor="#ffffffff"
+            android:textSize="9sp" />
+
+        <TextView
+            android:id="@+id/sendTextView"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:gravity="center"
+            android:background="@drawable/button_send"
+            android:text="发送"
+            android:textColor="#ffffffff"
+            android:textSize="13sp"
+            android:visibility="gone"
+            />
+
+    </LinearLayout>
+
+</layout>

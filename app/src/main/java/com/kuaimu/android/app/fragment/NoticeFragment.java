@@ -113,20 +113,20 @@ public class NoticeFragment extends BaseFragment {
             }
 
         });
-        SendRequest.leaveUser(getUid(), new GenericsCallback<LeaveUserData>(new JsonGenericsSerializator()) {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-            }
-
-            @Override
-            public void onResponse(LeaveUserData response, int id) {
-                if (response.getCode() == 200 && response.getData() != null) {
-                    adapter.refreshData(response.getData());
-                } else {
-                    ToastUtils.showShort(getActivity(), response.getMsg());
-                }
-            }
-
-        });
+//        SendRequest.leaveUser(getUid(), new GenericsCallback<LeaveUserData>(new JsonGenericsSerializator()) {
+//            @Override
+//            public void onError(Call call, Exception e, int id) {
+//            }
+//
+//            @Override
+//            public void onResponse(LeaveUserData response, int id) {
+//                if (response.getCode() == 200 && response.getData() != null) {
+//                    adapter.refreshData(response.getData());
+//                } else {
+//                    ToastUtils.showShort(getActivity(), response.getMsg());
+//                }
+//            }
+//
+//        });
     }
 }

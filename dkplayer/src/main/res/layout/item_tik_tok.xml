@@ -132,6 +132,13 @@
                     android:textColor="#ffffffff"
                     android:textSize="12sp" />
 
+                <ImageView
+                    android:id="@+id/iv_gift"
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:src="@drawable/icon_gift" />
+
             </LinearLayout>
 
             <com.dkplayer.view.LoadingView
