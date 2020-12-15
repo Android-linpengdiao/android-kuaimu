@@ -6,6 +6,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,6 +106,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onResume() {
         super.onResume();
+        Log.i(TAG, "onResume: ");
 //        if (getUid() > 0) {
 //            GlideLoader.LoderCircleImage(getActivity(), getUserInfo().getData().getAvatar(), binding.userIconView);
 //        } else {
@@ -115,6 +117,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+        Log.i(TAG, "onHiddenChanged: ");
 //        if (getUid() > 0) {
 //            GlideLoader.LoderCircleImage(getActivity(), getUserInfo().getData().getAvatar(), binding.userIconView);
 //        } else {

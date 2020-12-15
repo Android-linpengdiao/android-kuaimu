@@ -42,8 +42,97 @@
                 android:paddingRight="120dp"
                 android:paddingBottom="15dp">
 
+                <LinearLayout
+                    android:id="@+id/goodLayout"
+                    android:layout_width="234dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_white"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="3dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/goodImgView"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/image" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/goodNameView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:text=""
+                            android:textColor="#ff000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/goodLinkView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/button_red"
+                            android:paddingLeft="12dp"
+                            android:paddingTop="5dp"
+                            android:paddingRight="12dp"
+                            android:paddingBottom="5dp"
+                            android:text="立即购买"
+                            android:textColor="#ffffffff"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/goodDeleteView"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:padding="6dp"
+                            android:src="@drawable/close" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/userName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textColor="#ffe6e6e6"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/browseNumTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="已播放0"
+                        android:textColor="#ffe6e6e6"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
                 <TextView
-                    android:id="@+id/userName"
+                    android:id="@+id/userDesc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -51,17 +140,7 @@
                     android:maxLines="2"
                     android:text=""
                     android:textColor="#ffe6e6e6"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/userDesc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text=""
-                    android:textColor="#ffe6e6e6"
-                    android:textSize="13sp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -180,7 +259,7 @@
             android:layout_marginRight="15dp"
             android:padding="10dp"
             android:src="@mipmap/shanchu"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </RelativeLayout>
 

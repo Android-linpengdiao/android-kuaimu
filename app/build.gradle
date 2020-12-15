@@ -70,6 +70,7 @@ dependencies {
     implementation externalBanner
     implementation externalAndroidXRecyclerview
     implementation externalSpringview
+    implementation externalIndicatorseekbar
     implementation project(':base')
     implementation project(':okhttp')
     implementation project(':camera')

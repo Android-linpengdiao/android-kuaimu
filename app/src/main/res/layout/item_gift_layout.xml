@@ -16,9 +16,9 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="match_parent"
+            android:id="@+id/coverImageView"
+            android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@mipmap/gift"
             android:scaleType="center"
             />
 
@@ -32,9 +32,10 @@
             android:textSize="13sp" />
 
         <TextView
+            android:id="@+id/walletTokenTextView"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:text="10乐币"
+            android:text="0乐币"
             android:gravity="center"
             android:textColor="#ffffffff"
             android:textSize="9sp" />

@@ -65,7 +65,7 @@ public class MineFollowActivity extends BaseActivity implements View.OnClickList
     }
 
     private void initData() {
-        SendRequest.attention(getUid(), new GenericsCallback<FollowUserData>(new JsonGenericsSerializator()) {
+        SendRequest.follows(getUid(), new GenericsCallback<FollowUserData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
                 binding.swipeRefreshLayout.setRefreshing(false);

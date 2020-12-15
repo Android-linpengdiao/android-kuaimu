@@ -41,6 +41,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import androidx.viewpager.widget.ViewPager;
+
 import okhttp3.Call;
 
 public class WorkUserHomeFragment extends BaseFragment implements View.OnClickListener {
@@ -90,8 +91,9 @@ public class WorkUserHomeFragment extends BaseFragment implements View.OnClickLi
 
         binding.back.setOnClickListener(this);
         binding.back.setVisibility(View.VISIBLE);
-        binding.menuView.setOnClickListener(this);
-        binding.menuView.setVisibility(View.VISIBLE);
+//        binding.menuView.setOnClickListener(this);
+//        binding.menuView.setVisibility(View.VISIBLE);
+        binding.menuTextView.setOnClickListener(this);
         binding.headLoginLayout.tvIsFollow.setVisibility(View.VISIBLE);
         binding.headLoginLayout.tvChat.setOnClickListener(this);
         binding.headLoginLayout.tvChat.setVisibility(View.VISIBLE);
@@ -133,7 +135,7 @@ public class WorkUserHomeFragment extends BaseFragment implements View.OnClickLi
     }
 
     private void initData() {
-        Log.i(TAG, "initData: "+uid);
+        Log.i(TAG, "initData: " + uid);
         SendRequest.baseInfo(uid, new GenericsCallback<UserInfo>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -164,7 +166,7 @@ public class WorkUserHomeFragment extends BaseFragment implements View.OnClickLi
                         JSONObject jsonObject = new JSONObject(response);
                         if (jsonObject.optInt("code") == 200
                                 && !CommonUtil.isBlank(jsonObject.optJSONObject("data"))
-                                && jsonObject.optJSONObject("data").optBoolean("is_attention")) {
+                                && jsonObject.optJSONObject("data").optBoolean("isLike")) {
                             binding.headLoginLayout.tvIsFollow.setSelected(!binding.headLoginLayout.tvIsFollow.isSelected());
                             binding.headLoginLayout.tvIsFollow.setText(binding.headLoginLayout.tvIsFollow.isSelected() ? "已关注TA" : "关注TA");
                         } else {
@@ -186,34 +188,19 @@ public class WorkUserHomeFragment extends BaseFragment implements View.OnClickLi
             binding.headLoginLayout.userName.setText(userInfo.getData().getName());
             binding.headLoginLayout.touristId.setText("ID：" + userInfo.getData().getTourist_id());
             GlideLoader.LoderCircleImage(getContext(), userInfo.getData().getAvatar(), binding.headLoginLayout.userIcon);
-//            binding.headLoginLayout.userVip.setVisibility(userInfo.getData().getIs_vip() == 1 ? View.VISIBLE : View.GONE);
-//            binding.headLoginLayout.userVip.setImageResource(userInfo.getData().getVip_type() == 1 ? R.mipmap.qi : R.mipmap.icon_vip);
 
             binding.headLoginLayout.tvIsFollow.setVisibility(getUid() == userInfo.getData().getId() ? View.GONE : View.VISIBLE);
             binding.headLoginLayout.tvChat.setVisibility(getUid() == userInfo.getData().getId() ? View.GONE : View.VISIBLE);
 
-//        binding.headLoginLayout.label.setVisibility(View.VISIBLE);
-//        if (!CommonUtil.isBlank(userInfo.getData().getPerson_label()) && !CommonUtil.isBlank(userInfo.getData().getBus_label()) && !CommonUtil.isBlank(userInfo.getData().getDesc())) {
-//            binding.headLoginLayout.label.setText(userInfo.getData().getPerson_label() + "  |  " + userInfo.getData().getBus_label()+ "   " + userInfo.getData().getDesc());
-//        }else if (!CommonUtil.isBlank(userInfo.getData().getPerson_label()) && !CommonUtil.isBlank(userInfo.getData().getBus_label())) {
-//            binding.headLoginLayout.label.setText(userInfo.getData().getPerson_label() + "  |  " + userInfo.getData().getBus_label());
-//        } else if (!CommonUtil.isBlank(userInfo.getData().getPerson_label())) {
-//            binding.headLoginLayout.label.setText(userInfo.getData().getPerson_label());
-//        } else if (!CommonUtil.isBlank(userInfo.getData().getBus_label())) {
-//            binding.headLoginLayout.label.setText(userInfo.getData().getBus_label());
-//        } else {
-//            binding.headLoginLayout.label.setVisibility(View.GONE);
-//        }
+            binding.headLoginLayout.tvFollowers.setText(String.valueOf(userInfo.getData().getFollow_number()));
+            binding.headLoginLayout.tvLiker.setText(String.valueOf(userInfo.getData().getFan_number()));
 
-//            binding.headLoginLayout.label.setText((!CommonUtil.isBlank(userInfo.getData().getPerson_label()) ? userInfo.getData().getPerson_label() + "  |  " : "")
-//                    + (!CommonUtil.isBlank(userInfo.getData().getBus_label()) ? userInfo.getData().getBus_label() + "  |  " : "")
-//                    + (!CommonUtil.isBlank(userInfo.getData().getDesc()) ? userInfo.getData().getDesc() : ""));
-//
-//            binding.headLoginLayout.label.setVisibility(CommonUtil.isBlank(userInfo.getData().getPerson_label()) && CommonUtil.isBlank(userInfo.getData().getBus_label()) && CommonUtil.isBlank(userInfo.getData().getDesc()) ? View.GONE : View.VISIBLE);
-//
-//            binding.headLoginLayout.tvFollowers.setText(String.valueOf(userInfo.getData().getAttention_num()));
-//            binding.headLoginLayout.tvLiker.setText(String.valueOf(userInfo.getData().getFollower_num()));
-//            binding.headLoginLayout.tvAssistNum.setText(String.valueOf(userInfo.getData().getGood_num()));
+            //1通过 2正在审核 3审核未通过 4未认证
+            if (getUserInfo().getData() != null && getUserInfo().getData().getBusiness_auth_status() == 1) {
+                binding.menuTextView.setVisibility(View.VISIBLE);
+            }else {
+                binding.menuTextView.setVisibility(View.GONE);
+            }
 
         } else {
             binding.headLoginLayout.tvIsFollow.setOnClickListener(this);
@@ -229,6 +216,7 @@ public class WorkUserHomeFragment extends BaseFragment implements View.OnClickLi
             binding.headLoginLayout.tvFollowers.setText("");
             binding.headLoginLayout.tvLiker.setText("");
             binding.headLoginLayout.tvAssistNum.setText("");
+            binding.menuTextView.setVisibility(View.GONE);
         }
 
         initTab(userInfo);
@@ -237,8 +225,8 @@ public class WorkUserHomeFragment extends BaseFragment implements View.OnClickLi
 
     private void initTab(UserInfo userInfo) {
         UserPagerAdapter mainHomePagerAdapter = new UserPagerAdapter(getChildFragmentManager());
-        mainHomePagerAdapter.addFragment("作品 " + (userInfo != null && userInfo.getData() != null ? userInfo.getData().getVideo_num() : 0),UserWorkFragment.newInstance(uid));
-        mainHomePagerAdapter.addFragment("喜欢 " + (userInfo != null && userInfo.getData() != null ? userInfo.getData().getLike_video_num() : 0),UserLikeFragment.newInstance(uid));
+        mainHomePagerAdapter.addFragment("作品 " + (userInfo != null && userInfo.getData() != null ? userInfo.getData().getVideo_num() : 0), UserWorkFragment.newInstance(uid));
+        mainHomePagerAdapter.addFragment("喜欢 " + (userInfo != null && userInfo.getData() != null ? userInfo.getData().getLike_video_num() : 0), UserLikeFragment.newInstance(uid));
         binding.viewPager.setAdapter(mainHomePagerAdapter);
         binding.viewPager.setOffscreenPageLimit(1);
         binding.viewPager.setCurrentItem(0);
@@ -343,6 +331,10 @@ public class WorkUserHomeFragment extends BaseFragment implements View.OnClickLi
                 break;
             case R.id.menuView:
                 createMenuPopup();
+
+                break;
+            case R.id.menuTextView:
+
 
                 break;
         }

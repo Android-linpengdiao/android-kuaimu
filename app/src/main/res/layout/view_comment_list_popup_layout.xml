@@ -94,7 +94,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="@dimen/padding"
                     android:text="发送"
-                    android:textColor="#D8000D"
+                    android:textColor="#09DB6C"
                     android:textSize="18sp" />
 
 

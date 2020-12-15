@@ -9,6 +9,12 @@ import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.ToastUtils;
 import com.kuaimu.android.app.R;
 import com.kuaimu.android.app.databinding.ActivityTixianBinding;
+import com.kuaimu.android.app.model.BaseData;
+import com.okhttp.SendRequest;
+import com.okhttp.callbacks.GenericsCallback;
+import com.okhttp.sample_okhttp.JsonGenericsSerializator;
+
+import okhttp3.Call;
 
 public class TixianActivity extends BaseActivity {
 
@@ -51,6 +57,23 @@ public class TixianActivity extends BaseActivity {
                     ToastUtils.showShort(TixianActivity.this, "请输入备注信息");
                     return;
                 }
+
+                SendRequest.withdrawal(getUid(), money, wechat, name, remark, new GenericsCallback<BaseData>(new JsonGenericsSerializator()) {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(BaseData response, int id) {
+                        if (response.getCode() == 200) {
+                            ToastUtils.showShort(getApplication(), "提交成功");
+                            finish();
+                        } else {
+                            ToastUtils.showShort(getApplication(), response.getMsg());
+                        }
+                    }
+                });
             }
         });
     }

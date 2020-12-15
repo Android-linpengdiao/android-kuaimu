@@ -85,6 +85,26 @@ public class UserInfo implements Serializable {
         private int video_num;
         private int like_video_num;
 
+        private int person_auth_status;
+        private int  business_auth_status;
+        
+
+        public int getPerson_auth_status() {
+            return person_auth_status;
+        }
+
+        public void setPerson_auth_status(int person_auth_status) {
+            this.person_auth_status = person_auth_status;
+        }
+
+        public int getBusiness_auth_status() {
+            return business_auth_status;
+        }
+
+        public void setBusiness_auth_status(int business_auth_status) {
+            this.business_auth_status = business_auth_status;
+        }
+
         public int getVideo_num() {
             return video_num;
         }

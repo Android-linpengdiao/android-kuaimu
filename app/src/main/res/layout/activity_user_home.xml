@@ -33,19 +33,19 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#454B6E">
+                    android:background="@color/white">
 
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/tabLayout"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         app:tabGravity="fill"
-                        app:tabIndicatorColor="#DCDE0C"
+                        app:tabIndicatorColor="@color/colorPrimary"
                         app:tabIndicatorFullWidth="true"
                         app:tabIndicatorHeight="3dp"
                         app:tabMode="fixed"
                         app:tabRippleColor="@android:color/transparent"
-                        app:tabSelectedTextColor="@color/white"
+                        app:tabSelectedTextColor="#141414"
                         app:tabTextAppearance="@style/TabLayoutTextSize16"
                         app:tabTextColor="#999999" />
 
@@ -125,7 +125,23 @@
                 android:layout_marginLeft="4dp"
                 android:padding="15dp"
                 android:src="@drawable/video_back"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:tint="@color/black" />
+
+            <TextView
+                android:id="@+id/menuTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="4dp"
+                android:gravity="center"
+                android:layout_marginRight="6dp"
+                android:textColor="#5757FF"
+                android:text="查看商家页面"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 

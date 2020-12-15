@@ -105,11 +105,11 @@
                         android:layout_height="32dp"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
+                        android:background="@drawable/button_radius_bottom"
                         android:gravity="center"
                         android:text="上传封面"
                         android:textColor="#ffffffff"
-                        android:textSize="14sp"
-                        android:background="@drawable/button_radius_bottom"/>
+                        android:textSize="14sp" />
                 </RelativeLayout>
 
                 <TextView
@@ -172,7 +172,9 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -181,20 +183,67 @@
                             android:padding="15dp"
                             android:text="是"
                             android:textColor="#ff000000"
-                            android:textSize="15sp"
-                            />
+                            android:textSize="15sp" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/radio"
                             android:layout_marginLeft="60dp"
+                            android:drawableLeft="@drawable/radio"
                             android:drawablePadding="10dp"
                             android:padding="15dp"
                             android:text="否"
                             android:textColor="#ff000000"
-                            android:textSize="15sp"
-                            />
+                            android:textSize="15sp" />
                     </LinearLayout>
+
+                    <RadioGroup
+                        android:id="@+id/radio_group_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radio_button_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/padding"
+                            android:layout_marginRight="@dimen/padding"
+                            android:background="@color/white"
+                            android:button="@null"
+                            android:checked="true"
+                            android:clickable="true"
+                            android:drawableLeft="@drawable/radio"
+                            android:drawablePadding="10dp"
+                            android:gravity="center_vertical"
+                            android:padding="15dp"
+                            android:paddingLeft="@dimen/padding"
+                            android:paddingRight="@dimen/padding"
+                            android:text="是"
+                            android:textColor="#ff000000"
+                            android:textSize="15sp" />
+
+                        <RadioButton
+                            android:id="@+id/radio_button_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="@dimen/padding"
+                            android:background="@color/white"
+                            android:button="@null"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/padding"
+                            android:paddingRight="@dimen/padding"
+                            android:layout_marginLeft="60dp"
+                            android:drawableLeft="@drawable/radio"
+                            android:drawablePadding="10dp"
+                            android:padding="15dp"
+                            android:text="否"
+                            android:textColor="#ff000000"
+                            android:textSize="15sp" />
+
+
+                    </RadioGroup>
 
                 </androidx.cardview.widget.CardView>
 
@@ -274,8 +323,8 @@
                     android:id="@+id/goodImg"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:src="@mipmap/icon_pic"
-                    android:layout_marginTop="15dp"/>
+                    android:layout_marginTop="15dp"
+                    android:src="@mipmap/icon_pic" />
 
             </LinearLayout>
         </ScrollView>

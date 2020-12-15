@@ -28,12 +28,15 @@ import com.dkplayer.view.LoadingView;
 import com.dkplayer.widget.controller.TikTokController;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.kuaimu.android.app.R;
+import com.kuaimu.android.app.activity.CashPayActivity;
+import com.kuaimu.android.app.activity.MyWalletActivity;
 import com.kuaimu.android.app.adapter.TikTokAdapter;
 import com.kuaimu.android.app.databinding.FragmentWorkVideoBinding;
 import com.kuaimu.android.app.manager.TencentHelper;
 import com.kuaimu.android.app.manager.WXManager;
 import com.kuaimu.android.app.model.BaseData;
 import com.kuaimu.android.app.model.CommentData;
+import com.kuaimu.android.app.model.GiftData;
 import com.kuaimu.android.app.model.HomeDetail;
 import com.kuaimu.android.app.model.VideoDataBean;
 import com.dkplayer.widget.render.TikTokRenderViewFactory;
@@ -214,8 +217,31 @@ public class WorkVideoFragment extends VideoBaseFragment implements View.OnClick
                                 @Override
                                 public void onClick(View view, Object object) {
                                     switch (view.getId()) {
-                                        case R.id.shareWx:
+                                        case R.id.sendTextView:
+                                            if (object instanceof GiftData.DataBean) {
+                                                GiftData.DataBean giftData = (GiftData.DataBean) object;
+                                                SendRequest.sendGift(getUid(), dataBean.getId(), giftData.getId(), new GenericsCallback<BaseData>(new JsonGenericsSerializator()) {
+                                                    @Override
+                                                    public void onError(Call call, Exception e, int id) {
 
+                                                    }
+
+                                                    @Override
+                                                    public void onResponse(BaseData response, int id) {
+                                                        if (response.getCode() == 200) {
+                                                            ToastUtils.showShort(getActivity(), "已发送");
+                                                            giftPopupWindow.dismiss();
+                                                            baseInfo();
+                                                        } else {
+                                                            ToastUtils.showShort(getActivity(), response.getMsg());
+                                                        }
+
+                                                    }
+                                                });
+                                            }
+                                            break;
+                                        case R.id.walletTextView:
+                                            openActivity(CashPayActivity.class);
 
                                             break;
                                     }
@@ -340,14 +366,16 @@ public class WorkVideoFragment extends VideoBaseFragment implements View.OnClick
                     tvComment = itemView.findViewById(R.id.tv_comment);
                     tvShare = itemView.findViewById(R.id.tv_share);
                     ImageView deleteView = itemView.findViewById(R.id.deleteView);
+                    TextView browseNumTextView = itemView.findViewById(R.id.browseNumTextView);
                     tvLike.setSelected(response.getData().isIs_assist());
                     tvLike.setText(String.valueOf(response.getData().getAssist_num()));
                     tvComment.setText(String.valueOf(response.getData().getComment_num()));
                     tvShare.setText(String.valueOf(response.getData().getShare_num()));
+                    browseNumTextView.setText("已播放" + response.getData().getBrowse_num());
                     if (getUid() == response.getData().getTourist_id()) {
                         ivFollow.setVisibility(View.INVISIBLE);
                     } else {
-                        ivFollow.setVisibility(response.getData().isIs_liker() ? View.INVISIBLE : View.VISIBLE);
+                        ivFollow.setVisibility(response.getData().isIs_person_follow() ? View.INVISIBLE : View.VISIBLE);
                     }
                     ivFollow.setOnClickListener(new View.OnClickListener() {
                         @Override

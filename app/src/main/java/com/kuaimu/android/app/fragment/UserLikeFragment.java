@@ -167,7 +167,7 @@ public class UserLikeFragment extends BaseFragment {
             public void onResponse(MineLikeWorkData response, int id) {
                 if (response.getCode() == 200 && response.getData() != null && adapter != null) {
                     mineLikeWorkData = response;
-                    adapter.refreshData(response.getData().getData());
+                    adapter.refreshData(response.getData());
                 } else {
                     adapter.refreshData(new ArrayList<>());
 //                    ToastUtils.showShort(getActivity(), response.getMsg());

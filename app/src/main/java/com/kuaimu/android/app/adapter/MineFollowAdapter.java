@@ -32,12 +32,12 @@ public class MineFollowAdapter extends BaseRecyclerAdapter<FollowUserData.DataBe
     @Override
     protected void onBindItem(final ItemFriendsLayoutBinding binding, final FollowUserData.DataBeanX.DataBean dataBean, final int position) {
         if (mList != null && mList.size() > 0) {
-            if (dataBean.getTourist()!=null) {
-                binding.tvTitle.setText(dataBean.getTourist().getName());
-                binding.tvDesc.setText("粉丝：" + dataBean.getTourist().getFan_number());
-                binding.tvFollowers.setText("已关注");
-                GlideLoader.LoderCircleImage(mContext,dataBean.getTourist().getAvatar(), binding.userIcon);
-            }
+
+            binding.tvTitle.setText(dataBean.getName());
+            binding.tvDesc.setText("粉丝：" + dataBean.getFan_number());
+            binding.tvFollowers.setText("已关注");
+            GlideLoader.LoderCircleImage(mContext, dataBean.getAvatar(), binding.userIcon);
+
             binding.viewLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

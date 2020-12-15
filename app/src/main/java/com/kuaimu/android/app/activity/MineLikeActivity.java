@@ -14,6 +14,7 @@ import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.ToastUtils;
 import com.kuaimu.android.app.R;
 import com.kuaimu.android.app.adapter.MineLikeWorkAdapter;
+import com.kuaimu.android.app.adapter.WorkAdapter;
 import com.kuaimu.android.app.databinding.ActivityMineLikeBinding;
 import com.kuaimu.android.app.model.BaseData;
 import com.kuaimu.android.app.model.MineLikeWorkData;
@@ -28,7 +29,7 @@ import org.greenrobot.eventbus.EventBus;
 public class MineLikeActivity extends AppCompatActivity {
 
     private ActivityMineLikeBinding binding;
-    private MineLikeWorkAdapter adapter;
+    private WorkAdapter adapter;
     private MineLikeWorkData mineLikeWorkData;
     private int uid;
 
@@ -43,7 +44,7 @@ public class MineLikeActivity extends AppCompatActivity {
                 finish();
             }
         });
-        adapter = new MineLikeWorkAdapter(this);
+        adapter = new WorkAdapter(this);
         binding.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         GridItemDecoration.Builder builder = new GridItemDecoration.Builder(this);
         builder.color(R.color.transparent);
@@ -91,7 +92,7 @@ public class MineLikeActivity extends AppCompatActivity {
             public void onResponse(MineLikeWorkData response, int id) {
                 if (response.getCode() == 200 && response.getData() != null) {
                     mineLikeWorkData = response;
-                    adapter.refreshData(response.getData().getData());
+                    adapter.refreshData(response.getData());
                 } else {
                     ToastUtils.showShort(MineLikeActivity.this, response.getMsg());
                 }

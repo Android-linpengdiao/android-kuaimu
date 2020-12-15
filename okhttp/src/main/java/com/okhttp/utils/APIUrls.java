@@ -56,11 +56,11 @@ public class APIUrls {
     public final static String homeAssist = url_domain + "api/video/assist";
     public final static String homeDeleteAssist = url_domain + "api/video/cancelAssist";
     public final static String worksDetail = url_domain + "api/person/worksDetail";
-    public final static String homeShare = url_domain + "api/home/share";
+    public final static String homeShare = url_domain + "api/video/share";
 
     public final static String search = url_domain + "api/home/search";
 
-    public final static String personAssist = url_domain + "api/message/assist";
+
     public final static String homeSelfAttention = url_domain + "api/home/selfAttention";
     public final static String homeLeave = url_domain + "api/home/leave";
     public final static String publishLeave = url_domain + "api/message/publishLeave";
@@ -77,6 +77,9 @@ public class APIUrls {
 
 
     //我的
+    public final static String levelSet = url_domain + "api/common/levelSet";
+    public final static String personIntegral = url_domain + "api/person/integral";
+    public final static String personAssist = url_domain + "api/person/assist";
     public final static String createGood = url_domain + "api/person/createGood";
     public final static String editGood = url_domain + "api/person/editGood";
     public final static String deleteGood = url_domain + "api/person/deleteGood";
@@ -84,7 +87,7 @@ public class APIUrls {
     public final static String goodDetail = url_domain + "api/person/goodDetail";
 //    public final static String attention = url_domain + "api/person/attention";
     public final static String attention = url_domain + "api/message/flower";
-//    public final static String follower = url_domain + "api/person/follower";
+    public final static String follows = url_domain + "api/person/follows";
     public final static String follower = url_domain + "api/person/fans";
     public final static String personCategory = url_domain + "api/common/personCategory";
     public final static String cashPay = url_domain + "api/cash/pay";
@@ -96,6 +99,9 @@ public class APIUrls {
     public final static String walletRecord = url_domain + "api/wallet/record";
     public final static String personAuth = url_domain + "api/person/auth";
     public final static String businessBanner = url_domain + "api/person/businessBanner";
+    public final static String withdrawal = url_domain + "api/wallet/withdrawal";
+    public final static String sendGift = url_domain + "api/gift/send";
+    public final static String giftSet = url_domain + "api/common/giftSet";
 
 
     //首页-用户关注用户

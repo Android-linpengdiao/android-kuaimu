@@ -27,6 +27,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import androidx.viewpager.widget.ViewPager;
+
 import okhttp3.Call;
 
 public class UserHomeActivity extends BaseActivity implements View.OnClickListener {
@@ -42,6 +43,7 @@ public class UserHomeActivity extends BaseActivity implements View.OnClickListen
 
         uid = getIntent().getIntExtra("uid", 0);
 
+        binding.menuTextView.setOnClickListener(this);
         binding.back.setOnClickListener(this);
         binding.back.setVisibility(View.VISIBLE);
         binding.headLoginLayout.tvIsFollow.setVisibility(View.VISIBLE);
@@ -86,7 +88,7 @@ public class UserHomeActivity extends BaseActivity implements View.OnClickListen
                         JSONObject jsonObject = new JSONObject(response);
                         if (jsonObject.optInt("code") == 200
                                 && !CommonUtil.isBlank(jsonObject.optJSONObject("data"))
-                                && jsonObject.optJSONObject("data").optBoolean("is_attention")) {
+                                && jsonObject.optJSONObject("data").optBoolean("isLike")) {
                             binding.headLoginLayout.tvIsFollow.setSelected(!binding.headLoginLayout.tvIsFollow.isSelected());
                             binding.headLoginLayout.tvIsFollow.setText(binding.headLoginLayout.tvIsFollow.isSelected() ? "已关注TA" : "关注TA");
                         } else {
@@ -107,41 +109,16 @@ public class UserHomeActivity extends BaseActivity implements View.OnClickListen
         binding.headLoginLayout.userName.setText(userInfo.getData().getName());
         binding.headLoginLayout.touristId.setText("ID：" + userInfo.getData().getTourist_id());
         GlideLoader.LoderCircleImage(UserHomeActivity.this, userInfo.getData().getAvatar(), binding.headLoginLayout.userIcon);
-//        binding.headLoginLayout.userVip.setVisibility(userInfo.getData().getIs_vip() == 1 ? View.VISIBLE : View.GONE);
-//        binding.headLoginLayout.userVip.setImageResource(userInfo.getData().getVip_type() == 1 ? R.mipmap.qi : R.mipmap.icon_vip);
 
-        binding.headLoginLayout.tvIsFollow.setVisibility(getUid()==userInfo.getData().getId()?View.GONE:View.VISIBLE);
-        binding.headLoginLayout.tvChat.setVisibility(getUid()==userInfo.getData().getId()?View.GONE:View.VISIBLE);
+        binding.headLoginLayout.tvIsFollow.setVisibility(getUid() == userInfo.getData().getId() ? View.GONE : View.VISIBLE);
+        binding.headLoginLayout.tvChat.setVisibility(getUid() == userInfo.getData().getId() ? View.GONE : View.VISIBLE);
 
-
-//        binding.headLoginLayout.label.setVisibility(View.VISIBLE);
-//        if (!CommonUtil.isBlank(userInfo.getData().getPerson_label()) && !CommonUtil.isBlank(userInfo.getData().getBus_label()) && !CommonUtil.isBlank(userInfo.getData().getDesc())) {
-//            binding.headLoginLayout.label.setText(userInfo.getData().getPerson_label() + "  |  " + userInfo.getData().getBus_label()+ "   " + userInfo.getData().getDesc());
-//        }else if (!CommonUtil.isBlank(userInfo.getData().getPerson_label()) && !CommonUtil.isBlank(userInfo.getData().getBus_label())) {
-//            binding.headLoginLayout.label.setText(userInfo.getData().getPerson_label() + "  |  " + userInfo.getData().getBus_label());
-//        } else if (!CommonUtil.isBlank(userInfo.getData().getPerson_label())) {
-//            binding.headLoginLayout.label.setText(userInfo.getData().getPerson_label());
-//        } else if (!CommonUtil.isBlank(userInfo.getData().getBus_label())) {
-//            binding.headLoginLayout.label.setText(userInfo.getData().getBus_label());
-//        } else {
-//            binding.headLoginLayout.label.setVisibility(View.GONE);
-//        }
-
-//        binding.headLoginLayout.label.setText((!CommonUtil.isBlank(userInfo.getData().getPerson_label()) ? userInfo.getData().getPerson_label() + "  |  " : "")
-//                + (!CommonUtil.isBlank(userInfo.getData().getBus_label()) ? userInfo.getData().getBus_label() + "  |  " : "")
-//                + (!CommonUtil.isBlank(userInfo.getData().getDesc()) ? userInfo.getData().getDesc() : ""));
-//
-//        binding.headLoginLayout.label.setVisibility(CommonUtil.isBlank(userInfo.getData().getPerson_label()) && CommonUtil.isBlank(userInfo.getData().getBus_label()) && CommonUtil.isBlank(userInfo.getData().getDesc()) ? View.GONE : View.VISIBLE);
-//
-//        binding.headLoginLayout.tvFollowers.setText(String.valueOf(userInfo.getData().getAttention_num()));
-//        binding.headLoginLayout.tvLiker.setText(String.valueOf(userInfo.getData().getFollower_num()));
-//        binding.headLoginLayout.tvAssistNum.setText(String.valueOf(userInfo.getData().getGood_num()));
-
-//        binding.headLoginLayout.tvFollowers.setText(getUserInfo().getData().getFollowers() + "");
-//        binding.headLoginLayout.tvLiker.setText(getUserInfo().getData().getLiker() + "");
-
-//        binding.headLoginLayout.tvIsFollow.setSelected(isFollow);
-//        binding.headLoginLayout.tvIsFollow.setText(isFollow ? "已关注" : "关注");
+        //1通过 2正在审核 3审核未通过 4未认证
+        if (getUserInfo().getData() != null && getUserInfo().getData().getBusiness_auth_status() == 1) {
+            binding.menuTextView.setVisibility(View.VISIBLE);
+        } else {
+            binding.menuTextView.setVisibility(View.GONE);
+        }
 
         initTab(userInfo);
 
@@ -184,6 +161,9 @@ public class UserHomeActivity extends BaseActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.back:
                 finish();
+                break;
+            case R.id.menuTextView:
+
                 break;
             case R.id.tv_chat:
                 bundle.putInt("uid", uid);

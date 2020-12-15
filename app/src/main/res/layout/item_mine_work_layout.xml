@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_margin="10dp"
-            android:drawableLeft="@drawable/appreciatefill"
+            android:drawableLeft="@drawable/xihuan"
             android:drawablePadding="6dp"
             android:text="100"
             android:textColor="#ffffffff"

@@ -61,6 +61,46 @@ public class PersonAuthActivity extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_person_auth);
         if (getIntent().getExtras() != null) {
             auth = getIntent().getExtras().getInt("auth");
+
+            //1通过 2正在审核 3审核未通过 4未认证
+            if (auth == 1 && getUserInfo().getData().getBusiness_auth_status() == 2
+                    && getUserInfo().getData().getProfiles() != null && getUserInfo().getData().getProfiles().size() > 0) {
+
+                for (int i = 0; i < getUserInfo().getData().getProfiles().size(); i++) {
+                    if (getUserInfo().getData().getProfiles().get(i).getAuth() == 1) {
+                        binding.etName.setText(getUserInfo().getData().getProfiles().get(i).getReal_name());
+                        binding.etIDCard.setText(getUserInfo().getData().getProfiles().get(i).getIdcard());
+                        GlideLoader.LoderImage(getApplication(), getUserInfo().getData().getProfiles().get(i).getFront_photo(), binding.frontPhotoView);
+                        GlideLoader.LoderImage(getApplication(), getUserInfo().getData().getProfiles().get(i).getBack_photo(), binding.backPhotoView);
+                        GlideLoader.LoderImage(getApplication(), getUserInfo().getData().getProfiles().get(i).getLicense_photo(), binding.licensePhotoView);
+                    }
+                }
+
+            } else if (auth == 2 && getUserInfo().getData().getPerson_auth_status() == 2
+                    && getUserInfo().getData().getProfiles() != null && getUserInfo().getData().getProfiles().size() > 0) {
+                for (int i = 0; i < getUserInfo().getData().getProfiles().size(); i++) {
+                    if (getUserInfo().getData().getProfiles().get(i).getAuth() == 1) {
+                        binding.etName.setText(getUserInfo().getData().getProfiles().get(i).getReal_name());
+                        binding.etIDCard.setText(getUserInfo().getData().getProfiles().get(i).getIdcard());
+                        GlideLoader.LoderImage(getApplication(), getUserInfo().getData().getProfiles().get(i).getFront_photo(), binding.frontPhotoView);
+                        GlideLoader.LoderImage(getApplication(), getUserInfo().getData().getProfiles().get(i).getBack_photo(), binding.backPhotoView);
+                    }
+                }
+
+            }
+
+            if (auth == 1) {
+                binding.tvConfirm.setText(
+                        getUserInfo().getData().getBusiness_auth_status() == 1 ? "完成认证" :
+                                getUserInfo().getData().getBusiness_auth_status() == 2 ? "正在审核" :
+                                        getUserInfo().getData().getBusiness_auth_status() == 3 ? "审核未通过" : "提交认证");
+            } else if (auth == 2) {
+                binding.tvConfirm.setText(
+                        getUserInfo().getData().getPerson_auth_status() == 1 ? "完成认证" :
+                                getUserInfo().getData().getPerson_auth_status() == 2 ? "正在审核" :
+                                        getUserInfo().getData().getPerson_auth_status() == 3 ? "审核未通过" : "提交认证");
+            }
+
         } else {
             finish();
         }
@@ -120,13 +160,13 @@ public class PersonAuthActivity extends BaseActivity {
                 mediaDialog(REQUEST_IMAGE_BACK, REQUEST_CAMERA_BACK);
             }
         });
-        binding.frontPhotoLayout.setOnClickListener(new View.OnClickListener() {
+        binding.frontPhotoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mediaDialog(REQUEST_IMAGE_FRONT, REQUEST_CAMERA_FRONT);
             }
         });
-        binding.licensePhotoLayout.setOnClickListener(new View.OnClickListener() {
+        binding.licensePhotoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mediaDialog(REQUEST_IMAGE_LICENSE, REQUEST_CAMERA_LICENSE);

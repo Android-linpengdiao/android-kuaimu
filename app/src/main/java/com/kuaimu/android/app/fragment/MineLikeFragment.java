@@ -150,7 +150,7 @@ public class MineLikeFragment extends BaseFragment {
             public void onResponse(MineLikeWorkData response, int id) {
                 if (response.getCode() == 200 && response.getData() != null ) {
                     mineLikeWorkData = response;
-                    adapter.refreshData(response.getData().getData());
+                    adapter.refreshData(response.getData());
                 } else {
                     ToastUtils.showShort(getActivity(), response.getMsg());
                 }

@@ -43,6 +43,60 @@ public class VideoDataBean implements Serializable {
     private int share_num;
     private TouristBean tourist;
     private boolean is_adv;
+    private int browse_num;
+    private boolean is_person_follow;
+    private int relation_good;
+    private String good_name;
+    private String good_link;
+    private String good_img;
+
+    public int getRelation_good() {
+        return relation_good;
+    }
+
+    public void setRelation_good(int relation_good) {
+        this.relation_good = relation_good;
+    }
+
+    public String getGood_name() {
+        return good_name;
+    }
+
+    public void setGood_name(String good_name) {
+        this.good_name = good_name;
+    }
+
+    public String getGood_link() {
+        return good_link;
+    }
+
+    public void setGood_link(String good_link) {
+        this.good_link = good_link;
+    }
+
+    public String getGood_img() {
+        return good_img;
+    }
+
+    public void setGood_img(String good_img) {
+        this.good_img = good_img;
+    }
+
+    public int getBrowse_num() {
+        return browse_num;
+    }
+
+    public void setBrowse_num(int browse_num) {
+        this.browse_num = browse_num;
+    }
+
+    public boolean isIs_person_follow() {
+        return is_person_follow;
+    }
+
+    public void setIs_person_follow(boolean is_person_follow) {
+        this.is_person_follow = is_person_follow;
+    }
 
     public boolean isIs_adv() {
         return is_adv;

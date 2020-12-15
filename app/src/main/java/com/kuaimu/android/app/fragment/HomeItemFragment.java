@@ -33,14 +33,17 @@ import com.dkplayer.widget.controller.TikTokController;
 import com.dkplayer.widget.render.TikTokRenderViewFactory;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.kuaimu.android.app.R;
+import com.kuaimu.android.app.activity.CashPayActivity;
 import com.kuaimu.android.app.adapter.TikTokAdapter;
 import com.kuaimu.android.app.databinding.FragmentHomeItemBinding;
 import com.kuaimu.android.app.model.BaseData;
 import com.kuaimu.android.app.model.CommentData;
+import com.kuaimu.android.app.model.GiftData;
 import com.kuaimu.android.app.model.HomeDetail;
 import com.kuaimu.android.app.model.HomeWorkData;
 import com.kuaimu.android.app.model.VideoDataBean;
 import com.kuaimu.android.app.view.CommentListPopupWindow;
+import com.kuaimu.android.app.view.GiftPopupWindow;
 import com.kuaimu.android.app.view.OnClickListener;
 import com.okhttp.SendRequest;
 import com.okhttp.callbacks.GenericsCallback;
@@ -109,6 +112,18 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
         });
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume: "+category_id);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.i(TAG, "onHiddenChanged: "+category_id);
     }
 
     private void searchWork() {
@@ -192,6 +207,53 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
                             });
                         }
                         break;
+                    case R.id.iv_gift:
+                        if (object instanceof VideoDataBean) {
+                            VideoDataBean dataBean = (VideoDataBean) object;
+                            GiftPopupWindow giftPopupWindow = new GiftPopupWindow(getActivity());
+                            giftPopupWindow.setOnClickListener(new OnClickListener() {
+
+                                @Override
+                                public void onClick(View view, Object object) {
+                                    switch (view.getId()) {
+                                        case R.id.sendTextView:
+                                            if (object instanceof GiftData.DataBean) {
+                                                GiftData.DataBean giftData = (GiftData.DataBean) object;
+                                                SendRequest.sendGift(getUid(), dataBean.getId(), giftData.getId(), new GenericsCallback<BaseData>(new JsonGenericsSerializator()) {
+                                                    @Override
+                                                    public void onError(Call call, Exception e, int id) {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onResponse(BaseData response, int id) {
+                                                        if (response.getCode() == 200) {
+                                                            ToastUtils.showShort(getActivity(), "已发送");
+                                                            giftPopupWindow.dismiss();
+                                                            baseInfo();
+                                                        } else {
+                                                            ToastUtils.showShort(getActivity(), response.getMsg());
+                                                        }
+
+                                                    }
+                                                });
+                                            }
+                                            break;
+                                        case R.id.walletTextView:
+                                            openActivity(CashPayActivity.class);
+
+                                            break;
+                                    }
+                                }
+
+                                @Override
+                                public void onLongClick(View view, Object object) {
+
+                                }
+                            });
+                            giftPopupWindow.showAtLocation(getActivity().getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
+                        }
+                        break;
                     case R.id.videoView:
 
                         break;
@@ -269,11 +331,17 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
                     TextView tvComment = itemView.findViewById(R.id.tv_comment);
                     TextView tvShare = itemView.findViewById(R.id.tv_share);
                     ImageView deleteView = itemView.findViewById(R.id.deleteView);
+                    TextView browseNumTextView = itemView.findViewById(R.id.browseNumTextView);
                     tvLike.setSelected(response.getData().isIs_assist());
                     tvLike.setText(String.valueOf(response.getData().getAssist_num()));
                     tvComment.setText(String.valueOf(response.getData().getComment_num()));
                     tvShare.setText(String.valueOf(response.getData().getShare_num()));
-                    ivFollow.setVisibility(response.getData().isIs_liker() ? View.INVISIBLE : View.VISIBLE);
+                    browseNumTextView.setText("已播放" + response.getData().getBrowse_num());
+                    if (getUid() == response.getData().getTourist_id()) {
+                        ivFollow.setVisibility(View.INVISIBLE);
+                    } else {
+                        ivFollow.setVisibility(response.getData().isIs_person_follow() ? View.INVISIBLE : View.VISIBLE);
+                    }
                     tvLike.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -303,6 +371,8 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
                         }
                     });
                 }
+
+
             }
         });
     }

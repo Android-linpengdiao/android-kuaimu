@@ -66,6 +66,7 @@ public class MainActivity extends BaseActivity {
     private ImageView isVip;
     private TextView fanNumber;
     private TextView followNumber;
+    private TextView merchantAuthView;
 
     private void intHeaderView() {
         View headerView = mainBinding.navView.getHeaderView(0);
@@ -82,7 +83,7 @@ public class MainActivity extends BaseActivity {
         View workView = headerView.findViewById(R.id.workView);
         View walletView = headerView.findViewById(R.id.walletView);
         View personAuthView = headerView.findViewById(R.id.personAuthView);
-        View merchantAuthView = headerView.findViewById(R.id.merchantAuthView);
+        merchantAuthView = headerView.findViewById(R.id.merchantAuthView);
         View myPointView = headerView.findViewById(R.id.myPointView);
         View settingView = headerView.findViewById(R.id.settingView);
 
@@ -162,9 +163,18 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (getUid(true) > 0) {
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("auth", 1);
-                    openActivity(MerchantActivity.class, bundle);
+                    //1通过 2正在审核 3审核未通过 4未认证
+                    if (getUserInfo().getData() != null && getUserInfo().getData().getBusiness_auth_status() == 1) {
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("auth", 1);
+                        openActivity(MerchantActivity.class, bundle);
+
+                    } else {
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("auth", 1);
+                        openActivity(PersonAuthActivity.class, bundle);
+
+                    }
                 }
             }
         });
@@ -196,6 +206,10 @@ public class MainActivity extends BaseActivity {
         userName.setText(userInfo.getData().getName() + "");
         userTouristId.setText(getString(R.string.app_name) + "：" + userInfo.getData().getTourist_id());
         GlideLoader.LoderCircleImage(this, userInfo.getData().getAvatar(), userIcon);
+        //1通过 2正在审核 3审核未通过 4未认证
+        if (userInfo.getData().getBusiness_auth_status() == 1) {
+            merchantAuthView.setText("商家广告页");
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

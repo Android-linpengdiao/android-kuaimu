@@ -125,7 +125,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         binding.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         GridItemDecoration.Builder builder = new GridItemDecoration.Builder(this);
         builder.color(R.color.transparent);
-        builder.size(CommonUtil.dip2px(this, 10));
+        builder.size(CommonUtil.dip2px(this, 2));
         binding.recyclerView.addItemDecoration(new GridItemDecoration(builder));
         binding.recyclerView.setAdapter(adapter);
         adapter.setOnClickListener(new OnClickListener() {

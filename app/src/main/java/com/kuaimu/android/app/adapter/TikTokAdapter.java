@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,7 +79,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         final VideoDataBean dataBean = videos.get(position);
 
         if (dataBean.getTourist() != null) {
-            holder.userName.setText(dataBean.getTourist().getName());
+            holder.userName.setText("@" + dataBean.getTourist().getName());
             GlideLoader.LoderCircleImage(mContext, dataBean.getTourist().getAvatar(), holder.userIcon);
             holder.deleteView.setVisibility(dataBean.getTourist().getId() == getUid() ? View.VISIBLE : View.GONE);
         } else {
@@ -90,6 +91,30 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.tvComment.setText(String.valueOf(dataBean.getComment_num()));
         holder.tvShare.setText(String.valueOf(dataBean.getShare_num()));
         GlideLoader.LoderVideoCover(mContext, dataBean.getImg(), holder.thumb);
+
+        if (dataBean.getRelation_good() == 1) {
+            holder.goodLayout.setVisibility(View.VISIBLE);
+            holder.goodName.setText(dataBean.getGood_name());
+            GlideLoader.LoderImage(mContext, dataBean.getGood_img(), holder.goodImg,8);
+            holder.goodLink.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    intent.setData(Uri.parse(dataBean.getGood_link()));
+                    intent.setAction(Intent.ACTION_VIEW);
+                    mContext.startActivity(intent);
+                }
+            });
+            holder.goodDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.goodLayout.setVisibility(View.GONE);
+                }
+            });
+        } else {
+            holder.goodLayout.setVisibility(View.GONE);
+        }
+
         holder.userInfoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -217,6 +242,11 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         private ImageView deleteView;
         public LoadingView loadingView;
         private View liveAnimateView;
+        private View goodLayout;
+        private ImageView goodImg;
+        private TextView goodName;
+        private TextView goodLink;
+        private ImageView goodDelete;
 
         VideoHolder(View itemView) {
             super(itemView);
@@ -235,6 +265,11 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             deleteView = itemView.findViewById(R.id.deleteView);
             loadingView = itemView.findViewById(R.id.loadingView);
             liveAnimateView = itemView.findViewById(R.id.live_animate_view);
+            goodLayout = itemView.findViewById(R.id.goodLayout);
+            goodImg = itemView.findViewById(R.id.goodImgView);
+            goodName = itemView.findViewById(R.id.goodNameView);
+            goodLink = itemView.findViewById(R.id.goodLinkView);
+            goodDelete = itemView.findViewById(R.id.goodDeleteView);
             itemView.setTag(this);
         }
     }

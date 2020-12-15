@@ -31,6 +31,7 @@ public class DiscoverFragment extends BaseFragment implements View.OnClickListen
     private static final String TAG = "DiscoverFragment";
     private FragmentDiscoverBinding binding;
     private PagerAdapter pagerAdapter;
+    private NavData navData;
 
 
     @Override
@@ -55,6 +56,7 @@ public class DiscoverFragment extends BaseFragment implements View.OnClickListen
 
             @Override
             public void onResponse(NavData response, int id) {
+                navData = response;
                 if (response.getCode() == 200 && response.getData() != null) {
                     pagerAdapter = new PagerAdapter(getChildFragmentManager());
                     for (int i = 0; i < response.getData().size(); i++) {
@@ -82,6 +84,18 @@ public class DiscoverFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume: ");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause: ");
+    }
+
+    @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
     }
@@ -89,6 +103,9 @@ public class DiscoverFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onPageSelected(int position) {
         Log.i(TAG, "onPageSelected: " + position);
+        if (navData.getCode() == 200 && navData.getData() != null) {
+
+        }
     }
 
     @Override

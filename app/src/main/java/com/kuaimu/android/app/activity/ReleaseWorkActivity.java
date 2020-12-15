@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.RadioGroup;
 
 import com.alibaba.sdk.android.oss.ClientConfiguration;
 import com.alibaba.sdk.android.oss.ClientException;
@@ -70,10 +71,15 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
     private static final int REQUEST_CROP = 400;
     private final static int REQUEST_LOCATION = 500;
     private static final int REQUEST_LOCATION_SETTING = 600;
+    private static final int REQUEST_GOOD_IMAGE = 700;
+    private static final int REQUEST_GOOD_CAMERA = 800;
+    private static final int REQUEST_GOOD_CROP = 900;
     private NavData.DataBean dataBean;
     private String videoPath;
     private String coverPath;
     private String addr = "";
+    private String goodImg;
+    private int relationGood = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +89,23 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
         binding.back.setOnClickListener(this);
         binding.releaseConfirm.setOnClickListener(this);
         binding.cover.setOnClickListener(this);
+        binding.goodImg.setOnClickListener(this);
         binding.videoType.setOnClickListener(this);
+        binding.radioGroupView.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.radio_button_yes:
+
+                        break;
+                    case R.id.radio_button_no:
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
 
         videoPath = getIntent().getStringExtra("videoPath");
         coverPath = getIntent().getStringExtra("coverPath");
@@ -108,12 +130,41 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
 
     @Override
     public void onClick(View v) {
+        AlertDialog.Builder dialog;
         switch (v.getId()) {
             case R.id.back:
                 finish();
                 break;
+            case R.id.goodImg:
+                dialog = new AlertDialog.Builder(ReleaseWorkActivity.this);
+                dialog.setTitle("");
+                dialog.setItems(R.array.media_list_dialog, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                if (checkPermissionsAll(PermissionUtils.STORAGE, REQUEST_GOOD_IMAGE)) {
+                                    Intent intent = new Intent(ReleaseWorkActivity.this, MediaActivity.class);
+                                    intent.putExtra("type", ImageModel.TYPE_IMAGE);
+                                    intent.putExtra("number", 1);
+                                    startActivityForResult(intent, REQUEST_GOOD_IMAGE);
+                                }
+                                break;
+                            case 1:
+                                if (checkPermissionsAll(PermissionUtils.CAMERA, REQUEST_GOOD_CAMERA)) {
+                                    openCamera(REQUEST_GOOD_CAMERA);
+                                }
+                                break;
+                            case 2:
+
+                                break;
+                        }
+                    }
+                });
+                dialog.show();
+                break;
             case R.id.cover:
-                AlertDialog.Builder dialog = new AlertDialog.Builder(ReleaseWorkActivity.this);
+                dialog = new AlertDialog.Builder(ReleaseWorkActivity.this);
                 dialog.setTitle("");
                 dialog.setItems(R.array.media_list_dialog, new DialogInterface.OnClickListener() {
                     @Override
@@ -129,7 +180,7 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
                                 break;
                             case 1:
                                 if (checkPermissionsAll(PermissionUtils.CAMERA, REQUEST_CAMERA)) {
-                                    openCamera();
+                                    openCamera(REQUEST_CAMERA);
                                 }
                                 break;
                             case 2:
@@ -146,6 +197,8 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
                 break;
             case R.id.release_confirm:
                 String desc = binding.content.getText().toString().trim();
+                String goodName = binding.goodName.getText().toString().trim();
+                String goodLink = binding.goodLink.getText().toString().trim();
                 if (CommonUtil.isBlank(desc)) {
                     ToastUtils.showShort(ReleaseWorkActivity.this, "请输入你的描述");
                     return;
@@ -161,6 +214,21 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
                 if (CommonUtil.isBlank(coverPath)) {
                     ToastUtils.showShort(ReleaseWorkActivity.this, "封面地址无效，请重新选择");
                     return;
+                }
+
+                if (binding.radioGroupView.getCheckedRadioButtonId() == R.id.radio_button_yes) {
+                    if (CommonUtil.isBlank(goodName)) {
+                        ToastUtils.showShort(ReleaseWorkActivity.this, "请输入商品名称");
+                        return;
+                    }
+                    if (CommonUtil.isBlank(goodLink)) {
+                        ToastUtils.showShort(ReleaseWorkActivity.this, "请输入商品购买链接");
+                        return;
+                    }
+                    if (CommonUtil.isBlank(goodImg)) {
+                        ToastUtils.showShort(ReleaseWorkActivity.this, "商品主图地址无效，请重新选择");
+                        return;
+                    }
                 }
                 uploadFile(coverPath);
                 break;
@@ -196,7 +264,7 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
                     }
                 }
                 if (granted) {
-                    openCamera();
+
                 } else {
                     PermissionUtils.openAppDetails(ReleaseWorkActivity.this, "储存和相机");
                 }
@@ -229,7 +297,7 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
                                 JSONArray files = object.optJSONArray("imageList");
                                 if (files.length() > 0) {
                                     coverPath = String.valueOf(files.get(0));
-                                    clipPicture(coverPath);
+                                    clipPicture(coverPath, REQUEST_CROP);
                                     GlideLoader.LoderLoadImage(this, coverPath, binding.cover, 10);
                                 }
                             }
@@ -240,13 +308,42 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
                     break;
                 case REQUEST_CAMERA:
                     coverPath = String.valueOf(outputImage.getPath());
-                    clipPicture(coverPath);
+                    clipPicture(coverPath, REQUEST_CROP);
                     GlideLoader.LoderLoadImage(this, coverPath, binding.cover, 10);
                     break;
                 case REQUEST_CROP:
                     if (null != data) {
                         coverPath = data.getStringExtra(ClipImageActivity.ARG_CLIP_PATH);
                         GlideLoader.LoderLoadImage(this, coverPath, binding.cover, 10);
+                    }
+                    break;
+                case REQUEST_GOOD_IMAGE:
+                    if (data != null) {
+                        String resultJson = data.getStringExtra("resultJson");
+                        try {
+                            JSONObject object = new JSONObject(resultJson);
+                            if (object.optString("type").equals(ImageModel.TYPE_IMAGE)) {
+                                JSONArray files = object.optJSONArray("imageList");
+                                if (files.length() > 0) {
+                                    goodImg = String.valueOf(files.get(0));
+                                    clipPicture(goodImg, REQUEST_GOOD_CROP);
+                                    GlideLoader.LoderLoadImage(this, goodImg, binding.goodImg, 10);
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case REQUEST_GOOD_CAMERA:
+                    goodImg = String.valueOf(outputImage.getPath());
+                    clipPicture(goodImg, REQUEST_GOOD_CROP);
+                    GlideLoader.LoderLoadImage(this, goodImg, binding.goodImg, 10);
+                    break;
+                case REQUEST_GOOD_CROP:
+                    if (null != data) {
+                        goodImg = data.getStringExtra(ClipImageActivity.ARG_CLIP_PATH);
+                        uploadFileGoodCover(goodImg);
                     }
                     break;
                 case REQUEST_TYPE:
@@ -269,7 +366,7 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
 
     private File outputImage;
 
-    private void openCamera() {
+    private void openCamera(int requestCode) {
         String fileName = System.currentTimeMillis() + ".jpg";
         File file = FileUtils.createTempFile(fileName);
         if (null != file && file.exists()) {
@@ -284,11 +381,11 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
             } else {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
             }
-            startActivityForResult(intent, REQUEST_CAMERA);
+            startActivityForResult(intent, requestCode);
         }
     }
 
-    private void clipPicture(String path) {
+    private void clipPicture(String path, int requestCode) {
         Intent intent = new Intent(ReleaseWorkActivity.this, ClipImageActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(ClipImageActivity.ARG_PATH, path);
@@ -296,7 +393,34 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
         bundle.putFloat(ClipImageActivity.ARG_WIDTH, 1);
         bundle.putFloat(ClipImageActivity.ARG_HEIGHT, 1);
         intent.putExtras(bundle);
-        startActivityForResult(intent, REQUEST_CROP);
+        startActivityForResult(intent, requestCode);
+    }
+
+    private void uploadFileGoodCover(String file) {
+        SendRequest.fileUpload(file, file.substring(file.lastIndexOf("/") + 1), new StringCallback() {
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                try {
+                    JSONObject object = new JSONObject(response);
+                    goodImg = object.optString("data");
+                    if (!CommonUtil.isBlank(goodImg)) {
+                        GlideLoader.LoderImage(getApplication(), goodImg, binding.goodImg, 10);
+                    } else {
+                        ToastUtils.showShort(ReleaseWorkActivity.this, "封面上传失败");
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     private void uploadFile(String file) {
@@ -441,32 +565,35 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
     }
 
     private void publishWork(String coverUrl, String videoUrl) {
-        Log.i(TAG, "publishWork: coverUrl " + coverUrl);
-        Log.i(TAG, "publishWork: videoUrl " + videoUrl);
+        if (binding.radioGroupView.getCheckedRadioButtonId() == R.id.radio_button_yes) {
+            relationGood = 1;
+        }else if (binding.radioGroupView.getCheckedRadioButtonId() == R.id.radio_button_yes) {
+            relationGood = 2;
+        }
         SendRequest.publishVideo(getUserInfo().getData().getId(), binding.content.getText().toString(), coverUrl, videoUrl,
                 String.valueOf(dataBean.getId()), addr,
-                2,binding.goodName.getText().toString(),binding.goodLink.getText().toString(),"",new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                ToastUtils.showShort(ReleaseWorkActivity.this, "发布失败");
-            }
-
-            @Override
-            public void onResponse(String response, int id) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    if (jsonObject.optInt("code") == 200) {
-                        ToastUtils.showShort(ReleaseWorkActivity.this, "发布成功");
-                        finish();
-                    } else {
-                        ToastUtils.showShort(ReleaseWorkActivity.this, "发布失败 :" + jsonObject.optString("msg"));
+                relationGood, binding.goodName.getText().toString(), binding.goodLink.getText().toString(), goodImg, new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        ToastUtils.showShort(ReleaseWorkActivity.this, "发布失败");
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    ToastUtils.showShort(ReleaseWorkActivity.this, "发布失败");
-                }
-            }
-        });
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.optInt("code") == 200) {
+                                ToastUtils.showShort(ReleaseWorkActivity.this, "发布成功");
+                                finish();
+                            } else {
+                                ToastUtils.showShort(ReleaseWorkActivity.this, "发布失败 :" + jsonObject.optString("msg"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            ToastUtils.showShort(ReleaseWorkActivity.this, "发布失败");
+                        }
+                    }
+                });
 
 
     }

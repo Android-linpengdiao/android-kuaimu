@@ -33,4 +33,5 @@ ext{
 
     externalFiledownloader = 'com.liulishuo.filedownloader:library:1.7.6'
     externalSpringview = 'com.liaoinstan.springview:library:1.2.6'
+    externalIndicatorseekbar = 'com.github.warkiz.widget:indicatorseekbar:1.1.2'
 }
