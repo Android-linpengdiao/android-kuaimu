@@ -161,6 +161,12 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
                 }
             }
         });
+        holder.goodLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 //        holder.videoView.setOnTouchListener(new LiveClickListener(new LiveClickListener.ClickCallBack() {
 //            @Override
 //            public void oneClick() {
@@ -227,6 +233,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     public static class VideoHolder extends RecyclerView.ViewHolder {
 
         private ImageView thumb;
+        public ImageView playbtn;
         public TikTokView mTikTokView;
         public int mPosition;
         public FrameLayout mPlayerContainer;
@@ -252,6 +259,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             super(itemView);
             mTikTokView = itemView.findViewById(R.id.tiktok_View);
             thumb = mTikTokView.findViewById(R.id.iv_thumb);
+            playbtn = mTikTokView.findViewById(R.id.play_btn);
             mPlayerContainer = itemView.findViewById(R.id.container);
             userName = itemView.findViewById(R.id.userName);
             userDesc = itemView.findViewById(R.id.userDesc);

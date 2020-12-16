@@ -167,6 +167,13 @@ public class MainFragment extends BaseFragment implements View.OnClickListener, 
             binding.tabLayout.setSelectedTabIndicatorColor(position == 2 ? getResources().getColor(R.color.white) : getResources().getColor(R.color.black));
             binding.tabLayout.setTabTextColors(Color.parseColor("#CCCCCC"), position == 2 ? Color.parseColor("#FFFFFF") : Color.parseColor("#333333"));
         }
+
+        MessageBus.Builder builder = new MessageBus.Builder();
+        MessageBus messageBus = builder
+                .codeType(MessageBus.msgId_pageSelected)
+                .message(position)
+                .build();
+        EventBus.getDefault().post(messageBus);
     }
 
     @Override

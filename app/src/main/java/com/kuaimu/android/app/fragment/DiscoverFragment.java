@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.baselibrary.MessageBus;
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.ToastUtils;
 import com.kuaimu.android.app.NavData;
@@ -25,6 +26,9 @@ import com.okhttp.callbacks.GenericsCallback;
 import com.okhttp.sample_okhttp.JsonGenericsSerializator;
 
 import androidx.viewpager.widget.ViewPager;
+
+import org.greenrobot.eventbus.EventBus;
+
 import okhttp3.Call;
 
 public class DiscoverFragment extends BaseFragment implements View.OnClickListener, ViewPager.OnPageChangeListener {
@@ -104,7 +108,12 @@ public class DiscoverFragment extends BaseFragment implements View.OnClickListen
     public void onPageSelected(int position) {
         Log.i(TAG, "onPageSelected: " + position);
         if (navData.getCode() == 200 && navData.getData() != null) {
-
+            MessageBus.Builder builder = new MessageBus.Builder();
+            MessageBus messageBus = builder
+                    .codeType(MessageBus.msgId_searchWork)
+                    .message(navData.getData().get(position).getId())
+                    .build();
+            EventBus.getDefault().post(messageBus);
         }
     }
 

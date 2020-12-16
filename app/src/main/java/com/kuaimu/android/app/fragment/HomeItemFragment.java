@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.baselibrary.MessageBus;
 import com.baselibrary.manager.DialogManager;
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.GlideLoader;
@@ -34,6 +35,7 @@ import com.dkplayer.widget.render.TikTokRenderViewFactory;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.kuaimu.android.app.R;
 import com.kuaimu.android.app.activity.CashPayActivity;
+import com.kuaimu.android.app.activity.UserHomeActivity;
 import com.kuaimu.android.app.adapter.TikTokAdapter;
 import com.kuaimu.android.app.databinding.FragmentHomeItemBinding;
 import com.kuaimu.android.app.model.BaseData;
@@ -52,6 +54,9 @@ import com.okhttp.sample_okhttp.JsonGenericsSerializator;
 import com.okhttp.utils.APIUrls;
 import com.okhttp.utils.OkHttpUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -70,6 +75,7 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
     private int mCurPos;
     private List<VideoDataBean> mVideoList = new ArrayList<>();
     private TikTokAdapter mTikTokAdapter;
+    private HomeWorkData homeWorkData;
 
     public static HomeItemFragment newInstance(int category_id) {
         HomeItemFragment fragment = new HomeItemFragment();
@@ -111,19 +117,37 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
             }
         });
 
+        EventBus.getDefault().register(this);
+
+        searchWork();
+
         return binding.getRoot();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume: "+category_id);
+    private int selectedPosition = -1;
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getMainMessage(MessageBus messageBus) {
+        if (messageBus.getCodeType().equals(messageBus.msgId_searchWork)) {
+            selectedPosition = (int) messageBus.getMessage();
+            if (mVideoView != null && selectedPosition == category_id) {
+                mVideoView.start();
+            } else if (mVideoView != null) {
+                mVideoView.pause();
+            }
+        }
+        if (messageBus.getCodeType().equals(messageBus.msgId_pageSelected)) {
+            int position = (int) messageBus.getMessage();
+            if (mVideoView != null && position != 2) {
+                mVideoView.pause();
+            }
+        }
     }
 
     @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        Log.i(TAG, "onHiddenChanged: "+category_id);
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 
     private void searchWork() {
@@ -136,6 +160,7 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
 
             @Override
             public void onResponse(HomeWorkData response, int id) {
+                homeWorkData = response;
                 binding.swipeRefreshLayout.setRefreshing(false);
                 if (response.getCode() == 200) {
                     mVideoList = response.getData().getData();
@@ -170,8 +195,16 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
             public void onClick(View view, Object object) {
                 switch (view.getId()) {
                     case R.id.userInfoView:
-                        if (mVideoView != null) {
-                            mVideoView.pause();
+                        if (object instanceof VideoDataBean) {
+                            VideoDataBean dataBean = (VideoDataBean) object;
+                            if (getUid() != dataBean.getTourist_id()) {
+                                if (mVideoView != null) {
+                                    mVideoView.pause();
+                                }
+                                Intent intent = new Intent(getActivity(), UserHomeActivity.class);
+                                intent.putExtra("uid", dataBean.getTourist().getId());
+                                startActivity(intent);
+                            }
                         }
                         break;
                     case R.id.tv_like:
@@ -306,11 +339,16 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
                 playUrl = PreloadManager.getInstance(getActivity()).getPlayUrl(GlideLoader.domain + item.getVideo());
             }
         }
-        Log.i(TAG, "startPlay: " + playUrl);
         mVideoView.setUrl(playUrl);
         mController.addControlComponent(viewHolder.mTikTokView, true);
         viewHolder.mPlayerContainer.addView(mVideoView, 0);
-        mVideoView.start();
+        if (selectedPosition != -1) {
+            mVideoView.start();
+        }else {
+            selectedPosition = 0;
+            viewHolder.playbtn.setVisibility(View.VISIBLE);
+            loadingView.setVisibility(View.GONE);
+        }
         mCurPos = position;
         homeDetail(position);
     }
