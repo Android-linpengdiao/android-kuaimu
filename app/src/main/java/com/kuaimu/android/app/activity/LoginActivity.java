@@ -184,6 +184,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 if (response.getCode() == 200) {
                     MyApplication.getInstance().setUserInfo(response);
                     openActivity(MainActivity.class);
+                    baseInfo();
                     finish();
                 } else {
                     ToastUtils.showShort(LoginActivity.this, response.getMsg());

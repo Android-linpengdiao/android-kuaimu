@@ -79,7 +79,7 @@ public class PersonAuthActivity extends BaseActivity {
             } else if (auth == 2 && getUserInfo().getData().getPerson_auth_status() == 2
                     && getUserInfo().getData().getProfiles() != null && getUserInfo().getData().getProfiles().size() > 0) {
                 for (int i = 0; i < getUserInfo().getData().getProfiles().size(); i++) {
-                    if (getUserInfo().getData().getProfiles().get(i).getAuth() == 1) {
+                    if (getUserInfo().getData().getProfiles().get(i).getAuth() == 2) {
                         binding.etName.setText(getUserInfo().getData().getProfiles().get(i).getReal_name());
                         binding.etIDCard.setText(getUserInfo().getData().getProfiles().get(i).getIdcard());
                         GlideLoader.LoderImage(getApplication(), getUserInfo().getData().getProfiles().get(i).getFront_photo(), binding.frontPhotoView);
