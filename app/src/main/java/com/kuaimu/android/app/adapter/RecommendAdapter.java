@@ -30,7 +30,7 @@ public class RecommendAdapter extends BaseRecyclerAdapter<VideoDataBean, ItemWor
     @Override
     protected void onBindItem(final ItemWorkLayoutBinding binding, final VideoDataBean dataBean, final int position) {
         if (mList != null && mList.size() > 0) {
-            binding.title.setText(dataBean.getDesc());
+            binding.title.setText("已播放" + dataBean.getBrowse_num());
             binding.assist.setText("" + dataBean.getAssist_num());
             if (dataBean.getTourist() != null) {
                 binding.userVip.setVisibility(dataBean.getTourist().getIs_vip() == 1 ? View.VISIBLE : View.GONE);

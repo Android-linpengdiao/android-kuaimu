@@ -114,7 +114,7 @@ public class UserHomeActivity extends BaseActivity implements View.OnClickListen
         binding.headLoginLayout.tvChat.setVisibility(getUid() == userInfo.getData().getId() ? View.GONE : View.VISIBLE);
 
         //1通过 2正在审核 3审核未通过 4未认证
-        if (getUserInfo().getData() != null && getUserInfo().getData().getBusiness_auth_status() == 1) {
+        if (getUserInfo().getData() != null && getUserInfo().getData().getBusiness_auth_status() != 4) {
             binding.menuTextView.setVisibility(View.VISIBLE);
         } else {
             binding.menuTextView.setVisibility(View.GONE);

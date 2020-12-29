@@ -95,14 +95,16 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         if (dataBean.getRelation_good() == 1) {
             holder.goodLayout.setVisibility(View.VISIBLE);
             holder.goodName.setText(dataBean.getGood_name());
-            GlideLoader.LoderImage(mContext, dataBean.getGood_img(), holder.goodImg,8);
+            GlideLoader.LoderImage(mContext, dataBean.getGood_img(), holder.goodImg, 8);
             holder.goodLink.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent();
-                    intent.setData(Uri.parse(dataBean.getGood_link()));
-                    intent.setAction(Intent.ACTION_VIEW);
-                    mContext.startActivity(intent);
+                    if (!CommonUtil.isBlank(dataBean.getGood_link()) && dataBean.getGood_link().startsWith("http")) {
+                        Intent intent = new Intent();
+                        intent.setData(Uri.parse(dataBean.getGood_link()));
+                        intent.setAction(Intent.ACTION_VIEW);
+                        mContext.startActivity(intent);
+                    }
                 }
             });
             holder.goodDelete.setOnClickListener(new View.OnClickListener() {

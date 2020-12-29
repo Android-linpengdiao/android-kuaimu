@@ -196,7 +196,7 @@ public class WorkUserHomeFragment extends BaseFragment implements View.OnClickLi
             binding.headLoginLayout.tvLiker.setText(String.valueOf(userInfo.getData().getFan_number()));
 
             //1通过 2正在审核 3审核未通过 4未认证
-            if (getUserInfo().getData() != null && getUserInfo().getData().getBusiness_auth_status() == 1) {
+            if (getUserInfo().getData() != null && getUserInfo().getData().getBusiness_auth_status() != 4) {
                 binding.menuTextView.setVisibility(View.VISIBLE);
             }else {
                 binding.menuTextView.setVisibility(View.GONE);

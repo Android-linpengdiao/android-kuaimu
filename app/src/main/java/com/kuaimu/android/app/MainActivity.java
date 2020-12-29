@@ -164,15 +164,15 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
                 if (getUid(true) > 0) {
                     //1通过 2正在审核 3审核未通过 4未认证
-                    if (getUserInfo().getData() != null && getUserInfo().getData().getBusiness_auth_status() == 1) {
+                    if (getUserInfo().getData() != null && getUserInfo().getData().getBusiness_auth_status() == 4) {
                         Bundle bundle = new Bundle();
                         bundle.putInt("auth", 1);
-                        openActivity(MerchantActivity.class, bundle);
+                        openActivity(PersonAuthActivity.class, bundle);
 
                     } else {
                         Bundle bundle = new Bundle();
                         bundle.putInt("auth", 1);
-                        openActivity(PersonAuthActivity.class, bundle);
+                        openActivity(MerchantActivity.class, bundle);
 
                     }
                 }
@@ -207,7 +207,7 @@ public class MainActivity extends BaseActivity {
         userTouristId.setText(getString(R.string.app_name) + "：" + userInfo.getData().getTourist_id());
         GlideLoader.LoderCircleImage(this, userInfo.getData().getAvatar(), userIcon);
         //1通过 2正在审核 3审核未通过 4未认证
-        if (userInfo.getData().getBusiness_auth_status() == 1) {
+        if (userInfo.getData().getBusiness_auth_status() != 4) {
             merchantAuthView.setText("商家广告页");
         }
     }
