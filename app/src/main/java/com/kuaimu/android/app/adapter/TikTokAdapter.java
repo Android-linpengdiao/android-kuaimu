@@ -104,6 +104,8 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
                         intent.setData(Uri.parse(dataBean.getGood_link()));
                         intent.setAction(Intent.ACTION_VIEW);
                         mContext.startActivity(intent);
+                    } else {
+                        ToastUtils.showShort(mContext, "商品有误");
                     }
                 }
             });
