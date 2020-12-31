@@ -141,10 +141,12 @@ public class MainFragment extends BaseFragment implements View.OnClickListener, 
                 startActivity(intent);
                 break;
             case R.id.videoImageView:
-                int type = JCameraView.BUTTON_STATE_ONLY_RECORDER;
-                int minTime = 5;
-                int maxTime = 180;
-                CameraActivity.startCameraActivity(getActivity(), minTime, maxTime, "#44bf19", type, REQUEST_WXCAMERA);
+                if (getUid(true) > 0) {
+                    int type = JCameraView.BUTTON_STATE_ONLY_RECORDER;
+                    int minTime = 5;
+                    int maxTime = 180;
+                    CameraActivity.startCameraActivity(getActivity(), minTime, maxTime, "#44bf19", type, REQUEST_WXCAMERA);
+                }
                 break;
         }
     }

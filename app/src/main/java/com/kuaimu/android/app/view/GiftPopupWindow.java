@@ -52,7 +52,7 @@ public class GiftPopupWindow extends BasePopupWindow {
         TextView coinTextView = contentView.findViewById(R.id.coinTextView);
         coinTextView.setText(String.valueOf(MyApplication.getInstance().getUserInfo().getData().getWallet_token()));
         GiftAdapter adapter = new GiftAdapter(context);
-        binding.recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
+        binding.recyclerView.setLayoutManager(new GridLayoutManager(context, 4));
         binding.recyclerView.setAdapter(adapter);
         adapter.setOnClickListener(new OnClickListener() {
             @Override

@@ -567,7 +567,7 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
     private void publishWork(String coverUrl, String videoUrl) {
         if (binding.radioGroupView.getCheckedRadioButtonId() == R.id.radio_button_yes) {
             relationGood = 1;
-        }else if (binding.radioGroupView.getCheckedRadioButtonId() == R.id.radio_button_yes) {
+        }else if (binding.radioGroupView.getCheckedRadioButtonId() == R.id.radio_button_no) {
             relationGood = 2;
         }
         SendRequest.publishVideo(getUserInfo().getData().getId(), binding.content.getText().toString(), coverUrl, videoUrl,
