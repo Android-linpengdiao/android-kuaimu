@@ -17,8 +17,8 @@ public class Config {
      */
 
     // 微信
-    public final static String WECHAT_APP_ID = "wx30f4235615f87f52";
-    public final static String WECHAT_APP_SECRET = "262dbca057fbefdf0e4b3f7b7ffd2226";
+    public final static String WECHAT_APP_ID = "wx5b2171cc78c4fb1b";
+    public final static String WECHAT_APP_SECRET = "3b58f71e605a1239b79f1bbb71bc992d";
 
     // QQ
     public final static String QQ_APP_ID = "1110682729";
