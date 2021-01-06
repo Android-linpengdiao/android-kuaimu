@@ -508,7 +508,7 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
         OSS oss = new OSSClient(getApplicationContext(), endpoint, credentialProvider, conf);
 
         // Construct an upload request
-        PutObjectRequest put = new PutObjectRequest("oss-coffee", videoPath.substring(videoPath.lastIndexOf("/") + 1), videoPath);
+        PutObjectRequest put = new PutObjectRequest("quickeye", videoPath.substring(videoPath.lastIndexOf("/") + 1), videoPath);
 
         // You can set progress callback during asynchronous upload
         put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
