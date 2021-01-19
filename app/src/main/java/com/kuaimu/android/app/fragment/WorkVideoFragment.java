@@ -314,6 +314,7 @@ public class WorkVideoFragment extends VideoBaseFragment implements View.OnClick
         mVideoView.start();
         mCurPos = position;
         homeDetail(position);
+        SendRequest.videoPlay(mVideoList.get(position).getId(),null);
     }
 
     public void videoPlay(boolean videoPlay) {

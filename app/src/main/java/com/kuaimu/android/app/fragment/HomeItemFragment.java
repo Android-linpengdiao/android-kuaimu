@@ -351,6 +351,7 @@ public class HomeItemFragment extends VideoBaseFragment implements View.OnClickL
         }
         mCurPos = position;
         homeDetail(position);
+        SendRequest.videoPlay(mVideoList.get(position).getId(),null);
     }
 
     private void homeDetail(final int index) {

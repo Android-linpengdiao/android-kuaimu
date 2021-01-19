@@ -25,6 +25,7 @@ import com.baselibrary.utils.GlideLoader;
 import com.baselibrary.utils.ToastUtils;
 import com.kuaimu.android.app.R;
 import com.kuaimu.android.app.activity.ChatActivity;
+import com.kuaimu.android.app.activity.MerchantActivity;
 import com.kuaimu.android.app.activity.MineFansActivity;
 import com.kuaimu.android.app.activity.MineFollowActivity;
 import com.kuaimu.android.app.activity.MyProductActivity;
@@ -196,7 +197,7 @@ public class WorkUserHomeFragment extends BaseFragment implements View.OnClickLi
             binding.headLoginLayout.tvLiker.setText(String.valueOf(userInfo.getData().getFan_number()));
 
             //1通过 2正在审核 3审核未通过 4未认证
-            if (getUserInfo().getData() != null && getUserInfo().getData().getBusiness_auth_status() != 4) {
+            if (getUserInfo().getData() != null && userInfo.getData().getBusiness_auth_status() != 4) {
                 binding.menuTextView.setVisibility(View.VISIBLE);
             }else {
                 binding.menuTextView.setVisibility(View.GONE);
@@ -334,7 +335,8 @@ public class WorkUserHomeFragment extends BaseFragment implements View.OnClickLi
 
                 break;
             case R.id.menuTextView:
-
+                bundle.putInt("uid", uid);
+                openActivity(MerchantActivity.class, bundle);
 
                 break;
         }

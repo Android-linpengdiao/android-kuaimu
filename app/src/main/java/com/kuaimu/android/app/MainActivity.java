@@ -172,6 +172,7 @@ public class MainActivity extends BaseActivity {
                     } else {
                         Bundle bundle = new Bundle();
                         bundle.putInt("auth", 1);
+                        bundle.putInt("uid", getUid());
                         openActivity(MerchantActivity.class, bundle);
 
                     }

@@ -9,15 +9,32 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 
+import com.alibaba.sdk.android.oss.ClientConfiguration;
+import com.alibaba.sdk.android.oss.ClientException;
+import com.alibaba.sdk.android.oss.OSS;
+import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
+import com.alibaba.sdk.android.oss.callback.OSSProgressCallback;
+import com.alibaba.sdk.android.oss.common.OSSLog;
+import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
+import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
+import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
+import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
+import com.baselibrary.Constants;
+import com.baselibrary.manager.LoadingManager;
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.FileUtils;
 import com.baselibrary.utils.GlideLoader;
+import com.baselibrary.utils.LogUtil;
 import com.baselibrary.utils.PermissionUtils;
 import com.baselibrary.utils.ToastUtils;
 import com.kuaimu.android.app.R;
@@ -37,9 +54,11 @@ import org.json.JSONObject;
 import java.io.File;
 
 import okhttp3.Call;
+import okhttp3.Request;
 
 public class PersonAuthActivity extends BaseActivity {
 
+    private static final String TAG = "PersonAuthActivity";
     private ActivityPersonAuthBinding binding;
     private int auth = 1; //1 商家   2 个人
 
@@ -63,7 +82,7 @@ public class PersonAuthActivity extends BaseActivity {
             auth = getIntent().getExtras().getInt("auth");
 
             //1通过 2正在审核 3审核未通过 4未认证
-            if (auth == 1 && getUserInfo().getData().getBusiness_auth_status() == 2
+            if (auth == 1 && getUserInfo().getData().getBusiness_auth_status() != 4
                     && getUserInfo().getData().getProfiles() != null && getUserInfo().getData().getProfiles().size() > 0) {
 
                 for (int i = 0; i < getUserInfo().getData().getProfiles().size(); i++) {
@@ -76,7 +95,7 @@ public class PersonAuthActivity extends BaseActivity {
                     }
                 }
 
-            } else if (auth == 2 && getUserInfo().getData().getPerson_auth_status() == 2
+            } else if (auth == 2 && getUserInfo().getData().getPerson_auth_status() != 4
                     && getUserInfo().getData().getProfiles() != null && getUserInfo().getData().getProfiles().size() > 0) {
                 for (int i = 0; i < getUserInfo().getData().getProfiles().size(); i++) {
                     if (getUserInfo().getData().getProfiles().get(i).getAuth() == 2) {
@@ -90,15 +109,24 @@ public class PersonAuthActivity extends BaseActivity {
             }
 
             if (auth == 1) {
+//                binding.tvConfirm.setText(
+//                        getUserInfo().getData().getBusiness_auth_status() == 1 ? "完成认证" :
+//                                getUserInfo().getData().getBusiness_auth_status() == 2 ? "正在审核" :
+//                                        getUserInfo().getData().getBusiness_auth_status() == 3 ? "审核未通过" : "提交认证");
+
                 binding.tvConfirm.setText(
-                        getUserInfo().getData().getBusiness_auth_status() == 1 ? "完成认证" :
-                                getUserInfo().getData().getBusiness_auth_status() == 2 ? "正在审核" :
-                                        getUserInfo().getData().getBusiness_auth_status() == 3 ? "审核未通过" : "提交认证");
+                        getUserInfo().getData().getBusiness_auth_status() == 4 ? "提交认证" :"完成认证");
+                binding.tvConfirm.setEnabled(getUserInfo().getData().getBusiness_auth_status() == 4 ? true :false);
+
             } else if (auth == 2) {
+//                binding.tvConfirm.setText(
+//                        getUserInfo().getData().getPerson_auth_status() == 1 ? "完成认证" :
+//                                getUserInfo().getData().getPerson_auth_status() == 2 ? "正在审核" :
+//                                        getUserInfo().getData().getPerson_auth_status() == 3 ? "审核未通过" : "提交认证");
+
                 binding.tvConfirm.setText(
-                        getUserInfo().getData().getPerson_auth_status() == 1 ? "完成认证" :
-                                getUserInfo().getData().getPerson_auth_status() == 2 ? "正在审核" :
-                                        getUserInfo().getData().getPerson_auth_status() == 3 ? "审核未通过" : "提交认证");
+                        getUserInfo().getData().getPerson_auth_status() == 4 ? "提交认证" :"完成认证");
+                binding.tvConfirm.setEnabled(getUserInfo().getData().getPerson_auth_status() == 4 ? true :false);
             }
 
         } else {
@@ -301,7 +329,7 @@ public class PersonAuthActivity extends BaseActivity {
                             if (object.optString("type").equals(ImageModel.TYPE_IMAGE)) {
                                 JSONArray files = object.optJSONArray("imageList");
                                 if (files.length() > 0) {
-                                    uploadFile(requestCode, String.valueOf(files.get(0)));
+                                    createSecurityToken(requestCode, String.valueOf(files.get(0)));
                                 }
                             }
                         } catch (JSONException e) {
@@ -312,14 +340,58 @@ public class PersonAuthActivity extends BaseActivity {
                 case REQUEST_CAMERA_BACK:
                 case REQUEST_CAMERA_FRONT:
                 case REQUEST_CAMERA_LICENSE:
-                    uploadFile(requestCode, outputImage.getPath());
+//                    uploadFile(requestCode, outputImage.getPath());
+                    createSecurityToken(requestCode, outputImage.getPath());
                     break;
             }
         }
     }
 
-    private void uploadFile(int requestCode, String file) {
-        SendRequest.fileUpload(file, file.substring(file.lastIndexOf("/") + 1), new StringCallback() {
+//    private void uploadFile(int requestCode, String file) {
+//        SendRequest.fileUpload(file, file.substring(file.lastIndexOf("/") + 1), new StringCallback() {
+//            @Override
+//            public void onError(Call call, Exception e, int id) {
+//
+//            }
+//
+//            @Override
+//            public void onResponse(String response, int id) {
+//                try {
+//                    JSONObject object = new JSONObject(response);
+//                    String url = object.optString("data");
+//                    if (requestCode == 100 || requestCode == 400) {
+//                        backPhoto = url;
+//                        GlideLoader.LoderImage(PersonAuthActivity.this, url, binding.backPhotoView, 8);
+//                    } else if (requestCode == 200 || requestCode == 500) {
+//                        frontPhoto = url;
+//                        GlideLoader.LoderImage(PersonAuthActivity.this, url, binding.frontPhotoView, 8);
+//                    } else if (requestCode == 300 || requestCode == 600) {
+//                        licensePhoto = url;
+//                        GlideLoader.LoderImage(PersonAuthActivity.this, url, binding.licensePhotoView, 8);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//    }
+    
+    private void createSecurityToken(int requestCode,String file) {
+        SendRequest.createSecurityToken(new StringCallback() {
+
+            @Override
+            public void onBefore(Request request, int id) {
+                super.onBefore(request, id);
+                LoadingManager.showLoadingDialog(PersonAuthActivity.this);
+            }
+
+            @Override
+            public void onAfter(int id) {
+                super.onAfter(id);
+                LoadingManager.hideLoadingDialog(PersonAuthActivity.this);
+            }
+
             @Override
             public void onError(Call call, Exception e, int id) {
 
@@ -328,23 +400,117 @@ public class PersonAuthActivity extends BaseActivity {
             @Override
             public void onResponse(String response, int id) {
                 try {
-                    JSONObject object = new JSONObject(response);
-                    String url = object.optString("data");
-                    if (requestCode == 100 || requestCode == 400) {
-                        backPhoto = url;
-                        GlideLoader.LoderImage(PersonAuthActivity.this, url, binding.backPhotoView, 8);
-                    } else if (requestCode == 200 || requestCode == 500) {
-                        frontPhoto = url;
-                        GlideLoader.LoderImage(PersonAuthActivity.this, url, binding.frontPhotoView, 8);
-                    } else if (requestCode == 300 || requestCode == 600) {
-                        licensePhoto = url;
-                        GlideLoader.LoderImage(PersonAuthActivity.this, url, binding.licensePhotoView, 8);
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONObject object = jsonObject.optJSONObject("data");
+                    if (jsonObject.optInt("code") == 200) {
+                        String accessKeyId = object.optString("AccessKeyId");
+                        String accessKeySecret = object.optString("AccessKeySecret");
+                        String securityToken = object.optString("SecurityToken");
+                        String expriedTime = object.optString("Expiration");
+                        uploadImage(accessKeyId, accessKeySecret, securityToken,requestCode,file);
                     }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
 
+    }
+
+    private void uploadImage(String AccessKeyId, String SecretKeyId, String SecurityToken,int requestCode,String file) {
+
+        String endpoint = "http://oss-cn-beijing.aliyuncs.com";
+
+        //if null , default will be init
+        ClientConfiguration conf = new ClientConfiguration();
+        conf.setConnectionTimeout(15 * 1000); // connction time out default 15s
+        conf.setSocketTimeout(15 * 1000); // socket timeout，default 15s
+        conf.setMaxConcurrentRequest(5); // synchronous request number，default 5
+        conf.setMaxErrorRetry(2); // retry，default 2
+        OSSLog.enableLog(); //write local log file ,path is SDCard_path\OSSLog\logs.csv
+
+        OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(AccessKeyId, SecretKeyId, SecurityToken);
+
+        OSS oss = new OSSClient(getApplicationContext(), endpoint, credentialProvider, conf);
+
+        // Construct an upload request
+        PutObjectRequest put = new PutObjectRequest("quickeye", file.substring(file.lastIndexOf("/") + 1), file);
+
+        // You can set progress callback during asynchronous upload
+        put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
+            @Override
+            public void onProgress(PutObjectRequest request, long currentSize, long totalSize) {
+                LogUtil.d(TAG, "currentSize: " + currentSize + " totalSize: " + totalSize);
+                String temp = "" + currentSize * 100 / totalSize;
+                LoadingManager.updateProgress(PersonAuthActivity.this, String.format(Constants.str_updata_wait, temp + "%"));
+            }
+        });
+
+        LoadingManager.showProgress(PersonAuthActivity.this, String.format(Constants.str_updata_wait, "0%"));
+        final OSSAsyncTask task = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+            @Override
+            public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                LoadingManager.hideProgress(PersonAuthActivity.this);
+                String url = "http://" + request.getBucketName() + ".oss-cn-beijing.aliyuncs.com/" + request.getObjectKey();
+                Log.i(TAG, "onSuccess: " + url);
+                if (requestCode == 100 || requestCode == 400) {
+                    backPhoto = url;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            GlideLoader.LoderImage(PersonAuthActivity.this, url, binding.backPhotoView, 8);
+                        }
+                    });
+
+                } else if (requestCode == 200 || requestCode == 500) {
+                    frontPhoto = url;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            GlideLoader.LoderImage(PersonAuthActivity.this, url, binding.frontPhotoView, 8);
+                        }
+                    });
+
+                } else if (requestCode == 300 || requestCode == 600) {
+                    licensePhoto = url;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            GlideLoader.LoderImage(PersonAuthActivity.this, url, binding.licensePhotoView, 8);
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onFailure(PutObjectRequest request, ClientException clientExcepion, ServiceException serviceException) {
+                LoadingManager.hideProgress(PersonAuthActivity.this);
+                ToastUtils.showShort(PersonAuthActivity.this, "上传失败");
+                // Request exception
+                if (clientExcepion != null) {
+                    // Local exception, such as a network exception
+                    clientExcepion.printStackTrace();
+                }
+                if (serviceException != null) {
+                    // Service exception
+                }
+            }
+
+            @Override
+            protected Object clone() throws CloneNotSupportedException {
+                return super.clone();
+            }
+        });
+        LoadingManager.OnDismissListener(PersonAuthActivity.this, new LoadingManager.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                task.cancel(); // Cancel the task
+            }
+        });
+
+        // task.cancel(); // Cancel the task
+        // task.waitUntilFinished(); // Wait till the task is finished
     }
 }

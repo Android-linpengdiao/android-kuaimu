@@ -8,15 +8,32 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 
+import com.alibaba.sdk.android.oss.ClientConfiguration;
+import com.alibaba.sdk.android.oss.ClientException;
+import com.alibaba.sdk.android.oss.OSS;
+import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
+import com.alibaba.sdk.android.oss.callback.OSSProgressCallback;
+import com.alibaba.sdk.android.oss.common.OSSLog;
+import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
+import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
+import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
+import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
+import com.baselibrary.Constants;
+import com.baselibrary.manager.LoadingManager;
 import com.baselibrary.utils.CommonUtil;
 import com.baselibrary.utils.FileUtils;
 import com.baselibrary.utils.GlideLoader;
+import com.baselibrary.utils.LogUtil;
 import com.baselibrary.utils.PermissionUtils;
 import com.baselibrary.utils.ToastUtils;
 import com.kuaimu.android.app.R;
@@ -24,6 +41,7 @@ import com.kuaimu.android.app.databinding.ActivityMerchantBinding;
 import com.kuaimu.android.app.databinding.ActivityMessageBinding;
 import com.kuaimu.android.app.databinding.ActivityPersonAuthBinding;
 import com.kuaimu.android.app.model.BaseData;
+import com.kuaimu.android.app.model.BusinessData;
 import com.media.MediaActivity;
 import com.media.image.ImageModel;
 import com.okhttp.SendRequest;
@@ -38,9 +56,11 @@ import org.json.JSONObject;
 import java.io.File;
 
 import okhttp3.Call;
+import okhttp3.Request;
 
 public class MerchantActivity extends BaseActivity {
 
+    private static final String TAG = "MerchantActivity";
     private ActivityMerchantBinding binding;
 
     private static final int REQUEST_IMAGE_LOGO = 100;
@@ -51,6 +71,8 @@ public class MerchantActivity extends BaseActivity {
 
     private String logoPhoto = "";
     private String qrcodePhoto = "";
+
+    private int uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +114,7 @@ public class MerchantActivity extends BaseActivity {
                 }
 
 
-                businessBanner(name, industry,desc,link);
+                businessBanner(name, industry, desc, link);
             }
         });
         binding.logoImageView.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +129,48 @@ public class MerchantActivity extends BaseActivity {
                 mediaDialog(REQUEST_IMAGE_QRCODE, REQUEST_CAMERA_QRCODE);
             }
         });
+
+        if (getIntent().getExtras() != null) {
+            uid = getIntent().getExtras().getInt("uid");
+            if (getUid()!=uid){
+                binding.nameEditText.setEnabled(false);
+                binding.industryEditText.setEnabled(false);
+                binding.descEditText.setEnabled(false);
+                binding.linkEditText.setEnabled(false);
+                binding.logoImageView.setEnabled(false);
+                binding.qrcodeImageView.setEnabled(false);
+                binding.tvConfirm.setVisibility(View.GONE);
+            }else {
+                binding.tvConfirm.setVisibility(View.VISIBLE);
+            }
+            SendRequest.showBusinessBanner(uid, new GenericsCallback<BusinessData>(new JsonGenericsSerializator()) {
+                @Override
+                public void onError(Call call, Exception e, int id) {
+
+                }
+
+                @Override
+                public void onResponse(BusinessData response, int id) {
+                    if (response.getCode() == 200) {
+                        if (!CommonUtil.isBlank(response.getData()) && response.getData().size() > 0) {
+                            logoPhoto = response.getData().get(0).getLogo();
+                            qrcodePhoto = response.getData().get(0).getQrcode();
+                            GlideLoader.LoderImage(MerchantActivity.this, logoPhoto, binding.logoImageView, 8);
+                            GlideLoader.LoderImage(MerchantActivity.this, qrcodePhoto, binding.qrcodeImageView, 8);
+                            binding.nameEditText.setText(!CommonUtil.isBlank(response.getData().get(0).getName()) ? response.getData().get(0).getName() : "");
+                            binding.industryEditText.setText(!CommonUtil.isBlank(response.getData().get(0).getIndustry()) ? response.getData().get(0).getIndustry() : "");
+                            binding.descEditText.setText(!CommonUtil.isBlank(response.getData().get(0).getDesc()) ? response.getData().get(0).getDesc() : "");
+                            binding.linkEditText.setText(!CommonUtil.isBlank(response.getData().get(0).getLink()) ? response.getData().get(0).getLink() : "");
+                        }
+                    } else {
+                        ToastUtils.showShort(MerchantActivity.this, response.getMsg());
+                    }
+
+                }
+            });
+        }else {
+            binding.tvConfirm.setVisibility(View.GONE);
+        }
 
     }
 
@@ -233,7 +297,7 @@ public class MerchantActivity extends BaseActivity {
                             if (object.optString("type").equals(ImageModel.TYPE_IMAGE)) {
                                 JSONArray files = object.optJSONArray("imageList");
                                 if (files.length() > 0) {
-                                    uploadFile(requestCode, String.valueOf(files.get(0)));
+                                    createSecurityToken(requestCode, String.valueOf(files.get(0)));
                                 }
                             }
                         } catch (JSONException e) {
@@ -243,14 +307,54 @@ public class MerchantActivity extends BaseActivity {
                     break;
                 case REQUEST_CAMERA_LOGO:
                 case REQUEST_CAMERA_QRCODE:
-                    uploadFile(requestCode, outputImage.getPath());
+                    createSecurityToken(requestCode, outputImage.getPath());
                     break;
             }
         }
     }
 
-    private void uploadFile(int requestCode, String file) {
-        SendRequest.fileUpload(file, file.substring(file.lastIndexOf("/") + 1), new StringCallback() {
+//    private void uploadFile(int requestCode, String file) {
+//        SendRequest.fileUpload(file, file.substring(file.lastIndexOf("/") + 1), new StringCallback() {
+//            @Override
+//            public void onError(Call call, Exception e, int id) {
+//
+//            }
+//
+//            @Override
+//            public void onResponse(String response, int id) {
+//                try {
+//                    JSONObject object = new JSONObject(response);
+//                    String url = object.optString("data");
+//                    if (requestCode == 100 || requestCode == 400) {
+//                        logoPhoto = url;
+//                        GlideLoader.LoderImage(MerchantActivity.this, url, binding.logoImageView, 8);
+//                    } else if (requestCode == 200 || requestCode == 500) {
+//                        qrcodePhoto = url;
+//                        GlideLoader.LoderImage(MerchantActivity.this, url, binding.qrcodeImageView, 8);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//    }
+
+    private void createSecurityToken(int requestCode, String file) {
+        SendRequest.createSecurityToken(new StringCallback() {
+
+            @Override
+            public void onBefore(Request request, int id) {
+                super.onBefore(request, id);
+                LoadingManager.showLoadingDialog(MerchantActivity.this);
+            }
+
+            @Override
+            public void onAfter(int id) {
+                super.onAfter(id);
+                LoadingManager.hideLoadingDialog(MerchantActivity.this);
+            }
+
             @Override
             public void onError(Call call, Exception e, int id) {
 
@@ -259,20 +363,107 @@ public class MerchantActivity extends BaseActivity {
             @Override
             public void onResponse(String response, int id) {
                 try {
-                    JSONObject object = new JSONObject(response);
-                    String url = object.optString("data");
-                    if (requestCode == 100 || requestCode == 400) {
-                        logoPhoto = url;
-                        GlideLoader.LoderImage(MerchantActivity.this, url, binding.logoImageView, 8);
-                    } else if (requestCode == 200 || requestCode == 500) {
-                        qrcodePhoto = url;
-                        GlideLoader.LoderImage(MerchantActivity.this, url, binding.qrcodeImageView, 8);
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONObject object = jsonObject.optJSONObject("data");
+                    if (jsonObject.optInt("code") == 200) {
+                        String accessKeyId = object.optString("AccessKeyId");
+                        String accessKeySecret = object.optString("AccessKeySecret");
+                        String securityToken = object.optString("SecurityToken");
+                        String expriedTime = object.optString("Expiration");
+                        uploadImage(accessKeyId, accessKeySecret, securityToken, requestCode, file);
                     }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
 
+    }
+
+    private void uploadImage(String AccessKeyId, String SecretKeyId, String SecurityToken, int requestCode, String file) {
+
+        String endpoint = "http://oss-cn-beijing.aliyuncs.com";
+
+        //if null , default will be init
+        ClientConfiguration conf = new ClientConfiguration();
+        conf.setConnectionTimeout(15 * 1000); // connction time out default 15s
+        conf.setSocketTimeout(15 * 1000); // socket timeout，default 15s
+        conf.setMaxConcurrentRequest(5); // synchronous request number，default 5
+        conf.setMaxErrorRetry(2); // retry，default 2
+        OSSLog.enableLog(); //write local log file ,path is SDCard_path\OSSLog\logs.csv
+
+        OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(AccessKeyId, SecretKeyId, SecurityToken);
+
+        OSS oss = new OSSClient(getApplicationContext(), endpoint, credentialProvider, conf);
+
+        // Construct an upload request
+        PutObjectRequest put = new PutObjectRequest("quickeye", file.substring(file.lastIndexOf("/") + 1), file);
+
+        // You can set progress callback during asynchronous upload
+        put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
+            @Override
+            public void onProgress(PutObjectRequest request, long currentSize, long totalSize) {
+                LogUtil.d(TAG, "currentSize: " + currentSize + " totalSize: " + totalSize);
+                String temp = "" + currentSize * 100 / totalSize;
+                LoadingManager.updateProgress(MerchantActivity.this, String.format(Constants.str_updata_wait, temp + "%"));
+            }
+        });
+
+        LoadingManager.showProgress(MerchantActivity.this, String.format(Constants.str_updata_wait, "0%"));
+        final OSSAsyncTask task = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+            @Override
+            public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                LoadingManager.hideProgress(MerchantActivity.this);
+                String url = "http://" + request.getBucketName() + ".oss-cn-beijing.aliyuncs.com/" + request.getObjectKey();
+                Log.i(TAG, "onSuccess: " + url);
+                if (requestCode == 100 || requestCode == 400) {
+                    logoPhoto = url;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            GlideLoader.LoderImage(MerchantActivity.this, url, binding.logoImageView, 8);
+                        }
+                    });
+                } else if (requestCode == 200 || requestCode == 500) {
+                    qrcodePhoto = url;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            GlideLoader.LoderImage(MerchantActivity.this, url, binding.qrcodeImageView, 8);
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onFailure(PutObjectRequest request, ClientException clientExcepion, ServiceException serviceException) {
+                LoadingManager.hideProgress(MerchantActivity.this);
+                ToastUtils.showShort(MerchantActivity.this, "上传失败");
+                // Request exception
+                if (clientExcepion != null) {
+                    // Local exception, such as a network exception
+                    clientExcepion.printStackTrace();
+                }
+                if (serviceException != null) {
+                    // Service exception
+                }
+            }
+
+            @Override
+            protected Object clone() throws CloneNotSupportedException {
+                return super.clone();
+            }
+        });
+        LoadingManager.OnDismissListener(MerchantActivity.this, new LoadingManager.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                task.cancel(); // Cancel the task
+            }
+        });
+
+        // task.cancel(); // Cancel the task
+        // task.waitUntilFinished(); // Wait till the task is finished
     }
 }

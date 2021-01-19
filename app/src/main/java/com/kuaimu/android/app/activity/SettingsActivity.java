@@ -1,6 +1,7 @@
 package com.kuaimu.android.app.activity;
 
 import androidx.databinding.DataBindingUtil;
+
 import android.os.Bundle;
 import android.view.View;
 
@@ -30,6 +31,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         binding.clear.setOnClickListener(this);
         binding.resetPassword.setOnClickListener(this);
         binding.logout.setOnClickListener(this);
+        binding.logout.setVisibility(getUid() > 0 ? View.VISIBLE : View.GONE);
 
         double fileSize = FileSizeUtil.getFileOrFilesSize(FileUtils.getPath(), 3);
         binding.tvFileSize.setText(fileSize + "MB");
@@ -68,7 +70,9 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                 });
                 break;
             case R.id.resetPassword:
-                openActivity(ResetPasswordActivity.class);
+                if (getUid(true) > 0) {
+                    openActivity(ResetPasswordActivity.class);
+                }
                 break;
             case R.id.logout:
                 DialogManager.showConfirmDialog(SettingsActivity.this, "确定要退出登录？", new DialogManager.Listener() {

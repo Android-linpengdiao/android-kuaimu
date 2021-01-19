@@ -66,6 +66,7 @@ public class APIUrls {
     public final static String publishLeave = url_domain + "api/message/publishLeave";
 //    public final static String homeComment = url_domain + "api/home/comment";
     public final static String homeComment = url_domain + "api/video/comment";
+    public final static String videoPlay = url_domain + "api/video/play";
     public final static String leaveUser = url_domain + "api/message/leaveUser";
     public final static String leaveUserDetail = url_domain + "api/message/leaveUserDetail";
 
@@ -182,6 +183,8 @@ public class APIUrls {
 
     //关于我们
     public final static String url_personAbout = url_domain + "api/person/about";
+    //广告
+    public final static String url_showBusinessBanner = url_domain + "api/person/showBusinessBanner";
     //意见反馈
     public final static String url_centerComment = url_domain + "api/center/comment";
 

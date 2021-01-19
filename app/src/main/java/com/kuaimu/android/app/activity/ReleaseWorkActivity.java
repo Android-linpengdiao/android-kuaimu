@@ -77,6 +77,7 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
     private NavData.DataBean dataBean;
     private String videoPath;
     private String coverPath;
+    private String coverUrl;
     private String addr = "";
     private String goodImg;
     private int relationGood = 1;
@@ -230,7 +231,7 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
                         return;
                     }
                 }
-                uploadFile(coverPath);
+                createSecurityToken(0);
                 break;
         }
     }
@@ -343,7 +344,7 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
                 case REQUEST_GOOD_CROP:
                     if (null != data) {
                         goodImg = data.getStringExtra(ClipImageActivity.ARG_CLIP_PATH);
-                        uploadFileGoodCover(goodImg);
+                        createSecurityToken(2);
                     }
                     break;
                 case REQUEST_TYPE:
@@ -396,61 +397,64 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
         startActivityForResult(intent, requestCode);
     }
 
-    private void uploadFileGoodCover(String file) {
-        SendRequest.fileUpload(file, file.substring(file.lastIndexOf("/") + 1), new StringCallback() {
+//    private void uploadFileGoodCover(String file) {
+//        SendRequest.fileUpload(file, file.substring(file.lastIndexOf("/") + 1), new StringCallback() {
+//
+//            @Override
+//            public void onError(Call call, Exception e, int id) {
+//
+//            }
+//
+//            @Override
+//            public void onResponse(String response, int id) {
+//                try {
+//                    JSONObject object = new JSONObject(response);
+//                    goodImg = object.optString("data");
+//                    if (!CommonUtil.isBlank(goodImg)) {
+//                        GlideLoader.LoderImage(getApplication(), goodImg, binding.goodImg, 10);
+//                    } else {
+//                        ToastUtils.showShort(ReleaseWorkActivity.this, "封面上传失败");
+//                    }
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//    }
 
-            @Override
-            public void onError(Call call, Exception e, int id) {
+//    private void uploadFile(String file) {
+//        SendRequest.fileUpload(file, file.substring(file.lastIndexOf("/") + 1), new StringCallback() {
+//
+//            @Override
+//            public void onError(Call call, Exception e, int id) {
+//
+//            }
+//
+//            @Override
+//            public void onResponse(String response, int id) {
+//                try {
+//                    JSONObject object = new JSONObject(response);
+//                    String url = object.optString("data");
+//                    if (!CommonUtil.isBlank(url)) {
+//                        createSecurityToken(url);
+//                    } else {
+//                        ToastUtils.showShort(ReleaseWorkActivity.this, "封面上传失败");
+//                    }
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//    }
 
-            }
-
-            @Override
-            public void onResponse(String response, int id) {
-                try {
-                    JSONObject object = new JSONObject(response);
-                    goodImg = object.optString("data");
-                    if (!CommonUtil.isBlank(goodImg)) {
-                        GlideLoader.LoderImage(getApplication(), goodImg, binding.goodImg, 10);
-                    } else {
-                        ToastUtils.showShort(ReleaseWorkActivity.this, "封面上传失败");
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-    }
-
-    private void uploadFile(String file) {
-        SendRequest.fileUpload(file, file.substring(file.lastIndexOf("/") + 1), new StringCallback() {
-
-            @Override
-            public void onError(Call call, Exception e, int id) {
-
-            }
-
-            @Override
-            public void onResponse(String response, int id) {
-                try {
-                    JSONObject object = new JSONObject(response);
-                    String url = object.optString("data");
-                    if (!CommonUtil.isBlank(url)) {
-                        createSecurityToken(url);
-                    } else {
-                        ToastUtils.showShort(ReleaseWorkActivity.this, "封面上传失败");
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-    }
-
-    private void createSecurityToken(final String coverUrl) {
+    /**
+     * @param type 0 图片   1 视频    2 商品封面
+     */
+    private void createSecurityToken(int type) {
         SendRequest.createSecurityToken(new StringCallback() {
 
             @Override
@@ -480,7 +484,13 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
                         String accessKeySecret = object.optString("AccessKeySecret");
                         String securityToken = object.optString("SecurityToken");
                         String expriedTime = object.optString("Expiration");
-                        uploadVideo(accessKeyId, accessKeySecret, securityToken, coverUrl);
+                        if (type == 0) {
+                            uploadImage(accessKeyId, accessKeySecret, securityToken);
+                        } else if (type == 1) {
+                            uploadVideo(accessKeyId, accessKeySecret, securityToken);
+                        }else if (type == 2) {
+                            uploadGoodsImage(accessKeyId, accessKeySecret, securityToken);
+                        }
                     }
 
                 } catch (Exception e) {
@@ -491,7 +501,7 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
 
     }
 
-    private void uploadVideo(String AccessKeyId, String SecretKeyId, String SecurityToken, final String coverUrl) {
+    private void uploadGoodsImage(String AccessKeyId, String SecretKeyId, String SecurityToken) {
 
         String endpoint = "http://oss-cn-beijing.aliyuncs.com";
 
@@ -508,7 +518,7 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
         OSS oss = new OSSClient(getApplicationContext(), endpoint, credentialProvider, conf);
 
         // Construct an upload request
-        PutObjectRequest put = new PutObjectRequest("quickeye", videoPath.substring(videoPath.lastIndexOf("/") + 1), videoPath);
+        PutObjectRequest put = new PutObjectRequest("quickeye", goodImg.substring(goodImg.lastIndexOf("/") + 1), goodImg);
 
         // You can set progress callback during asynchronous upload
         put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
@@ -525,9 +535,82 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
             @Override
             public void onSuccess(PutObjectRequest request, PutObjectResult result) {
                 LoadingManager.hideProgress(ReleaseWorkActivity.this);
-                String videoUrl = "http://" + request.getBucketName() + ".oss-cn-beijing.aliyuncs.com/" + request.getObjectKey();
-                Log.i(TAG, "onSuccess: " + videoUrl);
-                publishWork(coverUrl, videoUrl);
+                goodImg = "http://" + request.getBucketName() + ".oss-cn-beijing.aliyuncs.com/" + request.getObjectKey();
+                Log.i(TAG, "onSuccess: " + goodImg);
+                GlideLoader.LoderImage(getApplication(), goodImg, binding.goodImg, 10);
+            }
+
+            @Override
+            public void onFailure(PutObjectRequest request, ClientException clientExcepion, ServiceException serviceException) {
+                LoadingManager.hideProgress(ReleaseWorkActivity.this);
+                ToastUtils.showShort(ReleaseWorkActivity.this, "商品封面上传失败");
+                // Request exception
+                if (clientExcepion != null) {
+                    // Local exception, such as a network exception
+                    clientExcepion.printStackTrace();
+                }
+                if (serviceException != null) {
+                    // Service exception
+                    LogUtil.d(TAG, "ErrorCode " + serviceException.getErrorCode());
+                    LogUtil.d(TAG, "RequestId " + serviceException.getRequestId());
+                    LogUtil.d(TAG, "HostId " + serviceException.getHostId());
+                    LogUtil.d(TAG, "RawMessage " + serviceException.getRawMessage());
+                }
+            }
+
+            @Override
+            protected Object clone() throws CloneNotSupportedException {
+                return super.clone();
+            }
+        });
+        LoadingManager.OnDismissListener(ReleaseWorkActivity.this, new LoadingManager.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                task.cancel(); // Cancel the task
+            }
+        });
+
+        // task.cancel(); // Cancel the task
+        // task.waitUntilFinished(); // Wait till the task is finished
+    }
+
+    private void uploadImage(String AccessKeyId, String SecretKeyId, String SecurityToken) {
+
+        String endpoint = "http://oss-cn-beijing.aliyuncs.com";
+
+        //if null , default will be init
+        ClientConfiguration conf = new ClientConfiguration();
+        conf.setConnectionTimeout(15 * 1000); // connction time out default 15s
+        conf.setSocketTimeout(15 * 1000); // socket timeout，default 15s
+        conf.setMaxConcurrentRequest(5); // synchronous request number，default 5
+        conf.setMaxErrorRetry(2); // retry，default 2
+        OSSLog.enableLog(); //write local log file ,path is SDCard_path\OSSLog\logs.csv
+
+        OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(AccessKeyId, SecretKeyId, SecurityToken);
+
+        OSS oss = new OSSClient(getApplicationContext(), endpoint, credentialProvider, conf);
+
+        // Construct an upload request
+        PutObjectRequest put = new PutObjectRequest("quickeye", coverPath.substring(coverPath.lastIndexOf("/") + 1), coverPath);
+
+        // You can set progress callback during asynchronous upload
+        put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
+            @Override
+            public void onProgress(PutObjectRequest request, long currentSize, long totalSize) {
+                LogUtil.d(TAG, "currentSize: " + currentSize + " totalSize: " + totalSize);
+                String temp = "" + currentSize * 100 / totalSize;
+                LoadingManager.updateProgress(ReleaseWorkActivity.this, String.format(Constants.str_updata_wait, temp + "%"));
+            }
+        });
+
+        LoadingManager.showProgress(ReleaseWorkActivity.this, String.format(Constants.str_updata_wait, "0%"));
+        final OSSAsyncTask task = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+            @Override
+            public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                LoadingManager.hideProgress(ReleaseWorkActivity.this);
+                coverUrl = "http://" + request.getBucketName() + ".oss-cn-beijing.aliyuncs.com/" + request.getObjectKey();
+                Log.i(TAG, "onSuccess: " + coverUrl);
+                createSecurityToken(1);
             }
 
             @Override
@@ -564,10 +647,83 @@ public class ReleaseWorkActivity extends BaseActivity implements AMapLocationLis
         // task.waitUntilFinished(); // Wait till the task is finished
     }
 
-    private void publishWork(String coverUrl, String videoUrl) {
+    private void uploadVideo(String AccessKeyId, String SecretKeyId, String SecurityToken) {
+
+        String endpoint = "http://oss-cn-beijing.aliyuncs.com";
+
+        //if null , default will be init
+        ClientConfiguration conf = new ClientConfiguration();
+        conf.setConnectionTimeout(15 * 1000); // connction time out default 15s
+        conf.setSocketTimeout(15 * 1000); // socket timeout，default 15s
+        conf.setMaxConcurrentRequest(5); // synchronous request number，default 5
+        conf.setMaxErrorRetry(2); // retry，default 2
+        OSSLog.enableLog(); //write local log file ,path is SDCard_path\OSSLog\logs.csv
+
+        OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(AccessKeyId, SecretKeyId, SecurityToken);
+
+        OSS oss = new OSSClient(getApplicationContext(), endpoint, credentialProvider, conf);
+
+        // Construct an upload request
+        PutObjectRequest put = new PutObjectRequest("quickeye", videoPath.substring(videoPath.lastIndexOf("/") + 1), videoPath);
+
+        // You can set progress callback during asynchronous upload
+        put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
+            @Override
+            public void onProgress(PutObjectRequest request, long currentSize, long totalSize) {
+                LogUtil.d(TAG, "currentSize: " + currentSize + " totalSize: " + totalSize);
+                String temp = "" + currentSize * 100 / totalSize;
+                LoadingManager.updateProgress(ReleaseWorkActivity.this, String.format(Constants.str_updata_wait, temp + "%"));
+            }
+        });
+
+        LoadingManager.showProgress(ReleaseWorkActivity.this, String.format(Constants.str_updata_wait, "0%"));
+        final OSSAsyncTask task = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+            @Override
+            public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                LoadingManager.hideProgress(ReleaseWorkActivity.this);
+                String videoUrl = "http://" + request.getBucketName() + ".oss-cn-beijing.aliyuncs.com/" + request.getObjectKey();
+                Log.i(TAG, "onSuccess: " + videoUrl);
+                publishWork(videoUrl);
+            }
+
+            @Override
+            public void onFailure(PutObjectRequest request, ClientException clientExcepion, ServiceException serviceException) {
+                LoadingManager.hideProgress(ReleaseWorkActivity.this);
+                ToastUtils.showShort(ReleaseWorkActivity.this, "上传视频失败");
+                // Request exception
+                if (clientExcepion != null) {
+                    // Local exception, such as a network exception
+                    clientExcepion.printStackTrace();
+                }
+                if (serviceException != null) {
+                    // Service exception
+                    LogUtil.d(TAG, "ErrorCode " + serviceException.getErrorCode());
+                    LogUtil.d(TAG, "RequestId " + serviceException.getRequestId());
+                    LogUtil.d(TAG, "HostId " + serviceException.getHostId());
+                    LogUtil.d(TAG, "RawMessage " + serviceException.getRawMessage());
+                }
+            }
+
+            @Override
+            protected Object clone() throws CloneNotSupportedException {
+                return super.clone();
+            }
+        });
+        LoadingManager.OnDismissListener(ReleaseWorkActivity.this, new LoadingManager.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                task.cancel(); // Cancel the task
+            }
+        });
+
+        // task.cancel(); // Cancel the task
+        // task.waitUntilFinished(); // Wait till the task is finished
+    }
+
+    private void publishWork(String videoUrl) {
         if (binding.radioGroupView.getCheckedRadioButtonId() == R.id.radio_button_yes) {
             relationGood = 1;
-        }else if (binding.radioGroupView.getCheckedRadioButtonId() == R.id.radio_button_no) {
+        } else if (binding.radioGroupView.getCheckedRadioButtonId() == R.id.radio_button_no) {
             relationGood = 2;
         }
         SendRequest.publishVideo(getUserInfo().getData().getId(), binding.content.getText().toString(), coverUrl, videoUrl,

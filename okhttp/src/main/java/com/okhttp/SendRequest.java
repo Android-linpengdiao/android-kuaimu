@@ -1240,6 +1240,13 @@ public class SendRequest {
 
     }
 
+    public static void videoPlay(int video_id, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("video_id", String.valueOf(video_id));
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.videoPlay).build().execute(call);
+
+    }
+
     public static void contentIsAssist(int tourist_id, int content_id, Callback call) {
         Map<String, String> map = new HashMap<>();
         map.put("tourist_id", String.valueOf(tourist_id));
@@ -1439,6 +1446,12 @@ public class SendRequest {
     public static void personAbout(Callback call) {
         Map<String, String> map = new HashMap<>();
         OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_personAbout).build().execute(call);
+    }
+
+    public static void showBusinessBanner(int tourist_id, Callback call) {
+        Map<String, String> map = new HashMap<>();
+        map.put("tourist_id", String.valueOf(tourist_id));
+        OkHttpUtils.getInstance().post().params(map).url(APIUrls.url_showBusinessBanner).build().execute(call);
     }
 
     public static void centerComment(int tourist_id, String comment, Callback call) {

@@ -21,26 +21,30 @@ public class GlideLoader {
     }
 
     public static void LoderImage(Context context, String url, ImageView view, int round) {
-        Log.i(TAG, "LoderImage: "+(domain + url));
-        Glide.with(context)
-                .load(domain + url)
-                .centerCrop()
-                .transform(new GlideRoundTransform(context, round))
-                .placeholder(R.drawable.placeholder)
-                .error(R.drawable.placeholder)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(view);
+        Log.i(TAG, "LoderImage: "+url);
+        if (!CommonUtil.isBlank(url)) {
+            Glide.with(context)
+                    .load(url.startsWith("http") ? url : domain + url)
+                    .centerCrop()
+                    .transform(new GlideRoundTransform(context, round))
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(view);
+        }
     }
 
     public static void LoderCircleImage(Context context, String url, ImageView view) {
-        Glide.with(context)
-                .load(domain + url)
-                .centerCrop()
-                .transform(new GlideRoundTransform(context, 100))
-                .placeholder(R.drawable.head)
-                .error(R.drawable.head)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(view);
+        if (!CommonUtil.isBlank(url)) {
+            Glide.with(context)
+                    .load(url.startsWith("http") ? url : domain + url)
+                    .centerCrop()
+                    .transform(new GlideRoundTransform(context, 100))
+                    .placeholder(R.drawable.head)
+                    .error(R.drawable.head)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(view);
+        }
     }
 
     public static void LoderImageUrl(Context context, String url, ImageView view) {
@@ -54,26 +58,30 @@ public class GlideLoader {
     }
 
     public static void LoderVideoCover(Context context, String url, ImageView view) {
-        Glide.with(context)
-                .load(domain + url)
-                .centerInside()
-                .placeholder(R.color.black)
-                .error(R.color.black)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(view);
+        if (!CommonUtil.isBlank(url)) {
+            Glide.with(context)
+                    .load(url.startsWith("http") ? url : domain + url)
+                    .centerInside()
+                    .placeholder(R.color.black)
+                    .error(R.color.black)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(view);
+        }
     }
 
     public static void LoderRoundedImage(Context context, String url, ImageView view, int round) {
         RoundedCornersTransform transform = new RoundedCornersTransform(context, CommonUtil.dip2px(context, round));
         transform.setNeedCorner(true, true, false, false);
-        Glide.with(context)
-                .load(domain + url)
-                .placeholder(R.drawable.button_top_gray)
-                .error(R.drawable.button_top_gray)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .transform(transform)
-                .into(view);
+        if (!CommonUtil.isBlank(url)) {
+            Glide.with(context)
+                    .load(url.startsWith("http") ? url : domain + url)
+                    .placeholder(R.drawable.button_top_gray)
+                    .error(R.drawable.button_top_gray)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .transform(transform)
+                    .into(view);
 
+        }
     }
 
     public static void LoderClipImage(Context context, String url, ImageView view) {
