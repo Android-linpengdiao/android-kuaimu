@@ -30,7 +30,7 @@
             <LinearLayout
                 android:id="@+id/topView"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="55dp"
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -42,7 +42,7 @@
                     android:layout_marginLeft="10dp"
                     android:padding="5dp"
                     android:src="@mipmap/peoplelist"
-                    android:tint="@color/black"/>
+                    app:tint="@color/black" />
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tabLayout"

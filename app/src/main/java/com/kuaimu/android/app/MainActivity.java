@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil;
 
 import android.os.Bundle;
 
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -95,6 +96,8 @@ public class MainActivity extends BaseActivity {
                     bundle.putInt("uid", getUid());
                     openActivity(MineLikeActivity.class, bundle);
                 }
+                closeDrawer();
+
             }
         });
         messageView.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +106,8 @@ public class MainActivity extends BaseActivity {
                 if (getUid(true) > 0) {
                     openActivity(MessageActivity.class);
                 }
+                closeDrawer();
+
             }
         });
         chatView.setOnClickListener(new View.OnClickListener() {
@@ -111,6 +116,8 @@ public class MainActivity extends BaseActivity {
                 if (getUid(true) > 0) {
                     openActivity(ChatListActivity.class);
                 }
+                closeDrawer();
+
             }
         });
         workView.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +126,8 @@ public class MainActivity extends BaseActivity {
                 if (getUid(true) > 0) {
                     openActivity(MineWorkActivity.class);
                 }
+                closeDrawer();
+
             }
         });
         followView.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +138,8 @@ public class MainActivity extends BaseActivity {
                     bundle.putInt("uid", getUid());
                     openActivity(MineFollowActivity.class, bundle);
                 }
+                closeDrawer();
+
             }
         });
         fansView.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +150,8 @@ public class MainActivity extends BaseActivity {
                     bundle.putInt("uid", getUid());
                     openActivity(MineFansActivity.class, bundle);
                 }
+                closeDrawer();
+
             }
         });
         walletView.setOnClickListener(new View.OnClickListener() {
@@ -147,6 +160,8 @@ public class MainActivity extends BaseActivity {
                 if (getUid(true) > 0) {
                     openActivity(MyWalletActivity.class);
                 }
+                closeDrawer();
+
             }
         });
         personAuthView.setOnClickListener(new View.OnClickListener() {
@@ -157,6 +172,8 @@ public class MainActivity extends BaseActivity {
                     bundle.putInt("auth", 2);
                     openActivity(PersonAuthActivity.class, bundle);
                 }
+                closeDrawer();
+
             }
         });
         merchantAuthView.setOnClickListener(new View.OnClickListener() {
@@ -177,6 +194,8 @@ public class MainActivity extends BaseActivity {
 
                     }
                 }
+                closeDrawer();
+
             }
         });
         myPointView.setOnClickListener(new View.OnClickListener() {
@@ -185,12 +204,16 @@ public class MainActivity extends BaseActivity {
                 if (getUid(true) > 0) {
                     openActivity(MyPointActivity.class);
                 }
+                closeDrawer();
+
             }
         });
         settingView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openActivity(SettingsActivity.class);
+                closeDrawer();
+
             }
         });
         userInfoView.setOnClickListener(new View.OnClickListener() {
@@ -199,8 +222,19 @@ public class MainActivity extends BaseActivity {
                 if (getUid(true) > 0) {
                     openActivity(EditorActivity.class);
                 }
+                closeDrawer();
+
             }
         });
+    }
+
+    private void closeDrawer() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mainBinding.drawerLayout.closeDrawer(Gravity.LEFT);
+            }
+        },500);
     }
 
     private void intHeaderData(UserInfo userInfo) {
