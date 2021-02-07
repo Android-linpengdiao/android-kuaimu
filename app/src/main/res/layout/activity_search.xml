@@ -50,7 +50,7 @@
                         android:drawableLeft="@drawable/search"
                         android:drawablePadding="10dp"
                         android:gravity="center_vertical"
-                        android:hint="军训视频"
+                        android:hint="搜索视频"
                         android:imeOptions="actionSearch"
                         android:maxLines="1"
                         android:paddingLeft="10dp"
