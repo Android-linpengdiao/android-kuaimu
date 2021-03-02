@@ -3,9 +3,12 @@ package com.kuaimu.android.app.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import okhttp3.Call;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -77,7 +80,14 @@ public class MineWorkActivity extends BaseActivity {
                 EventBus.getDefault().post(messageBus);
             }
         });
-
+        binding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initData();
+            }
+        });
+        binding.swipeRefreshLayout.setRefreshing(true);
         initData();
     }
 
@@ -85,10 +95,12 @@ public class MineWorkActivity extends BaseActivity {
         SendRequest.centerSelfWork(getUid(), new GenericsCallback<MineWorkData>(new JsonGenericsSerializator()) {
             @Override
             public void onError(Call call, Exception e, int id) {
+                binding.swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onResponse(MineWorkData response, int id) {
+                binding.swipeRefreshLayout.setRefreshing(false);
                 if (response.getCode() == 200 && response.getData() != null && response.getData().getData() != null) {
                     mineWorkData = response;
                     adapter.refreshData(response.getData().getData());
